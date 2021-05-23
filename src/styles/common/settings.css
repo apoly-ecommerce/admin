@@ -1,0 +1,26 @@
+:root {
+  --config--line-height: 1.2;
+  --config--font-size: 16px;
+  --app-bg: #ffffff;
+  --app-color: #ffffff;
+  --second-color: #444444;
+  --primary-color: #b8c7ce;
+  --header-bg: #00bcd4;
+  --dropdown-table-bg: #ffffff;
+  --sidebar-color: #222d32;
+  --sidebar-width: 160px;
+  --sidebar-space-top: 49px;
+
+  --header--z-index: 100;
+  --sidebar--z-index: 99;
+  --footer--z-index: 98;
+  --form-action--z-index: 101;
+
+  --content-bg: #f8f8f8;
+
+  --header-position: relative;
+
+  --header-height: 49px;
+  --footer-height: 50px;
+  --app-content--height: calc(100vh - calc(var(--footer-height) + var(--header-height)));
+}

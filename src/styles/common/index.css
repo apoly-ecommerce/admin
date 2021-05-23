@@ -1,0 +1,66 @@
+@import './reset.css';
+@import './settings.css';
+/* Global style */
+body {
+  background-color: var(--app-bg);
+  color: var(--app-color);
+  font-size: var(--config--font-size);
+  line-height: var(--config--line-height);
+}
+/* Custom */
+.img-full {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.img-contain {
+  display: block;
+  object-fit: contain;
+  max-width: 100%;
+  height: auto;
+}
+
+.DropdownMenu {
+  position: relative;
+}
+
+.DropdownMenu__table .DropdownMenu__btn--close {
+  color: var(--second-color);
+  position: absolute;
+  right: 2%;
+  top: 2%;
+  font-size: .7rem;
+  cursor: pointer;
+  padding: 3px;
+  box-sizing: content-box;
+}
+
+.DropdownMenu .DropdownMenu__table {
+  position: absolute;
+  right: 0;
+  left: auto;
+  z-index: 100;
+  min-width: 160px;
+  background-color: var(--dropdown-table-bg);
+  top: calc(100% + 2px);
+  border: 1px solid rgba(0,0,0,.15);
+}
+
+.DropdownMenu__table li,
+.DropdownMenu__table li .DropdownMenu__link {
+  color: var(--second-color);
+}
+
+.DropdownMenu__table .DropdownMenu__title {
+  padding: 7px 10px;
+  font-size: .9rem;
+  border-bottom: 1px solid #f4f4f4;
+}
+
+.DropdownMenu__table .DropdownMenu__footer .DropdownMenu__link {
+  display: block;
+  text-align: center;
+  font-size: .8rem;
+  padding: 7px 10px;
+}

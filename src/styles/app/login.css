@@ -1,0 +1,190 @@
+.PageLogin {
+  background-color: var(--app-bg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.PageLogin .LoginWrap {
+  width: 25%;
+  margin: 7% auto;
+  border: 1px solid #e8e8e8;
+  box-shadow: 0 0 3px rgb(104 102 102 / 12%);
+  overflow: hidden;
+}
+
+.PageLogin .LoginWrap .LoginLogo a {
+  text-align: center;
+  color: #000;
+}
+
+.PageLogin .LoginWrap .loginHeading {
+  color: #000;
+  font-size: 1.5rem;
+  text-align: center;
+  font-weight: 300;
+}
+
+.PageLogin .LoginWrap .loginDescription {
+  font-size: 1rem;
+  text-align: center;
+  color: #000;
+  padding: 20px 21px;
+  font-weight: 100;
+  padding-bottom: 5px;
+}
+
+.LoginWrap .LoginLogo {
+  text-align: center;
+  padding: 10px;
+  border-bottom: 1px solid #f2f2f2;
+  margin-bottom: 10px;
+}
+
+.LoginWrap .LoginLogo a {
+  color: var(--app-color);
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.LoginWrap .LoginBody {
+  background-color: var(--app-bg);
+  padding: 22px;
+  color: #666;
+  box-shadow: 0 1px 1px rgb(0 0 0 / 10%);
+}
+
+.LoginBody_Content__header {
+  border-bottom: 1px solid #f4f4f4;
+}
+
+.LoginBody_Content__formData {
+  padding: 10px;
+}
+
+.FormData .FormData__FormGroup {
+  padding: 7px 0;
+}
+
+.FormData .FormData__FormGroup .FormData__FormButton {
+  padding: 0 4px;
+}
+
+.FormData .FormData__FormInput {
+  position: relative;
+}
+
+.FormData .FormData__FormControl
+.el-input__inner {
+  width: 100%;
+  border: 1px solid #d2d6de;
+  padding: 0 15px;
+  height: 40px;
+  color: #555;
+  padding-right: 45px;
+}
+
+.error,
+.el-form-item__error {
+  color: #f00;
+  font-size: .8rem;
+  font-style: italic;
+}
+
+.FormData__FormInput .el-form-item {
+  margin: 4px;
+}
+
+.el-form-item__error {
+  position: absolute;
+  left: 0;
+  top: 100%;
+}
+
+.FormData .FormData__FormIcon {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  cursor: pointer;
+}
+
+.FormData__FormRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.FormLabel-FormData__FormCheckBox {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.FormLabel-FormData__FormCheckBox .FormLabel__hidden {
+  display: none;
+}
+
+.FormLabel-FormData__FormCheckBox .FormLabel__check {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border: 1px solid  #d2d6de;
+  margin-right: 5px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.FormLabel-FormData__FormCheckBox .FormLabel__check::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: 50% 50%;
+  background: no-repeat 50%/50% 50%;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26l2.974 2.99L8 2.193z'/%3E%3C/svg%3E");
+}
+
+.FormLabel-FormData__FormCheckBox .FormLabel__hidden:checked ~ .FormLabel__check::before {
+  background-color: #007bff;
+}
+
+.FormLabel-FormData__FormCheckBox .FormLabel__check::before {
+  content: '';
+  position: absolute;
+  color: var(--app-bg);
+  border-color: #007bff;
+  background-color: var(--app-bg);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin-top: -.5px;
+  transition: background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.FormData__FormButton .FormData__FormSubmit {
+  border: 1px solid #007bff;
+  background-color: #007bff;
+  color: var(--app-color);
+  text-transform: uppercase;
+  display: block;
+  padding: 10px 50px;
+  width: 100%;
+  border-radius: 3px;
+}
+
+.FormDataForm__QuickLink .FormData__FormLink {
+  text-transform: uppercase;
+  font-size: .75rem;
+  margin-right: 10px;
+  font-weight: 500;
+}

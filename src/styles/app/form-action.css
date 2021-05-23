@@ -1,0 +1,98 @@
+.PopupForm {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--form-action--z-index);
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  overflow-x: hidden;
+  overflow-y: auto;
+  color: #737373;
+}
+.PopupForm .PopupForm_Wrap {
+  margin: 30px auto;
+}
+
+.PopupForm_Wrap .el-form-item {
+  margin-bottom: 5px;
+}
+
+.PopupForm_Wrap .el-form-item .el-input__inner {
+  height: 36px;
+  border-radius: 3px;
+  border: 1px solid #DCDFE6;
+}
+
+.PopupForm .PopupForm_Content {
+  background-color: var(--app-bg);
+  height: auto;
+}
+
+.PopupForm_Content .PopupForm__header {
+  border-bottom: 1px solid var(--header-bg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 10px;
+  font-size: .9rem;
+}
+
+.PopupForm_Content .PopupForm__header .PopupForm__name {
+  color: var(--second-color);
+  text-transform: uppercase;
+}
+
+.PopupForm_Content .PopupForm__header .PopupForm__Btn--close {
+  background: none;
+  border: none;
+  color: var(--second-color);
+}
+
+.PopupForm_Content .PopupForm__body {
+  padding: 10px;
+}
+
+.PopupForm__FormGroup .FormControl:disabled {
+  opacity: .7;
+  background: #ececec;
+}
+
+.FormDropImages .container {
+  border-radius: 0!important;
+  border: 1px solid #ccc!important;
+  background: #fff!important;
+}
+
+.PopupForm__footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px;
+}
+
+.PopupForm__footer .PopupForm__Save {
+  background-color: #797c7d;
+  border: 1px solid #797c7d;
+  color: var(--app-color);
+  font-size: .8rem;
+  padding: 4px 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.el-input--suffix .el-input__inner {
+  border-radius: 0;
+  border: 1px solid #ccc;
+  padding: 7px 10px;
+  font-size: .9rem;
+  height: 37px;
+}
+
+.PopupForm__FormGroup .el-select {
+  width: 100%;
+}
+
+.el-tooltip__popper {
+  width: 200px!important;
+}
