@@ -15,7 +15,11 @@
 }
 
 .PopupForm_Wrap .el-form-item {
-  margin-bottom: 5px;
+  margin-bottom: 15px;
+}
+
+.PopupForm_Wrap .el-form-item__error {
+  font-size: 11px;
 }
 
 .PopupForm_Wrap .el-form-item .el-input__inner {
@@ -51,6 +55,17 @@
 
 .PopupForm_Content .PopupForm__body {
   padding: 10px;
+}
+
+.PopupForm_Content .FormLabel {
+  text-transform: uppercase;
+  font-size: .7rem;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.PopupForm_Content .el-form-item__content {
+    line-height: 1.2;
 }
 
 .PopupForm__FormGroup .FormControl:disabled {

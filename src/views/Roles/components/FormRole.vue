@@ -185,6 +185,8 @@ import { roleRules } from '@/validations';
 // Helpers
 import { formatModuleAccess } from '@/helpers';
 
+import { Message } from 'element-ui';
+
 const defaultRole = {
   name: '',
   public: '0',
@@ -208,7 +210,6 @@ export default {
       roleError: Object.assign({}, defaultError),
       formName: '',
       buttonName: 'Save',
-      isPublic: 0,
       roleRules: roleRules
     };
   },
@@ -222,22 +223,23 @@ export default {
   },
   computed: {
     ...mapGetters({
+      'role_permissions': 'user/getRolePermissions',
       'merchant_user': 'user/get_merchant_user',
       'accessLevel': 'user/getAccessLevel',
       'modulesApp': 'app/getModulesApp',
       'role': 'user/getRole',
-      'role_permissions': 'user/getRolePermissions'
     }),
      handleModuleAllowForRole() {
       let moduleAccess = [];
+      if (this.role.id === 3) { this.roleForm.public = '1' }
       this.modulesApp.forEach(module => {
         let access_level = module.access.toLowerCase();
         if (access_level === 'common' || access_level === 'merchant' && this.merchant_user ||
         (this.role) &&
         (
-          (this.isPublic  === 1 && 'merchant' === access_level) ||
-          (this.role.id === 3 && 'merchant' === access_level) ||
-          (this.isPublic  === 0 && 'platform' === access_level && this.role.id != 3)
+          (this.role.public === 1 && 'merchant' === access_level) ||
+          (this.role.id     === 3 && 'merchant' === access_level) ||
+          (this.role.public === 0 && 'platform' === access_level && this.role.id != 3)
         )
       ) { moduleAccess.push(module) }
       });
@@ -284,13 +286,16 @@ export default {
       return `OptionIndex_${_index_ + 1}`;
     },
     handleChangeRoleType(val) {
-      this.isPublic = +val;
+      this.role.public = +val;
     },
     getFormName() {
       this.formName = this.$route.meta && this.$route.meta.title;
     },
+    back(router = '/roles') {
+      this.$router.push(router);
+    },
     handleCloseFormRole() {
-      this.$router.push('/roles');
+      this.back();
     },
     getTooltipHelp(moduleName, moduleAccess) {
       return `Tất cả người dùng dưới vai trò này sẽ có thể thực hiện các hành động cụ thể để quản lý ${moduleName} ${formatModuleAccess(moduleAccess)}`;
@@ -305,21 +310,43 @@ export default {
       });
       this.roleForm.permissions = listPermisisonsSelected;
     },
+    resetRoleForm() {
+      this.roleForm.name   = '';
+      this.roleForm.public = '0';
+      this.roleForm.level  = null;
+      this.roleForm.description = '';
+      this.roleForm.permissions = [];
+    },
     handleAddNewRole() {
       this.$refs.roleForm.validate(valid => {
-        if (this.roleForm.level < this.accessLevel) {
-          valid = false;
-          this.roleError.level_error = `Giá trị level phải lớn hơn hoặc bằng ${this.accessLevel}`;
-        } else {
-          this.roleError.level_error = '';
-          valid = true;
-        }
-
         this.handleGetListPermission();
-
         if (valid) {
-          this.setisLoading(true);
-          this.addRole(this.roleForm);
+          let error = true;
+          if (this.roleForm.level < this.accessLevel) {
+            error = true;
+            this.roleError.level_error = `Giá trị level phải lớn hơn hoặc bằng ${this.accessLevel}`;
+          } else {
+            error = false;
+            this.roleError.level_error = '';
+          }
+          if(!error) {
+            this.setisLoading(true);
+
+            this.addRole(this.roleForm).then(res => {
+              Message({
+                message: res.success,
+                type: 'success',
+                duration: 5 * 1000
+              });
+              this.setisLoading(false);
+              this.resetRoleForm();
+              this.back();
+            }).catch(error => {
+              console.error(error);
+              this.setisLoading(false);
+            });
+
+          }
         } return;
       });
     },

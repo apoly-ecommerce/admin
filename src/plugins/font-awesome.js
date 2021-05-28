@@ -39,7 +39,8 @@ import {
   faSave,
   faLock,
   faEyeSlash,
-  faEye
+  faEye,
+  faTrash
 } from '@fortawesome/free-solid-svg-icons';
 
 // Handle
@@ -78,5 +79,6 @@ library.add(
   faSave,
   faLock,
   faEyeSlash,
-  faEye
+  faEye,
+  faTrash
 );

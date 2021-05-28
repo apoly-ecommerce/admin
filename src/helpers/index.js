@@ -37,5 +37,5 @@ const formatModuleAccess = (moduleAccess) => {
 export {
   changeToSlug,
   getCurrentYear,
-  formatModuleAccess
+  formatModuleAccess,
 };

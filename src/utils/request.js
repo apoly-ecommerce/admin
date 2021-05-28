@@ -32,14 +32,24 @@ service.interceptors.response.use(
   response => {
     const res = response;
     if (res.status !== 200) {
+      Message({
+        message: 'Request error !',
+        type: 'error',
+        duration: 5 * 1000
+      });
       return Promise.reject(new Error(res.message || 'Error'));
     } else {
-      // Do something.
       return res.data;
     }
   },
   error => {
+    console.log(error);
     const eRes = error.response;
+    Message({
+      message: 'Request error !',
+      type: 'error',
+      duration: 5 * 1000
+    });
     return Promise.reject({
       status: eRes.status,
       errors: eRes.data.data.errors

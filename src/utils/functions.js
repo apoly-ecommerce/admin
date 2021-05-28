@@ -13,3 +13,14 @@ export function getPageTitle(pageTitle) {
   }
   return `${appTitle}`;
 }
+
+/**
+ * Parse the time to string
+ * @param {(Object|string|number)} time
+ * @param {string} cFormat
+ * @returns {string | null}
+ */
+ export function parseTime(date) {
+   let d = new Date(date);
+   return `${d.getDate()}/${d.getMonth()}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
+}

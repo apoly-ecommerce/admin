@@ -65,7 +65,7 @@ export default {
       };
       getUserRole(headers).then(res => {
         let { data } = res;
-        console.log(data);
+        // console.log(data);
         commit('user/SET_USER_ROLE', data.role, { root: true });
         commit('user/SET_USER_ROLE_PERMISSIONS', data.role_permissions, { root: true });
         resolve(res);

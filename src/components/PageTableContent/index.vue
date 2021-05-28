@@ -15,6 +15,7 @@
 
             <section class="TableBox_Actions__supports">
               <div class="Supports_Button-GroupButton">
+                <slot name="actions"/>
                 <slot name="supports"/>
               </div>
             </section>
@@ -32,20 +33,11 @@
         </section>
       </section>
 
-      <!-- Paginations -->
-      <pagination
-        :pagination="getPagination"
-        @eventPagination="handlePagination"
-      />
-
     </section>
   </section>
 </template>
 
 <script>
-// Componentns
-import Pagination from '@/components/Pagination';
-
 export default {
   name: 'page-table-content',
   props: {
@@ -53,18 +45,6 @@ export default {
       Object: String,
       require: true
     },
-    getPagination: {
-      type: Object,
-      require: true
-    }
-  },
-  components: {
-    Pagination
-  },
-  methods: {
-    handlePagination({ page, perPage }) {
-      this.$emit('eventPagination', { page, perPage });
-    }
   }
 }
 </script>
@@ -93,11 +73,13 @@ export default {
     align-items: center;
   }
   .Table-TableBox__header .Table__tools .Table__tools-item {
-    background-color: #555;
+    background-color: #03a9f4;
     color: var(--app-color);
     font-size: .8rem;
-    padding: 5px 7px;
+    padding: 5.2px 15px;
     margin-left: 4px;
+    border-radius: 3px;
+    border: 1px solid #03a9f4;
   }
   .Table-TableBox .Table-TableBox__body {
     padding: 10px;
@@ -143,11 +125,15 @@ export default {
     padding: 0 10px;
     box-sizing: content-box;
   }
-  .TableBox_Actions__filters .SearchForm__FormSelect {
-    border: 1px solid #ddd;
-    margin-right: 2px;
-    color: #4c4747;
-    cursor: pointer;
+  .TableBox_Actions__filters .el-FormControl_custom .el-input__suffix {
+    top: 4px;
+  }
+  .TableBox_Actions__filters .el-FormControl_custom .el-input__inner {
+    line-height: 1.2;
+    height: 32px;
+    padding: 0 10px;
+    margin-right: 3px;
+    border-radius: 0;
   }
   .TableBox_Actions__filters .SearchForm__FormControl {
     display: block;
@@ -218,5 +204,16 @@ export default {
     margin-top: 0!important;
     color: #605a5a;
     font-size: .9rem;
+  }
+  .el-button-group .el-button--primary:last-child {
+    padding-bottom: 6px;
+  }
+  .el-table__body td.el-table__expanded-cell {
+    padding: 10px 10px;
+    background-color: #f6f6f6!important;
+    font-size: .8rem;
+  }
+  .el-table__body td.el-table__expanded-cell .ExpandData__Item {
+    padding: 3px 0;
   }
 </style>

@@ -10,15 +10,20 @@ import '@/middleware/apiAuth';
 
 // Plugins
 import './plugins';
+
+// Element ui
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
+import enLang from 'element-ui/lib/locale/lang/vi';
 
 // Common styles
 import './styles/common/index.css';
 
-Vue.config.productionTip = false;
+Vue.use(Element, {
+  locale: enLang
+});
 
-Vue.use(Element);
+Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 new Vue({

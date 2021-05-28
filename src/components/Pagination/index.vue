@@ -1,87 +1,107 @@
 <template>
-  <section class="Table-TableBox__Paginate" v-if="pagination.rows && pagination.rows > 0">
-    <div class="Table-TableBox__Paginate--perPage">
-      <b-form-select size="sm" class="mt-3"
-        :options="pagination.options"
-        :value="pagination.perPage"
-        @change="handleChangePerPage"
-      ></b-form-select>
-    </div>
-    <b-pagination
-      :total-rows="pagination.rows"
-      :per-page="pagination.perPage"
-      :value="currentPage"
+  <div :class="{'hidden':hidden}" class="pagination-container">
+    <el-pagination
+      :background="background"
+      :current-page.sync="currentPage"
+      :page-size.sync="pageSize"
+      :layout="layout"
+      :page-sizes="pageSizes"
+      :total="total"
       v-bind="$attrs"
-      first-number
-      last-number
-    >
-      <template #prev-text><fa-icon @click="handleChangeCurrentPage(currentPage - 1, pagination.perPage)" class="Table-TableBox__icon" icon="chevron-left" /></template>
-
-      <template #next-text><fa-icon @click="handleChangeCurrentPage(currentPage + 1, pagination.perPage)" class="Table-TableBox__icon" icon="chevron-right" /></template>
-
-      <template #ellipsis-text>
-        <i>...</i>
-      </template>
-
-      <template #page="{ page, active }">
-        <b v-if="active">{{ page }}</b>
-        <i v-else @click="handleChangeCurrentPage(page, pagination.perPage)">{{ page }}</i>
-      </template>
-
-    </b-pagination>
-  </section>
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    />
+  </div>
 </template>
 
 <script>
-// Import Utils
+import { scrollTo } from '@/utils/scroll-to'
+
 export default {
-  name: 'pagination',
+  name: 'Pagination',
   props: {
-    pagination: {
-      type: Object,
-      default: {}
+    total: {
+      required: true,
+      type: Number
+    },
+    page: {
+      type: Number,
+      default: 1
+    },
+    limit: {
+      type: Number,
+      default: 20
+    },
+    pageSizes: {
+      type: Array,
+      default() {
+        return [10, 20, 30, 50]
+      }
+    },
+    layout: {
+      type: String,
+      default: 'total, sizes, prev, pager, next, jumper'
+    },
+    background: {
+      type: Boolean,
+      default: true
+    },
+    autoScroll: {
+      type: Boolean,
+      default: true
+    },
+    hidden: {
+      type: Boolean,
+      default: false
     }
   },
-  data() {
-    return {
-      currentPage: +this.pagination.currentPage
-    };
+  computed: {
+    currentPage: {
+      get() {
+        return this.page
+      },
+      set(val) {
+        this.$emit('update:page', val)
+      }
+    },
+    pageSize: {
+      get() {
+        return this.limit
+      },
+      set(val) {
+        this.$emit('update:limit', val)
+      }
+    }
   },
   methods: {
-    handleChangeCurrentPage(page, perPage) {
-      this.$emit('eventPagination', { page, perPage });
-      this.currentPage = page;
+    handleSizeChange(val) {
+      this.$emit('pagination', { page: this.currentPage, limit: val })
+      if (this.autoScroll) {
+        scrollTo(0, 800)
+      }
     },
-    handleChangePerPage(perPage) {
-      this.$emit('eventPagination', { page: 1, perPage });
+    handleCurrentChange(val) {
+      this.$emit('pagination', { page: val, limit: this.pageSize })
+      if (this.autoScroll) {
+        scrollTo(0, 800)
+      }
     }
   }
 }
 </script>
-<style>
-  .Table-TableBox__Paginate {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding: 0 10px 10px;
-  }
-  .Table-TableBox__Paginate .page-link {
-    outline: none!important;
-    box-shadow: none!important;
-    padding: 5px 12px;
-    border-radius: 0!important;
-  }
-  .Table-TableBox__Paginate .page-item .page-link {
-    padding: 0!important;
-  }
-  .Table-TableBox__Paginate .Table-TableBox__icon {
-    font-size: .8rem;
-    padding: 7.2px 12px;
-    box-sizing: content-box;
-  }
-  .Table-TableBox__Paginate .page-item .page-link i,
-  .Table-TableBox__Paginate .page-item .page-link b {
-    padding: 5px 10px;
-    display: block;
-  }
+
+<style scoped>
+.pagination-container {
+  background: #fff;
+  padding: 0px 16px;
+  margin-top: 6px;
+  display: flex;
+  justify-content: flex-end;
+}
+.pagination-container.hidden {
+  display: none;
+}
+.pagination-container .el-input--suffix .el-input__inner {
+  height: 29px;
+}
 </style>
