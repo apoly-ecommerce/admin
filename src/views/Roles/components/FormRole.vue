@@ -18,7 +18,7 @@
             <el-form-item prop="name">
               <label for="name" class="FormLabel">
                 <span class="FormLabel__title">Name</span>
-                <el-tooltip class="item" effect="dark" content="The title of the user role !" placement="top">
+                <el-tooltip class="item" effect="dark" placement="top" content="The title of the user role !">
                   <fa-icon icon="question-circle" />
                 </el-tooltip>
               </label>
@@ -81,7 +81,7 @@
           </el-col>
         </el-row>
 
-        <el-row>
+        <el-row :gutter="5">
           <el-col :span="24" class="p-1">
             <el-form-item prop="description">
               <label for="description" class="FormLabel">
@@ -92,7 +92,7 @@
                 ref="description"
                 placeholder="Description of rule"
                 v-model="roleForm.description"
-                maxlength="100"
+                maxlength="500"
                 spellcheck="false"
                 id="description"
                 show-word-limit
@@ -101,7 +101,7 @@
           </el-col>
         </el-row>
 
-        <el-row>
+        <el-row :gutter="5">
           <el-col :span="24" class="p-1">
             <section class="PopupForm__FormGroup">
               <table class="TableWrap" id="TableWrap-Heading">
@@ -164,10 +164,14 @@
     </template>
 
     <template v-slot:form-footer>
-      <button @click.prevent="handleAddNewRole" type="button" class="PopupForm__Save">
+      <el-button v-if="formName === 'Add role'" type="primary" size="mini" @click.prevent="handleActionFormRole(handleAddRole)">
         <fa-icon class="PopupForm__SaveIcon" icon="save" />
-        <span class="PopupForm_SaveLabel">Save</span>
-      </button>
+        <span class="PopupForm_SaveLabel">{{ formName }}</span>
+      </el-button>
+      <el-button v-else type="primary" size="mini" @click.prevent="handleActionFormRole(handleUpdateRole)">
+        <fa-icon class="PopupForm__SaveIcon" icon="save" />
+        <span class="PopupForm_SaveLabel">{{ formName }}</span>
+      </el-button>
     </template>
 
   </form-action>
@@ -176,8 +180,6 @@
 <script>
 // Components @ > *
 import FormAction from '@/components/FormAction';
-// Libraties
-import UploadImages from 'vue-upload-drop-images';
 // Store
 import { mapGetters, mapActions } from 'vuex';
 // Validations
@@ -202,37 +204,46 @@ const defaultError = {
 export default {
   components: {
     FormAction,
-    'upload-images': UploadImages,
   },
   data() {
     return {
       roleForm: Object.assign({}, defaultRole),
       roleError: Object.assign({}, defaultError),
       formName: '',
-      buttonName: 'Save',
-      roleRules: roleRules
+      roleRules: roleRules,
+      roleId: this.$route.params.id,
+      isUpdate: false
     };
   },
   watch: {
-    $route() {
+    $route(to, from) {
       this.getFormName();
+      if (to.params.id) {
+        // console.log('handle get role by id in watch !');
+        this.getRoleById(to.params.id);
+      }
     }
   },
   created() {
     this.getFormName();
+    if (this.roleId) {
+      // console.log('get role by id in create()');
+      this.getRoleById(this.roleId);
+    }
   },
   computed: {
     ...mapGetters({
       'role_permissions': 'user/getRolePermissions',
       'merchant_user': 'user/get_merchant_user',
       'accessLevel': 'user/getAccessLevel',
-      'modulesApp': 'app/getModulesApp',
+      'modules': 'module/getModules',
       'role': 'user/getRole',
     }),
      handleModuleAllowForRole() {
       let moduleAccess = [];
       if (this.role.id === 3) { this.roleForm.public = '1' }
-      this.modulesApp.forEach(module => {
+      // console.log(this.modules);
+      this.modules.forEach(module => {
         let access_level = module.access.toLowerCase();
         if (access_level === 'common' || access_level === 'merchant' && this.merchant_user ||
         (this.role) &&
@@ -249,7 +260,9 @@ export default {
   methods: {
     ...mapActions({
       'setisLoading': 'app/handleSetIsLoading',
-      'addRole': 'role/addRole'
+      'addRole': 'role/addRole',
+      'updateRole': 'role/updateRole',
+      'fetchRoleById': 'role/fetchRoleById'
     }),
     handleSelectItemPermission(e) {
       let permissionEl  = e.target;
@@ -290,6 +303,7 @@ export default {
     },
     getFormName() {
       this.formName = this.$route.meta && this.$route.meta.title;
+      console.log(this.formName);
     },
     back(router = '/roles') {
       this.$router.push(router);
@@ -298,7 +312,7 @@ export default {
       this.back();
     },
     getTooltipHelp(moduleName, moduleAccess) {
-      return `Tất cả người dùng dưới vai trò này sẽ có thể thực hiện các hành động cụ thể để quản lý ${moduleName} ${formatModuleAccess(moduleAccess)}`;
+      return `All users under this role will be able to perform specific actions for management ${moduleName} ${formatModuleAccess(moduleAccess)}`;
     },
     handleGetListPermission() {
       let listPermisisonsEl = document.querySelectorAll('.permission_item');
@@ -309,6 +323,7 @@ export default {
         }
       });
       this.roleForm.permissions = listPermisisonsSelected;
+      console.log(this.roleForm.permissions);
     },
     resetRoleForm() {
       this.roleForm.name   = '';
@@ -317,22 +332,63 @@ export default {
       this.roleForm.description = '';
       this.roleForm.permissions = [];
     },
-    handleAddNewRole() {
+    handleAppendPermissionsWasSave(permissionsIds) {
+      let listPermisisonsEl = document.querySelectorAll('.permission_item');
+      listPermisisonsEl.forEach(item => {
+        permissionsIds.forEach(id => {
+          if (+item.value === id) {
+            item.checked = true;
+          }
+        })
+      });
+      let rowModules = document.querySelectorAll(".TableWrap_TableContent");
+      rowModules.forEach(row => {
+        let numRowChildrenChecked = 0;
+        for (let i = 1; i < row.children.length ; i++) {
+          if (row.children[i].children[0].children[0].checked) {
+            numRowChildrenChecked ++;
+          }
+          if (numRowChildrenChecked === row.children.length-1) {
+            (row.children[0].children[0].children[1].children[0]).checked = true;
+          }
+        }
+      });
+    },
+    getRoleById(roleId) {
+      this.setisLoading(true);
+      this.isUpdate = true;
+      this.fetchRoleById(roleId).then(res => {
+        this.setisLoading(false);
+        let { role, role_permissions } = res;
+        this.roleForm.name   = role.name;
+
+        this.roleForm.public = role.public.toString();
+        this.roleForm.level  = role.level;
+        this.roleForm.description = role.description;
+        let permissionsIds = role_permissions.map(item => item.id);
+        this.handleAppendPermissionsWasSave(permissionsIds);
+      }).catch(error => {
+        console.error(error);
+        this.$message.error('Role không tồn tại !');
+        this.setisLoading(false);
+      });
+    },
+    handleActionFormRole(callback) {
       this.$refs.roleForm.validate(valid => {
         this.handleGetListPermission();
         if (valid) {
           let error = true;
           if (this.roleForm.level < this.accessLevel) {
             error = true;
-            this.roleError.level_error = `Giá trị level phải lớn hơn hoặc bằng ${this.accessLevel}`;
+            this.roleError.level_error = `Level value must be greater than or equal to ${this.accessLevel}`;
           } else {
             error = false;
             this.roleError.level_error = '';
           }
           if(!error) {
             this.setisLoading(true);
-
-            this.addRole(this.roleForm).then(res => {
+            callback().then(res => {
+              console.log(res);
               Message({
                 message: res.success,
                 type: 'success',
@@ -342,14 +398,24 @@ export default {
               this.resetRoleForm();
               this.back();
             }).catch(error => {
-              console.error(error);
+              console.error(error.data.errors);
+              Message({
+                message: error.data.errors.name[0],
+                type: 'error',
+                duration: 5 * 1000
+              });
               this.setisLoading(false);
             });
-
           }
         } return;
       });
     },
+    handleAddRole() {
+      return this.addRole(this.roleForm);
+    },
+    handleUpdateRole() {
+      return this.updateRole({ roleData: this.roleForm, roleId: this.roleId });
+    }
   }
 }
 </script>

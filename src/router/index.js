@@ -63,54 +63,132 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   {
-    path: '/services',
+    path: '/catalog/category-group',
     component: Layout,
-    redirect: '/services/',
-    meta: { title: 'Services' },
+    redirect: '/category-group/',
+    meta: { title: 'Nhóm danh mục' },
     children: [
       {
         path: '',
-        name: 'list-service',
-        component: () => import('@/views/Services/index'),
-        meta: { title: 'List Service' },
+        name: 'list-category-group',
+        component: () => import('@/views/CategoryGroups/index'),
+        meta: { title: 'Danh sách' }
       },
       {
         path: 'add',
-        name: 'add-service',
-        component: () => import('@/views/Services/components/FormService'),
-        meta: { title: 'Add Service' }
+        name: 'add-category-group',
+        component: () => import('@/views/CategoryGroups/components/FormCategoryGroup'),
+        meta: { title: 'Thêm mới' }
       },
       {
         path: 'update/:id',
-        name: 'update-service',
-        component: () => import('@/views/Services/components/FormService'),
-        meta: { title: 'Update Service' }
+        name: 'update-category-group',
+        component: () => import('@/views/CategoryGroups/components/FormCategoryGroup'),
+        meta: { title: 'Cập nhật' }
       }
     ]
   },
   {
-    path: '/city',
+    path: '/catalog/category-sub-group',
     component: Layout,
-    redirect: '/city/',
-    meta: { title: 'Location' },
+    redirect: '/category-sub-group/',
+    meta: { title: 'Nhóm danh mục phụ' },
     children: [
       {
         path: '',
-        name: 'list-city',
-        component: () => import('@/views/Locations/City/index'),
-        meta: { title: 'List City' }
+        name: 'list-category-sub-group',
+        component: () => import('@/views/CategorySubGroups/index'),
+        meta: { title: 'Danh sách nhóm danh mục phụ' }
       },
       {
         path: 'add',
-        name: 'add-city',
-        component: () => import('@/views/Locations/City/components/FormCity'),
-        meta: { title: 'Add City' }
+        name: 'add-category-sub-group',
+        component: () => import('@/views/CategorySubGroups/components/FormCategorySubGroup'),
+        meta: { title: 'Thêm nhóm danh mục phụ' }
       },
       {
         path: 'update/:id',
-        name: 'update-city',
-        component: () => import('@/views/Locations/City/components/FormCity'),
-        meta: { title: 'Update City' }
+        name: 'update-category-sub-group',
+        component: () => import('@/views/CategorySubGroups/components/FormCategorySubGroup'),
+        meta: { title: 'Cập nhật nhóm danh mục phụ' }
+      }
+    ]
+  },
+  {
+    path: '/catalog/category',
+    component: Layout,
+    redirect: '/category',
+    meta: { title: 'Category' },
+    children: [
+      {
+        path: '',
+        name: 'list-category',
+        component: () => import('@/views/Categories/index'),
+        meta: { title: 'Danh sách danh mục' }
+      },
+      {
+        path: 'add',
+        name: 'add-category',
+        component: () => import('@/views/Categories/components/FormCategory'),
+        meta: { title: 'Thêm danh mục' }
+      },
+      {
+        path: 'update/:id',
+        name: 'update-category',
+        component: () => import('@/views/Categories/components/FormCategory'),
+        meta: { title: 'Cập nhật danh mục' }
+      }
+    ]
+  },
+  {
+    path: '/catalog/product',
+    component: Layout,
+    redirect: '/product/',
+    meta: { title: 'Product' },
+    children: [
+      {
+        path: '',
+        name: 'list-product',
+        component: () => import('@/views/Products/index'),
+        meta: { title: 'Danh sách sản phẩm' }
+      },
+      {
+        path: 'add',
+        name: 'add-product',
+        component: () => import('@/views/Products/components/FormProduct'),
+        meta: { title: 'Thêm sản phẩm' }
+      },
+      {
+        path: 'update/:id',
+        name: 'update-product',
+        component: () => import('@/views/Products/components/FormProduct'),
+        meta: { title: 'Cập nhật sản phẩm' }
+      }
+    ]
+  },
+  {
+    path: '/catalog/manufacturer',
+    component: Layout,
+    redirect: '/manufacturer/',
+    meta: { title: 'Manufacturer' },
+    children: [
+      {
+        path: '',
+        name: 'list-manufacturer',
+        component: () => import('@/views/Manufacturers/index'),
+        meta: { title: 'Danh sách nhà cung cấp' }
+      },
+      {
+        path: 'add',
+        name: 'add-manufacturer',
+        component: () => import('@/views/Manufacturers/components/FormManufacturer'),
+        meta: { title: 'Thêm nhà cung cấp' }
+      },
+      {
+        path: 'update/:id',
+        name: 'update-manufacturer',
+        component: () => import('@/views/Manufacturers/components/FormManufacturer'),
+        meta: { title: 'Cập nhật nhà cung cấp' }
       }
     ]
   },

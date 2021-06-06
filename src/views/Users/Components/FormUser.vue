@@ -247,15 +247,13 @@
         </label>
         <section class="FormDropImages">
           <template>
-
             <upload-images
-              uploadMsg="Upload service images cover"
+              uploadMsg="Upload hình ảnh mô tả sản phẩm"
               maxError="Just allow upload 1 images"
-              fileError="Image file only accepted"
+              fileError=""
               :max="1"
               @change="handleUploadImages"
             />
-
           </template>
         </section>
       </section>

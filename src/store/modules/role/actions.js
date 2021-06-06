@@ -8,155 +8,111 @@ import {
   destroyRole,
   massTrashRole,
   massDestroyRole,
-  massRestoreRole
+  massRestoreRole,
+  fetchRoleById,
+  getRolePermissionsByUser,
+  updateRole
 } from '@/api/role';
-// Utils
-import { getToken } from '@/utils/auth';
 
 export default {
 
+  getRolePermissionsByUser({ commit }) {
+    return new Promise((resolve, reject) => {
+      getRolePermissionsByUser().then(res => {
+        let { data } = res;
+        commit('user/SET_USER_ROLE', data.role, { root: true });
+        commit('user/SET_USER_ROLE_PERMISSIONS', data.role_permissions, { root: true });
+        resolve(res);
+      }).catch(error => reject(error));
+    });
+  },
+
   addRole({commit}, roleData) {
     return new Promise((resolve, reject) => {
-      const config = {
-        headers: {
-          'Authorization': 'Bearer ' + getToken()
-        },
-        data: roleData,
-      };
-      addRole(config).then(res => {
-        resolve(res.data);
-      }).catch(error => {
-        reject(error);
-      });
+      addRole(roleData)
+      .then(res => resolve(res.data))
+      .catch(error => reject(error));
+    });
+  },
+
+  updateRole({ commit }, { roleData, roleId }) {
+    console.log(roleData);
+    return new Promise((resolve, reject) => {
+      updateRole(roleData, roleId)
+      .then(res => resolve(res.data))
+      .catch(error => reject(error));
     });
   },
 
   fetchListRole({commit}, listQuery) {
     return new Promise((resolve, reject) => {
-      const config = {
-        headers: {
-          'Authorization': 'Bearer ' + getToken()
-        },
-        params: listQuery
-      };
-      fetchListRole(config).then(res => {
-        resolve(res.data);
-      }).catch(error => {
-        console.error(error);
-        reject(error);
-      });
+      fetchListRole(listQuery)
+      .then(res => resolve(res.data))
+      .catch(error => reject(error));
     });
   },
 
   fetchListRoleTrashed({commit}, listQuery) {
     return new Promise((resolve, reject) => {
-      const config = {
-        headers: {
-          'Authorization': 'Bearer ' + getToken()
-        },
-        params: listQuery
-      };
-      fetchListRoleTrashed(config).then(res => {
-        resolve(res.data);
-      }).catch(error => {
-        reject(error);
-      });
+      fetchListRoleTrashed(listQuery)
+      .then(res => resolve(res.data))
+      .catch(error => reject(error));
     });
   },
 
   trashRole({ commit }, roleId) {
     return new Promise((resolve, reject) => {
-      const config = {
-        headers: {
-          'Authorization': 'Bearer ' + getToken(),
-        },
-        id: roleId
-      };
-      trashRole(config).then(res => {
-        resolve(res.data);
-      }).catch(error => {
-        reject(error);
-      })
+      trashRole(roleId)
+      .then(res => resolve(res.data))
+      .catch(error => reject(error))
     });
   },
 
   restoreRole({ commit }, roleId) {
     return new Promise((resolve, reject) => {
-      const config = {
-        headers: {
-          'Authorization': 'Bearer ' + getToken(),
-        },
-        id: roleId
-      };
-      restoreRole(config).then(res => {
-        resolve(res.data);
-      }).catch(error => {
-        reject(error)
-      });
+      restoreRole(roleId)
+      .then(res => resolve(res.data))
+      .catch(error => reject(error));
     });
   },
 
   destroyRole({ commit }, roleId) {
     return new Promise((resolve, reject) => {
-      const config = {
-        headers: {
-          'Authorization': 'Bearer ' + getToken(),
-        },
-        id: roleId
-      };
-      destroyRole(config).then(res => {
-        resolve(res.data);
-      }).catch(error => {
-        reject(error);
-      });
+      destroyRole(roleId)
+      .then(res => resolve(res.data))
+      .catch(error => reject(error));
     });
   },
 
   massTrashRole({ commit }, roleIds) {
     return new Promise((resolve, reject) => {
-      const config = {
-        headers: {
-          'Authorization': 'Bearer ' + getToken(),
-        },
-        ids: roleIds
-      };
-      massTrashRole(config).then(res => {
-        resolve(res.data);
-      }).catch(error => {
-        reject(error);
-      });
+      massTrashRole(roleIds)
+      .then(res => resolve(res.data))
+      .catch(error => reject(error));
     });
   },
 
   massDestroyRole({ commit }, roleIds) {
     return new Promise((resolve, reject) => {
-      const config = {
-        headers: {
-          'Authorization': 'Bearer ' + getToken(),
-        },
-        ids: roleIds
-      };
-      massDestroyRole(config).then(res => {
-        resolve(res.data);
-      }).catch(error => {
-        reject(error);
-      });
+      massDestroyRole(roleIds)
+      .then(res => resolve(res.data))
+      .catch(error => reject(error));
     });
   },
 
   massRestoreRole({ commit }, roleIds) {
     return new Promise((resolve, reject) => {
-      const config = {
-        headers: {
-          'Authorization': 'Bearer ' + getToken(),
-        },
-        ids: roleIds
-      };
-      massRestoreRole(config).then(res => {
-        resolve(res.data);
-      }).catch(error => {
-        reject(error);
-      });
+      massRestoreRole(roleIds)
+      .then(res => resolve(res.data))
+      .catch(error => reject(error));
+    });
+  },
+
+  fetchRoleById({ commit }, roleId) {
+    return new Promise((resolve, reject) => {
+      fetchRoleById(roleId)
+      .then(res => resolve(res.data))
+      .catch(error => reject(error));
     });
   }
 

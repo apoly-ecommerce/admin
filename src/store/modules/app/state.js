@@ -16,5 +16,4 @@ export default {
   copyright: 'All rights reserved.',
   version: '1.0.0',
   isLoading: false,
-  modulesApp: []
 };

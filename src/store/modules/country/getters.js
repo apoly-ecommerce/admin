@@ -1,5 +1,5 @@
 export default {
-  getAllCountries(state) {
-    return state.countries;
+  getListCountries(state) {
+    return state.listCountries;
   }
 };

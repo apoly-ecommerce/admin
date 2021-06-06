@@ -12,8 +12,4 @@ export default {
   SET_IS_LOADING: (state, isLoading) => {
     state.isLoading = isLoading;
   },
-
-  SET_MODULES_APP: (state, modulesApp) => {
-    state.modulesApp = modulesApp;
-  }
 };

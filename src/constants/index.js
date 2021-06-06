@@ -8,5 +8,5 @@ export {
   USER_AVATAR,
   APP_SIDE,
   LOGIN_BACKGROUND,
-  TOKEN_KEY
+  TOKEN_KEY,
 };

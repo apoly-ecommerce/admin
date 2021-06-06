@@ -1,8 +1,8 @@
 import request from '@/utils/request';
 
-export function getAllCountries() {
+export function fetchListCountries() {
   return request({
-    url: 'api/location/countries',
+    url: 'api/admin/setting/country/list',
     method: 'get'
   });
 }

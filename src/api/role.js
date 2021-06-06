@@ -1,82 +1,92 @@
 import request from '@/utils/request';
 
-export function addRole({headers, data}) {
+export function addRole(formData) {
   return request({
-    url: 'api/admin/role/addRole',
+    url: 'api/admin/setting/role/add',
     method: 'post',
-    headers,
+    data: formData
+  });
+}
+
+export function updateRole(data, id) {
+  return request ({
+    url: `api/admin/setting/role/update/${id}`,
+    method: 'put',
     data
   });
 }
 
-export function fetchListRole({headers, params}) {
+export function fetchListRole(query) {
   return request({
-    url: 'api/admin/role/list',
+    url: 'api/admin/setting/role/list',
     method: 'get',
-    headers,
-    params
+    params: query
   });
 }
 
-export function fetchListRoleTrashed({headers, params}) {
+export function fetchListRoleTrashed(query) {
   return request({
-    url: 'api/admin/role/listTrashed',
+    url: 'api/admin/setting/role/list/trashed',
     method: 'get',
-    headers,
-    params
+    params: query
   });
 }
 
-export function trashRole({ headers, id }) {
+export function trashRole(id) {
   return request({
-    url: 'api/admin/role/trash',
+    url: `api/admin/setting/role/trash/${id}`,
     method: 'delete',
-    headers,
-    params: { id }
   });
 }
 
-export function restoreRole({ headers, id }) {
+export function restoreRole(id) {
   return request({
-    url: 'api/admin/role/restore',
+    url: `api/admin/setting/role/restore/${id}`,
     method: 'patch',
-    headers,
-    params: { id }
   });
 }
 
-export function destroyRole({ headers, id }) {
+export function destroyRole(id) {
   return request({
-    url: 'api/admin/role/destroy',
+    url: `api/admin/setting/role/destroy/${id}`,
     method: 'delete',
-    headers,
-    params: { id }
   });
 }
 
-export function massTrashRole({ headers, ids }) {
+export function massTrashRole(ids) {
   return request({
-    url: 'api/admin/role/massTrash',
+    url: 'api/admin/setting/role/massTrash',
     method: 'delete',
-    headers,
     params: { ids }
   });
 }
 
-export function massDestroyRole({ headers, ids }) {
+export function massDestroyRole(ids) {
   return request({
-    url: 'api/admin/role/massDestroy',
+    url: 'api/admin/setting/role/massDestroy',
     method: 'delete',
-    headers,
     params: { ids }
   });
 }
 
-export function massRestoreRole({ headers, ids }) {
+export function massRestoreRole(ids) {
   return request({
-    url: 'api/admin/role/massRestore',
+    url: 'api/admin/setting/role/massRestore',
     method: 'patch',
-    headers,
     params: { ids }
+  });
+}
+
+export function fetchRoleById(id) {
+  return request({
+    url: `api/admin/setting/role/show/${id}`,
+    method: 'get',
+  });
+}
+
+export function getRolePermissionsByUser() {
+  return request({
+    url: 'api/admin/setting/role/getRolePermissionsByUser',
+    method: 'get'
   });
 }

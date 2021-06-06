@@ -14,6 +14,50 @@ const mapSidebarMenu = [
     roles: true
   },
   {
+    name: 'Catalog',
+    icon: 'tags',
+    roles: true,
+    children: [
+      {
+        name: 'Categories',
+        icon: 'angle-double-right',
+        roles: handleCheckRoleToShow(['admin', 'editor']),
+        children: [
+          {
+            name: 'Group',
+            link: '/catalog/category-group',
+            icon: 'angle-right',
+            roles: true,
+          },
+          {
+            name: 'Sub-group',
+            link: '/catalog/category-sub-group',
+            icon: 'angle-right',
+            roles: true
+          },
+          {
+            name: 'Categories',
+            link: '/catalog/category',
+            icon: 'angle-right',
+            roles: true
+          }
+        ]
+      },
+      {
+        name: 'Products',
+        link: '/catalog/product',
+        icon: 'angle-double-right',
+        roles: handleCheckRoleToShow(['admin', 'editor'])
+      },
+      {
+        name: 'Manufacturers',
+        link: '/catalog/manufacturer',
+        icon: 'angle-double-right',
+        roles: handleCheckRoleToShow(['admin', 'editor'])
+      },
+    ]
+  },
+  {
     name: 'Admin',
     icon: 'user-secret',
     roles: handleCheckRoleToShow(['admin', 'editor']),
@@ -77,76 +121,6 @@ const mapSidebarMenu = [
   }
 ];
 
-const paginates = {
-
-  /**
-   * @of PageServices
-   */
-  service: {
-    currentPage: 1,
-    perPage: 10,
-    options: [
-      { value: 10, text: '10/Page' },
-      { value: 20, text: '20/Page' },
-      { value: 30, text: '30/Page' },
-    ]
-  },
-
-  /**
-   * @of City Location
-   */
-  city: {
-    currentPage: 1,
-    perPage: 10,
-    options: [
-      { value: 10, text: '10/Page'  },
-      { value: 20, text: '20/Page' },
-      { value: 30, text: '30/Page' },
-    ]
-  },
-
-  /**
-   * @of Role
-   */
-  role: {
-    currentPage: 1,
-    perPage: 10,
-    options: [
-      { value: 10, text: '10/Page' },
-      { value: 20, text: '20/Page' },
-      { value: 30, text: '30/Page' },
-    ]
-  },
-
-  /**
-   * @of User
-   */
-   user: {
-    currentPage: 1,
-    perPage: 10,
-    options: [
-      { value: 10, text: '10/Page' },
-      { value: 20, text: '20/Page' },
-      { value: 30, text: '30/Page' },
-    ]
-  },
-
-  /**
-   * @of Customer
-   */
-   customer: {
-    currentPage: 1,
-    perPage: 10,
-    options: [
-      { value: 10, text: '10/Page' },
-      { value: 20, text: '20/Page' },
-      { value: 30, text: '30/Page' },
-    ]
-  }
-
-};
-
 export {
   mapSidebarMenu,
-  paginates
 };

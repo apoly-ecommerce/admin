@@ -8,26 +8,16 @@ export function login(data) {
   });
 }
 
-export function logout(headers) {
+export function logout() {
   return request({
     url: 'api/admin/auth/logout',
     method: 'post',
-    headers
   });
 }
 
-export function getInfo(headers) {
+export function getInfo() {
   return request({
-    url: 'api/admin/user/info',
+    url: 'api/admin/admin/user/info',
     method: 'get',
-    headers
-  });
-}
-
-export function getUserRole(headers) {
-  return request({
-    url: 'api/admin/role/getRoleByUser',
-    method: 'get',
-    headers
   });
 }

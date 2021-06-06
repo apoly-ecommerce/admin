@@ -1,59 +1,57 @@
 import axios from 'axios';
 import store from '@/store';
 import { getToken } from '@/utils/auth';
-import { TOKEN_KEY } from '@/constants';
-import { Message } from 'element-ui';
+import { MessageBox, Message } from 'element-ui';
 
 // Create an axios instance
 const service = axios.create({
-  baseURL: 'https://pacific-forest-81915.herokuapp.com/',
-  headers: {
-    'accept': 'application/json'
-  },
+  baseURL: 'http://127.0.0.1:2810/',
   timeout: 5000 // request timeout.
 });
 
 service.interceptors.request.use(
   config => {
-    if (store.getters['app/getToken']) {
-      config.headers[TOKEN_KEY] = getToken(); // Set token if it exists.
+    if (store.getters['user/getToken']) {
+      config.headers = {
+        'accept': 'application/json',
+        'Authorization': 'Bearer ' + getToken()
+      };
     }
     return config;
   },
 
   error => {
-    // Do something with request error
-    // console.error(error); // For debug
     return Promise.reject(error);
   }
 );
 
 service.interceptors.response.use(
-  response => {
-    const res = response;
-    if (res.status !== 200) {
-      Message({
-        message: 'Request error !',
-        type: 'error',
-        duration: 5 * 1000
-      });
-      return Promise.reject(new Error(res.message || 'Error'));
-    } else {
-      return res.data;
-    }
-  },
+  response => { return response.data; },
   error => {
-    console.log(error);
-    const eRes = error.response;
-    Message({
-      message: 'Request error !',
-      type: 'error',
-      duration: 5 * 1000
-    });
-    return Promise.reject({
-      status: eRes.status,
-      errors: eRes.data.data.errors
-    });
+    if (error.response.status === 403) {
+      MessageBox.confirm('Quyền truy cập vào tài nguyên được yêu cầu bị cấm, vui lòng liên hệ thành viên của thẩm quyền ban hành nhiệm vụ', 'Xác nhận', {
+        confirmButtonText: 'Đồng ý',
+        cancelButtonText: 'Hủy',
+        type: 'warning'
+      }).then(() => {
+        Message({
+          message: 'Vui lòng rời khỏi tab nhiệm vụ này !',
+          type: 'warning',
+          duration: 5 * 1000
+        });
+    })}
+    if (error.response.status === 401) {
+      MessageBox.confirm('Bạn đã đăng xuất, bạn có thể hủy để ở lại trang này hoặc đăng nhập lại', 'Xác nhận đăng xuất', {
+        confirmButtonText: 'Đăng nhập lại',
+        cancelButtonText: 'Hủy',
+        type: 'warning'
+      }).then(() => {
+        store.dispatch('user/resetToken').then(() => {
+          location.reload()
+        });
+      });
+    }
+    return Promise.reject(error.response);
   }
 );
 

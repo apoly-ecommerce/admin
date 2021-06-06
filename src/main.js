@@ -16,6 +16,10 @@ import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
 import enLang from 'element-ui/lib/locale/lang/vi';
 
+// Font awesome picker
+import VueFontAwesomePicker from "vfa-picker";
+Vue.use(VueFontAwesomePicker);
+
 // Common styles
 import './styles/common/index.css';
 

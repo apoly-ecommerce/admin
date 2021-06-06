@@ -30,24 +30,25 @@ router.beforeEach(async(to, from, next) => {
       } else {
         try {
 
-          store.dispatch('app/handleSetIsLoading', true);
+          // store.dispatch('app/handleSetIsLoading', true);
 
-          const userInfoPromise  = store.dispatch('user/getInfo');
-          const userRolePromise  = store.dispatch('user/getUserRole');
-          const modulePromise    = store.dispatch('app/getAllModules');
+          const modulePromise = store.dispatch('module/getAllModules');
+          const userInfoPromise = store.dispatch('user/getInfo');
+          const userRolePermissionsPromise  = store.dispatch('role/getRolePermissionsByUser');
 
-          let [userInfo, userRole, modulesApp] = await Promise.all([userInfoPromise, userRolePromise, modulePromise]);
+          let [userInfo, userRolePermissions, modulesApp] = await Promise.all([userInfoPromise, userRolePermissionsPromise, modulePromise]);
 
-          store.dispatch('app/handleSetIsLoading', false);
+          // store.dispatch('app/handleSetIsLoading', false);
 
           // console.log(userInfo);
-          // console.log(userRole);
+          // console.log(userRolePermissions);
           // console.log(modulesApp);
+          // console.log('Run app !');
 
         } catch (error) {
           console.log(error);
           console.error("there's an error !");
-          store.dispatch('app/handleSetIsLoading', false);
+          // store.dispatch('app/handleSetIsLoading', false);
         }
       }
     }

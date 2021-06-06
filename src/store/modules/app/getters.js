@@ -13,8 +13,5 @@ export default {
   },
   getIsLoading(state) {
     return state.isLoading;
-  },
-  getModulesApp(state) {
-    return state.modulesApp;
   }
 };

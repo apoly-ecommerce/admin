@@ -125,7 +125,7 @@
               <template slot-scope="{row}">
                 <el-button-group>
                   <template v-if="!row.deleted_at">
-                    <el-button size="mini" type="primary" icon="el-icon-edit"></el-button>
+                    <el-button @click="handleEditRole(row.id)" size="mini" type="primary" icon="el-icon-edit"></el-button>
                     <el-button @click="handleTrashRole(row.id)" size="mini" type="danger" icon="el-icon-delete"></el-button>
                   </template>
                   <template v-else>
@@ -199,7 +199,7 @@ export default {
       return this.$route.path;
     },
     getPlaceholderSearch() {
-       let optionCurrent = this.tableSearch.options.filter(item => item.value === this.tableSearch.optionSelected);
+      let optionCurrent = this.tableSearch.options.filter(item => item.value === this.tableSearch.optionSelected);
       return optionCurrent[0]['placeholder'];
     },
     roleDataSearch() {
@@ -251,8 +251,8 @@ export default {
       this.listLoading = true;
       this.fetchListRole(this.listQuery).then(res => {
         this.listLoading = false;
-        this.listRole  = res.data;
-        this.totalRole = res.total;
+        this.listRole  = res.roles.data;
+        this.totalRole = res.roles.total;
         this.tableName = 'List Role';
       }).catch(error => {
         this.listLoading = false;
@@ -263,8 +263,8 @@ export default {
       this.listLoading = true;
       this.fetchListRoleTrashed(this.listQuery).then(res => {
         this.listLoading = false;
-        this.listRole  = res.data;
-        this.totalRole = res.total;
+        this.listRole  = res.trashed.data;
+        this.totalRole = res.trashed.total;
         this.tableName = 'Role Trashed';
       }).catch(error => {
         this.listLoading = false;
@@ -299,7 +299,7 @@ export default {
           this.getListRole();
         }).catch(error => {
           this.$message.error('Failed to move Role to trash !');
-          console.error('App: ', error);
+          // console.error('App: ', error);
         });
       }).catch(() => {
         this.$message({
@@ -399,7 +399,7 @@ export default {
           this.getListRole();
         }).catch(error => {
           this.$message.error('Moved list of roles in to trash failed !');
-          console.error('App: ', error);
+          // console.error('App: ', error);
         });
       }).catch(() => {
         this.$message({
@@ -437,8 +437,11 @@ export default {
         });
       });
     },
-    handleEditRole() {
-
+    handleEditRole(roleId) {
+      this.$router.push({
+        name: 'update-role',
+        params: { id: roleId }
+      });
     }
   }
 }

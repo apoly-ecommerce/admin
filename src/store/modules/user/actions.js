@@ -1,4 +1,4 @@
-import { login, getInfo, logout, getUserRole } from '@/api/user';
+import { login, getInfo, logout } from '@/api/user';
 import { setToken, removeToken, getToken } from '@/utils/auth';
 import router, { resetRouter } from '@/router';
 
@@ -12,9 +12,10 @@ export default {
     const { email, password }  = userInfo;
     return new Promise((resolve, reject) => {
       login({email: email.trim(), password: password}).then(res => {
+        console.log(res);
         const { data } = res;
-        commit('user/SET_TOKEN', data.api_token, { root: true });
-        setToken(data.api_token);
+        commit('user/SET_TOKEN', data.accessToken, { root: true });
+        setToken(data.accessToken);
         resolve();
       }).catch(error => {
         reject(error);
@@ -24,20 +25,13 @@ export default {
 
   logout({ commit }) {
     return new Promise((resolve, reject) => {
-      const headers = {
-        'Authorization': 'Bearer ' + getToken()
-      };
-      logout(headers).then(res => {
-
+      logout().then(res => {
         commit('user/SET_TOKEN', '', { root: true });
         commit('user/SET_ROLE', '', { root: true });
         commit('user/RESET_USER_INFO', '', { root: true });
-
         removeToken();
         resetRouter();
-
-        resolve(res);
-
+        resolve(res.data);
       }).catch(error => {
           reject(error);
       });
@@ -46,32 +40,22 @@ export default {
 
   getInfo({ commit }) {
     return new Promise((resolve, reject) => {
-      const headers = {
-        'Authorization': 'Bearer ' + getToken()
-      };
-      getInfo(headers).then(res => {
-        commit('user/SET_USER_INFO', res.data, { root: true })
-        resolve(res);
+      getInfo().then(res => {
+        commit('user/SET_USER_INFO', res.data.user, { root: true })
+        resolve(res.data);
       }).catch(error => {
         reject(error);
       });
     });
   },
 
-  getUserRole({ commit }) {
-    return new Promise((resolve, reject) => {
-      const headers = {
-        'Authorization': 'Bearer ' + getToken()
-      };
-      getUserRole(headers).then(res => {
-        let { data } = res;
-        // console.log(data);
-        commit('user/SET_USER_ROLE', data.role, { root: true });
-        commit('user/SET_USER_ROLE_PERMISSIONS', data.role_permissions, { root: true });
-        resolve(res);
-      }).catch(error => {
-        reject(error);
-      });
+  resetToken({ commit }) {
+    return new Promise(resolve => {
+      commit('user/SET_TOKEN', '', { root: true });
+      commit('user/SET_ROLE', '', { root: true });
+      commit('user/RESET_USER_INFO', '', { root: true });
+      removeToken();
+      resolve();
     });
   }
 };
