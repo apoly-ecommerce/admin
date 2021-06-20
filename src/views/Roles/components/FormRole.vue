@@ -2,16 +2,15 @@
   <form-action
     :name="formName"
     :size="'800px'"
-    @close="handleCloseFormRole"
+    :isFormLoading="isFormLoading"
+    @close="handleCloseForm"
   >
-
     <template v-slot:form-body>
       <el-form
-        ref="roleForm"
-        :model="roleForm"
-        :rules="roleRules"
+        ref="formData"
+        :model="formData"
+        :rules="formRules"
         @submit.prevent
-        autocomplete="on"
       >
         <el-row :gutter="5">
           <el-col :span="merchant_user ? 16 : 8" class="p-1">
@@ -19,7 +18,7 @@
               <label for="name" class="FormLabel">
                 <span class="FormLabel__title">Name</span>
                 <el-tooltip class="item" effect="dark" placement="top" content="The title of the user role !">
-                  <fa-icon icon="question-circle" />
+                  <i class="fas fa-question-circle"></i>
                 </el-tooltip>
               </label>
               <el-input
@@ -31,8 +30,9 @@
                 autocomplete="off"
                 spellcheck="false"
                 id="name"
-                v-model="roleForm.name"
+                v-model="formData.name"
               />
+              <div v-if="formError.name" class="el-form-item__error">{{ formError.name }}</div>
             </el-form-item>
           </el-col>
 
@@ -41,11 +41,11 @@
               <label for="public" class="FormLabel">
                 <span class="FormLabel__title">Role type</span>
                 <el-tooltip class="item" effect="dark" content="Platform and Merchant. The role type platform only available for the main platform user, a merchant can't use this role. The Merchant role type will available when a merchant will add a new user." placement="top">
-                  <fa-icon icon="question-circle" />
+                  <i class="fas fa-question-circle"></i>
                 </el-tooltip>
               </label>
               <el-select
-                v-model="roleForm.public"
+                v-model="formData.public"
                 @change="handleChangeRoleType"
                 placeholder="Select"
                 id="public"
@@ -63,12 +63,12 @@
                <label for="level" class="FormLabel">
                 <span class="FormLabel__title">Role level</span>
                 <el-tooltip class="item" effect="dark" content="Role level will be use determine who can control who. Example: An user with role level 2 can't modify any the user with role level 1. Keep emty if the role is for end level users." placement="top">
-                  <fa-icon icon="question-circle" />
+                  <i class="fas fa-question-circle"></i>
                 </el-tooltip>
                 <small v-if="accessLevel" class="p-2">(Between {{ accessLevel }} and 99)</small>
               </label>
               <el-input-number class="w-100"
-                v-model="roleForm.level"
+                v-model="formData.level"
                 size="medium"
                 :min="accessLevel"
                 :max="99"
@@ -76,7 +76,7 @@
                 tabindex="3"
                 id="level"
               />
-              <div v-if="roleError.level_error" class="el-form-item__error">{{ roleError.level_error }}</div>
+              <div v-if="formError.level" class="el-form-item__error">{{ formError.level }}</div>
             </el-form-item>
           </el-col>
         </el-row>
@@ -91,7 +91,7 @@
                 type="textarea"
                 ref="description"
                 placeholder="Description of rule"
-                v-model="roleForm.description"
+                v-model="formData.description"
                 maxlength="500"
                 spellcheck="false"
                 id="description"
@@ -110,13 +110,13 @@
                     <th>
                       <label for="modules" class="with-help">Modules</label>
                       <el-tooltip class="item" effect="dark" content="Enable the module to set permission for the module." placement="top">
-                        <fa-icon icon="question-circle" />
+                        <i class="fas fa-question-circle"></i>
                       </el-tooltip>
                     </th>
                     <th>
                       <label for="permisisons" class="with-help">Permissions</label>
                       <el-tooltip class="item" effect="dark" content="Set role permissions very carefully. Choose the 'Role Type' to get approperit modules." placement="top">
-                        <fa-icon icon="question-circle" />
+                        <i class="fas fa-question-circle"></i>
                       </el-tooltip>
                     </th>
                   </tr>
@@ -127,29 +127,31 @@
                   <div
                     v-for="(_module_, index) in handleModuleAllowForRole"
                     :key="index"
+                    v-show="_module_.is"
                     class="TableWrap_TableContent"
                   >
                     <template>
                       <div class="TableContent__Row TableContent__button">
                         <div class="TableForm__FormGroup">
                           <div class="TableForm__AddonGroup">
-                            <el-tooltip class="item" effect="dark" :content="getTooltipHelp(_module_.name, _module_.access)" placement="top">
-                              <fa-icon icon="question-circle" />
+                            <el-tooltip class="item" effect="dark" :content="getTooltipHelp(_module_.module.name, _module_.module.access)" placement="top">
+                              <i class="fas fa-question-circle"></i>
                             </el-tooltip>
                           </div>
-                          <label :for="_module_.name" class="d-block iCheckbox_line-pick">
-                            <input @change.stop="handleSelectAllPermission" :id="_module_.name" type="checkbox">
-                            <span>{{ _module_.name }}</span>
+                          <label :for="_module_.module.name" class="d-block iCheckbox_line-pick">
+                            <input @change.stop="handleSelectAllPermission" :id="_module_.module.name" type="checkbox">
+                            <span>{{ _module_.module.name }}</span>
                           </label>
                         </div>
                       </div>
 
                       <div
-                        v-for="(permission, _index_) in _module_.permissions"
-                        :key="_index_"
-                        class="TableContent__Row TableContent__option" :class="orderOption(_index_)">
+                        v-for="(permission, index_pms) in _module_.module.permissions"
+                        :key="index_pms"
+                        class="TableContent__Row TableContent__option" :class="orderOption(index_pms)"
+                      >
                         <label :for="permission.name +'_'+ permission.id" class="d-block checkbox">
-                          <input :value="permission.id" class="permission_item" @change.stop="handleSelectItemPermission" :data-module="_module_.name" type="checkbox" :id="permission.name +'_'+ permission.id">
+                          <input :value="permission.id" class="permission_item" @change.stop="handleSelectItemPermission" :data-module="_module_.module.name" type="checkbox" :id="permission.name +'_'+ permission.id">
                           <span>{{ permission.name }}</span>
                         </label>
                       </div>
@@ -164,16 +166,15 @@
     </template>
 
     <template v-slot:form-footer>
-      <el-button v-if="formName === 'Add role'" type="primary" size="mini" @click.prevent="handleActionFormRole(handleAddRole)">
-        <fa-icon class="PopupForm__SaveIcon" icon="save" />
-        <span class="PopupForm_SaveLabel">{{ formName }}</span>
+      <el-button v-if="!roleId" type="primary" size="mini" @click.prevent="handleActionForm(handleAdd)">
+        <i class="PopupForm__SaveIcon fas fa-save"></i>
+        <span class="PopupForm_SaveLabel">Save</span>
       </el-button>
-      <el-button v-else type="primary" size="mini" @click.prevent="handleActionFormRole(handleUpdateRole)">
-        <fa-icon class="PopupForm__SaveIcon" icon="save" />
-        <span class="PopupForm_SaveLabel">{{ formName }}</span>
+      <el-button v-else type="primary" size="mini" @click.prevent="handleActionForm(handleUpdate)">
+        <i class="PopupForm__SaveIcon fas fa-save"></i>
+        <span class="PopupForm_SaveLabel">Update</span>
       </el-button>
     </template>
-
   </form-action>
 </template>
 
@@ -189,7 +190,7 @@ import { formatModuleAccess } from '@/helpers';
 
 import { Message } from 'element-ui';
 
-const defaultRole = {
+const defaultFormData = {
   name: '',
   public: '0',
   level: null,
@@ -197,8 +198,9 @@ const defaultRole = {
   permissions: [],
 };
 
-const defaultError = {
-  level_error: ''
+const defaultFormError = {
+  name: '',
+  level: ''
 };
 
 export default {
@@ -207,63 +209,100 @@ export default {
   },
   data() {
     return {
-      roleForm: Object.assign({}, defaultRole),
-      roleError: Object.assign({}, defaultError),
       formName: '',
-      roleRules: roleRules,
+      formData: {...defaultFormData},
+      formError: {...defaultFormError},
+      formRules: roleRules,
       roleId: this.$route.params.id,
-      isUpdate: false
+      isFormLoading: false,
+      modules: [],
+      role: {},
+      permissionsIds: null,
+      moduleAccess: [],
+      publicId: ''
     };
   },
   watch: {
     $route(to, from) {
-      this.getFormName();
-      if (to.params.id) {
-        // console.log('handle get role by id in watch !');
-        this.getRoleById(to.params.id);
+      this.roleId = to.params.id;
+      if (to.name !== 'list-role') {
+        this.formSetup();
       }
+    },
+    public: (val) => {
+      console.log(val);
     }
   },
   created() {
-    this.getFormName();
-    if (this.roleId) {
-      // console.log('get role by id in create()');
-      this.getRoleById(this.roleId);
-    }
+    this.formSetup();
   },
   computed: {
     ...mapGetters({
-      'role_permissions': 'user/getRolePermissions',
       'merchant_user': 'user/get_merchant_user',
       'accessLevel': 'user/getAccessLevel',
-      'modules': 'module/getModules',
-      'role': 'user/getRole',
     }),
      handleModuleAllowForRole() {
       let moduleAccess = [];
-      if (this.role.id === 3) { this.roleForm.public = '1' }
-      // console.log(this.modules);
+      if (this.role.id === 3) { this.formData.public = '1' }
       this.modules.forEach(module => {
         let access_level = module.access.toLowerCase();
         if (access_level === 'common' || access_level === 'merchant' && this.merchant_user ||
         (this.role) &&
         (
-          (this.role.public === 1 && 'merchant' === access_level) ||
+          (this.publicId === 1 && 'merchant' === access_level) ||
           (this.role.id     === 3 && 'merchant' === access_level) ||
-          (this.role.public === 0 && 'platform' === access_level && this.role.id != 3)
+          (this.publicId === 0 && 'platform' === access_level && this.role.id != 3)
         )
-      ) { moduleAccess.push(module) }
+      ) { moduleAccess.push({module, is: true}) }
+        else { moduleAccess.push({module, is: false}) }
       });
       return moduleAccess;
     }
   },
   methods: {
     ...mapActions({
-      'setisLoading': 'app/handleSetIsLoading',
+      'fetchListModule' : 'module/fetchListModule',
+      'fetchRolePermissionsByUser': 'role/fetchRolePermissionsByUser',
       'addRole': 'role/addRole',
-      'updateRole': 'role/updateRole',
-      'fetchRoleById': 'role/fetchRoleById'
+      'fetchRoleById': 'role/fetchRoleById',
+      'updateRole': 'role/updateRole'
     }),
+    async formSetup() {
+      try {
+        this.resetFormData();
+        this.getFormName();
+        this.isFormLoading = true;
+        const [dataModule, dataRolePermissions] = await Promise.all([this.fetchListModule(), this.fetchRolePermissionsByUser()]);
+        this.role = dataRolePermissions.role;
+        this.modules = dataModule.modules;
+        if (this.roleId) {
+          const dataRole = await this.fetchRoleById(this.roleId);
+          this.appendDataToForm(dataRole.role);
+          this.permissionsIds = dataRole.role_permissions.map(item => item.id);
+          this.handleAppendPermissionsWasSave();
+          this.publicId = dataRole.role.public;
+        } else {
+          this.publicId = this.role.public;
+        }
+        this.isFormLoading = false;
+      } catch (error) {
+        console.error('[App Error] => ', error);
+        if (error.status === 404) {
+          this.$confirm('Quyền này không tồn tại, hoặc đã bị xóa trước đó !', 'Thông báo lỗi', {
+            confirmButtonText: 'Quay về',
+            cancelButtonText: 'Thêm mới',
+            type: 'error'
+          }).then(() => {
+            this.$router.push('/setting/role');
+          }).catch(() => {
+            this.$router.push('/setting/role/add');
+          });
+        } else {
+          this.$message.error('Có lỗi trong quá trình tải dữ liệu !');
+          this.$router.push('/setting/role');
+        }
+      }
+    },
     handleSelectItemPermission(e) {
       let permissionEl  = e.target;
       let moduleName    = permissionEl.getAttribute(['data-module']);
@@ -299,17 +338,7 @@ export default {
       return `OptionIndex_${_index_ + 1}`;
     },
     handleChangeRoleType(val) {
-      this.role.public = +val;
-    },
-    getFormName() {
-      this.formName = this.$route.meta && this.$route.meta.title;
-      console.log(this.formName);
-    },
-    back(router = '/roles') {
-      this.$router.push(router);
-    },
-    handleCloseFormRole() {
-      this.back();
+      this.publicId = +val;
     },
     getTooltipHelp(moduleName, moduleAccess) {
       return `All users under this role will be able to perform specific actions for management ${moduleName} ${formatModuleAccess(moduleAccess)}`;
@@ -322,24 +351,16 @@ export default {
           listPermisisonsSelected.push(+item.value);
         }
       });
-      this.roleForm.permissions = listPermisisonsSelected;
-      console.log(this.roleForm.permissions);
+      this.formData.permissions = listPermisisonsSelected;
     },
-    resetRoleForm() {
-      this.roleForm.name   = '';
-      this.roleForm.public = '0';
-      this.roleForm.level  = null;
-      this.roleForm.description = '';
-      this.roleForm.permissions = [];
-    },
-    handleAppendPermissionsWasSave(permissionsIds) {
+    handleAppendPermissionsWasSave() {
       let listPermisisonsEl = document.querySelectorAll('.permission_item');
       listPermisisonsEl.forEach(item => {
-        permissionsIds.forEach(id => {
+        this.permissionsIds.forEach(id => {
           if (+item.value === id) {
             item.checked = true;
           }
-        })
+        });
       });
       let rowModules = document.querySelectorAll(".TableWrap_TableContent");
       rowModules.forEach(row => {
@@ -354,149 +375,151 @@ export default {
         }
       });
     },
-    getRoleById(roleId) {
-      this.setisLoading(true);
-      this.isUpdate = true;
-      this.fetchRoleById(roleId).then(res => {
-        this.setisLoading(false);
-        let { role, role_permissions } = res;
-        this.roleForm.name   = role.name;
-
-        this.roleForm.public = role.public.toString();
-        this.roleForm.level  = role.level;
-        this.roleForm.description = role.description;
-        let permissionsIds = role_permissions.map(item => item.id);
-        this.handleAppendPermissionsWasSave(permissionsIds);
-      }).catch(error => {
-        console.error(error);
-        this.$message.error('Role không tồn tại !');
-        this.setisLoading(false);
-      });
+    getFormName() {
+      this.formName = this.$route.meta && this.$route.meta.title;
     },
-    handleActionFormRole(callback) {
-      this.$refs.roleForm.validate(valid => {
+    back(router = '/setting/role', query = {}) {
+      this.resetFormData();
+      this.$router.push({ path: router, query });
+    },
+    handleCloseForm() {
+      this.back();
+    },
+    resetFormData() {},
+    handleActionForm(callback) {
+      this.$refs['formData'].validate(valid => {
         this.handleGetListPermission();
         if (valid) {
           let error = true;
-          if (this.roleForm.level < this.accessLevel) {
+          if (this.formData.level < this.accessLevel) {
             error = true;
-            this.roleError.level_error = `Level value must be greater than or equal to ${this.accessLevel}`;
+            this.formError.level_error = `Level value must be greater than or equal to ${this.accessLevel}`;
           } else {
             error = false;
-            this.roleError.level_error = '';
+            this.formError.level_error = '';
           }
-          if(!error) {
-            this.setisLoading(true);
+          if (!error) {
             callback().then(res => {
-              console.log(res);
               Message({
                 message: res.success,
                 type: 'success',
                 duration: 5 * 1000
               });
-              this.setisLoading(false);
-              this.resetRoleForm();
-              this.back();
+              this.back('/setting/role', { form: 'success' });
             }).catch(error => {
-              console.error(error.data.errors);
+              console.error('[App Error] => ', error);
               Message({
                 message: error.data.errors.name[0],
                 type: 'error',
                 duration: 5 * 1000
               });
-              this.setisLoading(false);
+              this.appendErrorToForm(error.data.errors);
             });
           }
-        } return;
+        }
       });
     },
-    handleAddRole() {
-      return this.addRole(this.roleForm);
+    handleAdd() {
+      return this.addRole(this.formData);
     },
-    handleUpdateRole() {
-      return this.updateRole({ roleData: this.roleForm, roleId: this.roleId });
+    handleUpdate() {
+      return this.updateRole({ formData: this.formData, id: this.roleId });
+    },
+    setFormData() {
+      this.formData = {...defaultFormData};
+    },
+    appendErrorToForm(errors) {
+      for (const [key, value] of Object.entries(errors)) {
+        this.formError[key] = value[0];
+      }
+    },
+    appendDataToForm(data) {
+      this.formData.name   = data.name;
+      this.formData.public = data.public.toString();
+      this.formData.level  = data.level;
+      this.formData.description = data.description;
     }
   }
 }
 </script>
 
 <style>
-  .TableWrap {
-    color: #000;
-    width: 100%;
-  }
-  #TableWrap-Heading {
-    border: 1px solid #dcdfe6;
-    margin-bottom: 5px;
-  }
-  #TableWrap-Heading thead tr th {
-    padding: 10px 10px;
-    color: #5a5959;
-    font-weight: 500;
-    text-transform: uppercase;
-    font-size: .8rem;
-    letter-spacing: 1px;
-  }
-  #TableWrap-Heading thead tr th a {
-    color: #646464;
-  }
-  #TableWrap-Heading thead tr th:first-child {
-    width: 25.3%;
-    border-right: 1px solid #dcdfe6;
-  }
-  #TableWrap-Heading thead tr th:nth-child(2) {
-    width: 85%;
-  }
-  #TableWrap-permissions .TableWrap_TableContent {
-    display: flex;
-    justify-content: flex-start;
-  }
-  #TableWrap-permissions .TableContent__button {
-    width: 25.1%;
-  }
-  #TableWrap-permissions .TableContent__Row {
-    vertical-align: middle;
-    padding-bottom: 5px;
-  }
-  #TableWrap-permissions .TableContent__option {
-    padding-right: 7px;
-  }
-  #TableWrap-permissions .TableContent__option.OptionIndex_1 {
-    padding-left: 5px;
-  }
-  #TableWrap-permissions .TableContent__option .checkbox {
-    border: 1px solid #dcdfe6;
-    padding: 4.5px 10px;
-    cursor: pointer;
-  }
-  #TableWrap-permissions .TableForm__FormGroup {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    font-size: .8rem;
-    text-transform: uppercase;
-    color: #3f3d3d;
-  }
-  #TableWrap-permissions .TableForm__FormGroup .TableForm__AddonGroup {
-    padding: 7px 10px;
-    border-right: 1px solid #dcdfe6;
-    border: 1px solid #dcdfe6;
-  }
-  #TableWrap-permissions .TableForm__FormGroup .iCheckbox_line-pick {
-    padding: 6.8px 10px;
-    width: 100%;
-    background-color: #797c7d;
-    color: #fff;
-    font-weight: 500;
-    letter-spacing: 1px;
-    cursor: pointer;
-    border: 1px solid #797c7d;
-  }
-  #TableWrap-permissions .TableContent__button .el-checkbox,
-  .el-checkbox__input.is-checked+.el-checkbox__label {
-    color: #fff;
-  }
-  #TableWrap-permissions .el-checkbox .el-checkbox__label {
-    font-size: .8rem;
-  }
+.TableWrap {
+  color: #000;
+  width: 100%;
+}
+#TableWrap-Heading {
+  border: 1px solid #dcdfe6;
+  margin-bottom: 5px;
+}
+#TableWrap-Heading thead tr th {
+  padding: 10px 10px;
+  color: #5a5959;
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: .8rem;
+  letter-spacing: 1px;
+}
+#TableWrap-Heading thead tr th a {
+  color: #646464;
+}
+#TableWrap-Heading thead tr th:first-child {
+  width: 25.3%;
+  border-right: 1px solid #dcdfe6;
+}
+#TableWrap-Heading thead tr th:nth-child(2) {
+  width: 85%;
+}
+#TableWrap-permissions .TableWrap_TableContent {
+  display: flex;
+  justify-content: flex-start;
+}
+#TableWrap-permissions .TableContent__button {
+  width: 25.1%;
+}
+#TableWrap-permissions .TableContent__Row {
+  vertical-align: middle;
+  padding-bottom: 5px;
+}
+#TableWrap-permissions .TableContent__option {
+  padding-right: 7px;
+}
+#TableWrap-permissions .TableContent__option.OptionIndex_1 {
+  padding-left: 5px;
+}
+#TableWrap-permissions .TableContent__option .checkbox {
+  border: 1px solid #dcdfe6;
+  padding: 4.5px 10px;
+  cursor: pointer;
+}
+#TableWrap-permissions .TableForm__FormGroup {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  font-size: .8rem;
+  text-transform: uppercase;
+  color: #3f3d3d;
+}
+#TableWrap-permissions .TableForm__FormGroup .TableForm__AddonGroup {
+  padding: 7px 10px;
+  border-right: 1px solid #dcdfe6;
+  border: 1px solid #dcdfe6;
+}
+#TableWrap-permissions .TableForm__FormGroup .iCheckbox_line-pick {
+  padding: 6.8px 10px;
+  width: 100%;
+  background-color: #797c7d;
+  color: #fff;
+  font-weight: 500;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border: 1px solid #797c7d;
+}
+#TableWrap-permissions .TableContent__button .el-checkbox,
+.el-checkbox__input.is-checked+.el-checkbox__label {
+  color: #fff;
+}
+#TableWrap-permissions .el-checkbox .el-checkbox__label {
+  font-size: .8rem;
+}
 </style>

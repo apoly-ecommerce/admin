@@ -11,7 +11,7 @@ import {
   massRestoreProduct,
   fetchProductItemById,
   updateProduct,
-  emptyTrashProduct
+  emptyTrashProduct,
 } from '@/api/product';
 
 export default {
@@ -22,7 +22,10 @@ export default {
         'Content-type': 'multipart/form-data'
       };
       addProduct(headers, formData)
-      .then(res => resolve(res.data))
+      .then(res => {
+        console.log(res);
+        resolve(res.data);
+      })
       .catch(error => reject(error));
     });
   },

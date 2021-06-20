@@ -2,6 +2,7 @@
   <form-action
     :name="formName"
     :size="'90%'"
+    :isFormLoading="isFormLoading"
     @close="handleCloseForm"
   >
 
@@ -16,145 +17,160 @@
         <el-row :gutter="5">
           <el-col :span="16" class="p-1">
             <div class="FormOption__Item">
-              <div class="FormTop__Heading">INFORMATIONS</div>
-                <div class="FormTop__Content">
-                  <el-row :gutter="5">
-                    <el-col :span="18" class="p-1">
-                      <el-form-item prop="name">
-                        <label for="name" class="FormLabel">
-                          <span class="FormLabel__title">Name *</span>
-                          <el-tooltip class="item" effect="dark" placement="top" content="Khách hàng sẽ không nhìn thấy điều này. Tên này chỉ giúp người bán tìm thấy mặt hàng để liệt kê.">
-                            <fa-icon icon="question-circle" />
-                          </el-tooltip>
-                        </label>
-                        <el-input
-                          placeholder="Product name"
-                          type="text"
-                          ref="name"
-                          autocomplete="off"
-                          spellcheck="false"
-                          id="name"
-                          v-model="formData.name"
-                        />
-                      </el-form-item>
-                    </el-col>
+              <div class="FormTop__Heading">THÔNG TIN CƠ BẢN</div>
+              <div class="FormTop__Content">
+                <el-row :gutter="5">
+                  <el-col :span="18" class="p-1">
+                    <el-form-item prop="name">
+                      <label for="name" class="FormLabel">
+                        <span class="FormLabel__title">Name *</span>
+                        <el-tooltip class="item" effect="dark" placement="top" content="Khách hàng sẽ không nhìn thấy điều này. Tên này chỉ giúp người bán tìm thấy mặt hàng để liệt kê.">
+                          <i class="fas fa-question-circle"></i>
+                        </el-tooltip>
+                      </label>
+                      <el-input
+                        placeholder="Product name"
+                        type="text"
+                        ref="name"
+                        autocomplete="off"
+                        spellcheck="false"
+                        id="name"
+                        v-model="formData.name"
+                      />
+                      <div v-if="formError.name" class="el-form-item__error">{{ formError.name }}</div>
+                    </el-form-item>
+                  </el-col>
 
-                    <el-col :span="6" class="p-1">
-                      <el-form-item prop="active">
-                        <label for="active" class="FormLabel">
-                          <span class="FormLabel__title">Status *</span>
-                          <el-tooltip class="item" effect="dark" placement="top" content="Người bán sẽ chỉ tìm thấy các mặt hàng đang hoạt động.">
-                            <fa-icon icon="question-circle" />
-                          </el-tooltip>
-                        </label>
-                        <el-select
-                          v-model="formData.active"
-                          placeholder="Select"
-                          id="active"
-                          class="w-100"
-                        >
-                          <el-option value="1" label="Active"/>
-                          <el-option value="0" label="Inactive"/>
-                        </el-select>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
+                  <el-col :span="6" class="p-1">
+                    <el-form-item prop="active">
+                      <label for="active" class="FormLabel">
+                        <span class="FormLabel__title">Status *</span>
+                        <el-tooltip class="item" effect="dark" placement="top" content="Người bán sẽ chỉ tìm thấy các mặt hàng đang hoạt động.">
+                          <i class="fas fa-question-circle"></i>
+                        </el-tooltip>
+                      </label>
+                      <el-select
+                        v-model="formData.active"
+                        placeholder="Select"
+                        id="active"
+                        class="w-100"
+                      >
+                        <el-option value="1" label="Active"/>
+                        <el-option value="0" label="Inactive"/>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
 
-                  <el-row :gutter="5">
-                    <el-col :span="6" class="p-1">
-                      <el-form-item prop="mpn">
-                        <label for="mpn" class="FormLabel">
-                          <span class="FormLabel__title">Mpn *</span>
-                          <el-tooltip class="item" effect="dark" placement="top" content="Mã bộ phận của nhà sản xuất (MPN) là mã định danh duy nhất do nhà sản xuất cấp. Bạn có thể lấy MPN từ nhà sản xuất. Không bắt buộc nhưng được khuyến nghị">
-                            <fa-icon icon="question-circle" />
-                          </el-tooltip>
-                        </label>
-                        <el-input
-                          placeholder="Manufacturer Part Number"
-                          type="text"
-                          ref="mpn"
-                          autocomplete="off"
-                          spellcheck="false"
-                          id="mpn"
-                          v-model="formData.mpn"
-                        />
-                      </el-form-item>
-                    </el-col>
+                <el-row :gutter="5">
+                  <el-col :span="6" class="p-1">
+                    <el-form-item prop="mpn">
+                      <label for="mpn" class="FormLabel">
+                        <span class="FormLabel__title">Mpn *</span>
+                        <el-tooltip class="item" effect="dark" placement="top" content="Mã bộ phận của nhà sản xuất (MPN) là mã định danh duy nhất do nhà sản xuất cấp. Bạn có thể lấy MPN từ nhà sản xuất. Không bắt buộc nhưng được khuyến nghị">
+                          <i class="fas fa-question-circle"></i>
+                        </el-tooltip>
+                      </label>
+                      <el-input
+                        placeholder="Manufacturer Part Number"
+                        type="text"
+                        ref="mpn"
+                        autocomplete="off"
+                        spellcheck="false"
+                        id="mpn"
+                        v-model="formData.mpn"
+                      />
+                    </el-form-item>
+                  </el-col>
 
-                    <el-col :span="18" class="p-1">
-                      <el-form-item prop="list_tags">
-                        <label for="list_tags" class="FormLabel">
-                          <span class="FormLabel__title">Tags</span>
-                        </label>
-                        <el-select
-                          v-model="formData.tag_list"
-                          class="w-100"
-                          multiple
-                          filterable
-                          allow-create
-                          default-first-option
-                          placeholder="Choose tags for your product">
-                          <el-option
-                            v-for="(tag, index) in tags"
-                            :key="index"
-                            :label="tag.label"
-                            :value="tag.value">
-                          </el-option>
-                        </el-select>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
+                  <el-col :span="18" class="p-1">
+                    <el-form-item prop="list_tags">
+                      <label for="list_tags" class="FormLabel">
+                        <span class="FormLabel__title">Tags</span>
+                      </label>
+                      <el-select
+                        v-model="formData.tag_list"
+                        class="w-100"
+                        multiple
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="Choose tags for your product">
+                        <el-option
+                          v-for="(tag, index) in tags"
+                          :key="index"
+                          :label="tag.label"
+                          :value="tag.value">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
 
-                  <el-row :gutter="5">
-                    <el-col :span="24" class="p-1">
-                      <el-form-item prop="description">
-                        <label for="description" class="FormLabel">
-                          <span class="FormLabel__title">Description</span>
-                          <el-tooltip class="item" effect="dark" placement="top" content="is tooltip">
-                            <fa-icon icon="question-circle" />
-                          </el-tooltip>
-                        </label>
-                        <editor
-                          :api-key="tinymceSetup.api_key"
-                          :init="tinymceSetup.config"
-                          v-model="formData.description"
-                        />
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
+                <el-row :gutter="5">
+                  <el-col :span="24" class="p-1">
+                    <el-form-item prop="detail_information">
+                      <label for="detail_information" class="FormLabel">
+                        <span class="FormLabel__title">Thông tin chi tiết</span>
+                        <el-tooltip class="item" effect="dark" placement="top" content="is tooltip">
+                          <i class="fas fa-question-circle"></i>
+                        </el-tooltip>
+                      </label>
+                      <editor
+                        :api-key="tinymceSetup.api_key"
+                        :init="tinymceSetup.config"
+                        v-model="formData.detail_information"
+                      />
+                    </el-form-item>
+                  </el-col>
+                </el-row>
 
-                  <el-row :gutter="5">
-                    <el-col :span="24" class="p-1">
-                      <el-form-item prop="feature_image">
-                        <label for="feature_image" class="FormLabel">
-                          <span class="FormLabel__title">Feature images</span>
-                          <el-tooltip class="item" effect="dark" placement="top" content="Khách hàng sẽ không nhìn thấy điều này. Điều này chỉ giúp người bán tìm thấy mặt hàng để liệt kê.">
-                            <fa-icon icon="question-circle" />
-                          </el-tooltip>
-                        </label>
-                        <div class="line-break"></div>
-                        <upload-images
-                          uploadMsg="Upload hình ảnh mô tả sản phẩm"
-                          maxError="Chỉ cho phép tải lên 10 hình ảnh"
-                          fileError="Tệp hình ảnh không chính xác"
-                          class="upload-multi-drop-images"
-                          :max="10"
-                            @change="handleUploadImagesDesc"
-                        />
-                        <div class="note-small">
-                          <i class="icon el-icon-info"></i>
-                          <span class="txt">Bạn có thể tải lên tối đa 10 hình ảnh</span>
-                        </div>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-                </div>
+                <el-row :gutter="5">
+                  <el-col :span="24" class="p-1">
+                    <el-form-item prop="description">
+                      <label for="description" class="FormLabel">
+                        <span class="FormLabel__title">Mô tả sản phẩm</span>
+                        <el-tooltip class="item" effect="dark" placement="top" content="is tooltip">
+                          <i class="fas fa-question-circle"></i>
+                        </el-tooltip>
+                      </label>
+                      <editor
+                        :api-key="tinymceSetup.api_key"
+                        :init="tinymceSetup.config"
+                        v-model="formData.description"
+                      />
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+
+                <el-row :gutter="5">
+                  <el-col :span="24" class="p-1">
+                    <el-form-item prop="feature_image">
+                      <label for="feature_image" class="FormLabel">
+                        <span class="FormLabel__title">Describe images</span>
+                        <el-tooltip class="item" effect="dark" placement="top" content="Khách hàng sẽ không nhìn thấy điều này. Điều này chỉ giúp người bán tìm thấy mặt hàng để liệt kê.">
+                          <i class="fas fa-question-circle"></i>
+                        </el-tooltip>
+                      </label>
+                      <div class="line-break"></div>
+                      <cloudinary-upload
+                        :max="10"
+                        :caption="'* Bạn có thể tải lên tối đa 10 hình ảnh'"
+                        :init="{ cloud_name: 'phamdinhhungit', upload_preset: 'm15alpjo' }"
+                        :imgs="formData.media_list"
+                        @change="handleUploadDescribeImages"
+                        @clErrorMaxFile="handleClErrorMaxFile"
+                      />
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </div>
             </div>
           </el-col>
 
           <el-col :span="8" class="p-1">
             <div class="FormOption__Item">
-              <div class="FormTop__Heading">ORGANIZATION</div>
+              <div class="FormTop__Heading">THÔNG TIN BỔ XUNG</div>
               <div class="FormTop__Content">
                 <el-row :gutter="5">
                   <el-col :span="24" class="p-1">
@@ -188,60 +204,181 @@
                 </el-row>
 
                 <el-row :gutter="5">
-                  <el-col :span="12" class="p-1">
-                    <el-form-item prop="min_price">
-                      <label for="min_price" class="FormLabel">
-                        <span class="FormLabel__title">Min price</span>
-                        <el-tooltip class="item" effect="dark" placement="top" content="Đặt giá tối thiểu cho sản phẩm. Nhà cung cấp có thể thêm khoảng không quảng cáo trong giới hạn giá này.">
-                          <fa-icon icon="question-circle" />
-                        </el-tooltip>
+                  <el-col :span="12" class="p-1 price-append">
+                    <el-form-item prop="promotional_price">
+                      <label for="promotional_price" class="FormLabel">
+                        <span class="FormLabel__title">Giá khuyến mãi*</span>
                       </label>
-                      <el-input
-                        placeholder="Min price"
-                        type="number"
-                        name="min_price"
-                        ref="min_price"
-                        autocomplete="off"
-                        spellcheck="false"
-                        id="min_price"
-                        v-model="formData.min_price"
-                      >
-                        <template slot="prepend">VNĐ</template>
-                      </el-input>
+                      <app-currency-input v-model="formData.promotional_price"/>
                     </el-form-item>
                   </el-col>
 
-                  <el-col :span="12" class="p-1">
-                    <el-form-item prop="max_price">
-                      <label for="max_price" class="FormLabel">
-                        <span class="FormLabel__title">Max price</span>
-                        <el-tooltip class="item" effect="dark" placement="top" content="Đặt giá tối đa cho sản phẩm. Nhà cung cấp có thể thêm khoảng không quảng cáo trong giới hạn giá này.">
-                          <fa-icon icon="question-circle" />
-                        </el-tooltip>
+                  <el-col :span="12" class="p-1 price-append">
+                    <el-form-item prop="original_price">
+                      <label for="original_price" class="FormLabel">
+                        <span class="FormLabel__title">Giá gốc*</span>
                       </label>
-                      <el-input
-                        placeholder="Max price"
-                        type="number"
-                        name="max_price"
-                        ref="max_price"
-                        autocomplete="off"
-                        spellcheck="false"
-                        id="max_price"
-                        v-model="formData.max_price"
-                      >
-                        <template slot="prepend">VNĐ</template>
-                      </el-input>
+                      <app-currency-input v-model="formData.original_price"/>
                     </el-form-item>
                   </el-col>
                 </el-row>
 
                 <el-row :gutter="5">
                   <el-col :span="24">
+                    <el-form-item prop="requires_shipping">
+                      <label for="image_desc" class="FormLabel">
+                        <span class="FormLabel__title">Yêu cầu vận chuyển</span>
+                      </label>
+                      <div class="line-break"></div>
+                      <template>
+                        <el-radio class="mx-1" v-model="formData.requires_shipping" label="1" border>Có</el-radio>
+                        <el-radio class="mx-1" v-model="formData.requires_shipping" label="0" border>Không</el-radio>
+                      </template>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+
+                <el-row :gutter="5">
+                  <el-col :span="24" class="p-1">
+                    <label for="image_desc" class="FormLabel">
+                      <b class="FormLabel__title">Bảo hành</b>
+                    </label>
+                    <div class="line-break"></div>
+                  </el-col>
+
+                  <el-col :span="24" class="p-1">
+                    <el-form-item prop="warranty_period">
+                      <label for="image_desc" class="FormLabel">
+                        <span class="FormLabel__title">Thời gian bảo hành</span>
+                      </label>
+                      <el-input
+                        placeholder="Thời gian bảo hành"
+                        type="number"
+                        ref="warranty_period"
+                        autocomplete="off"
+                        spellcheck="false"
+                        id="warranty_period"
+                        v-model="formData.warranty_period"
+                      >
+                        <el-select v-model="formData.warranty_period_type" slot="prepend" style="width: 90px">
+                          <el-option label="Ngày" value="Ngày" />
+                          <el-option label="Tháng" value="Tháng" />
+                          <el-option label="Năm" value="Năm" />
+                        </el-select>
+                      </el-input>
+                    </el-form-item>
+                  </el-col>
+
+                  <el-col :span="24" class="p-1">
+                    <el-form-item prop="warranty_form">
+                      <label for="image_desc" class="FormLabel">
+                        <span class="FormLabel__title">Hình thức bảo hành</span>
+                      </label>
+                      <el-input
+                        placeholder="Hình thức bảo hành"
+                        type="text"
+                        ref="warranty_form"
+                        autocomplete="off"
+                        spellcheck="false"
+                        id="warranty_form"
+                        v-model="formData.warranty_form"
+                      />
+                    </el-form-item>
+                  </el-col>
+
+                  <el-col :span="24" class="p-1">
+                    <el-form-item prop="warranty_place">
+                      <label for="image_desc" class="FormLabel">
+                        <span class="FormLabel__title">Nơi bảo hành</span>
+                      </label>
+                      <el-input
+                        placeholder="Nơi bảo hành"
+                        type="text"
+                        ref="warranty_place"
+                        autocomplete="off"
+                        spellcheck="false"
+                        id="warranty_place"
+                        v-model="formData.warranty_place"
+                      />
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+
+                <el-row :gutter="5">
+                  <el-col :span="24" class="p-1">
+                    <label for="image_desc" class="FormLabel">
+                      <b class="FormLabel__title">Hỗ trợ</b>
+                    </label>
+                    <div class="line-break"></div>
+                  </el-col>
+
+                  <el-col :span="24">
+                    <el-form-item prop="requires_shipping">
+                      <label for="image_desc" class="FormLabel">
+                        <span class="FormLabel__title">Kiễm tra hàng khi nhận</span>
+                        <el-tooltip class="item" effect="dark" placement="top" content="Cho phép khách hàng kiễm tra sản phẩm trước khi nhận">
+                          <i class="fas fa-question-circle"></i>
+                        </el-tooltip>
+                      </label>
+                      <div class="line-break"></div>
+                      <template>
+                        <el-radio class="mx-1" v-model="formData.allow_inspection" label="1" border>Có</el-radio>
+                        <el-radio class="mx-1" v-model="formData.allow_inspection" label="0" border>Không</el-radio>
+                      </template>
+                    </el-form-item>
+                  </el-col>
+
+                  <el-col :span="24" class="p-1">
+                    <el-form-item prop="return_time">
+                      <label for="image_desc" class="FormLabel">
+                        <span class="FormLabel__title">Thời gian đổi trả</span>
+                      </label>
+                      <el-input
+                        placeholder="Thời gian đổi trả"
+                        type="number"
+                        ref="return_time"
+                        autocomplete="off"
+                        spellcheck="false"
+                        id="return_time"
+                        v-model="formData.return_time"
+                      >
+                        <el-select v-model="formData.return_time_type" slot="prepend" style="width: 90px">
+                          <el-option label="Ngày" value="Ngày" />
+                          <el-option label="Tháng" value="Tháng" />
+                          <el-option label="Năm" value="Năm" />
+                        </el-select>
+                      </el-input>
+                    </el-form-item>
+                  </el-col>
+
+                  <el-col :span="24" class="p-1">
+                    <el-form-item prop="percent_refund">
+                      <label for="image_desc" class="FormLabel">
+                        <span class="FormLabel__title">Phần trăm hoàn tiền</span>
+                      </label>
+                      <el-input
+                        placeholder="Phần trăm hoàn tiền"
+                        type="number"
+                        ref="percent_refund"
+                        autocomplete="off"
+                        spellcheck="false"
+                        id="percent_refund"
+                        v-model="formData.percent_refund"
+                      >
+                        <template slot="prepend">%</template>
+                      </el-input>
+                    </el-form-item>
+                  </el-col>
+
+                </el-row>
+
+                <el-row :gutter="5">
+                  <el-col :span="24">
                     <el-form-item prop="feature_image">
                       <label for="image_desc" class="FormLabel">
-                        <span class="FormLabel__title">Images</span>
-                        <el-tooltip class="item" effect="dark" placement="top" content="Khách hàng sẽ chỉ nhìn thấy những hình ảnh này nếu danh sách của người bán không có hình ảnh nào để hiển thị.">
-                          <fa-icon icon="question-circle" />
+                        <b class="FormLabel__title">Avatar</b>
+                        <el-tooltip class="item" effect="dark" placement="top" content="">
+                          <i class="fas fa-question-circle"></i>
                         </el-tooltip>
                       </label>
                       <div class="line-break"></div>
@@ -271,7 +408,7 @@
                 <el-row :gutter="5">
                   <el-col :span="24" class="p-1">
                     <label for="branding" class="FormLabel">
-                      <span class="FormLabel__title">Branding</span>
+                      <b class="FormLabel__title">Branding</b>
                     </label>
                     <div class="line-break"></div>
                   </el-col>
@@ -283,7 +420,7 @@
                       <label for="brand" class="FormLabel">
                         <span class="FormLabel__title">Brand</span>
                         <el-tooltip class="item" effect="dark" placement="top" content="Thương hiệu của sản phẩm. Không bắt buộc nhưng được khuyến nghị">
-                          <fa-icon icon="question-circle" />
+                          <i class="fas fa-question-circle"></i>
                         </el-tooltip>
                       </label>
                       <el-input
@@ -302,22 +439,22 @@
 
                 <el-row :gutter="5">
                   <el-col :span="24" class="p-1">
-                    <el-form-item prop="module_number">
-                      <label for="module_number" class="FormLabel">
+                    <el-form-item prop="model_number">
+                      <label for="model_number" class="FormLabel">
                         <span class="FormLabel__title">Module number</span>
                         <el-tooltip class="item" effect="dark" placement="top" content="Số nhận dạng của một sản phẩm do nhà sản xuất cung cấp. Không bắt buộc nhưng được khuyến nghị">
-                          <fa-icon icon="question-circle" />
+                          <i class="fas fa-question-circle"></i>
                         </el-tooltip>
                       </label>
                       <el-input
                         placeholder="Module number"
                         type="text"
-                        name="module_number"
-                        ref="module_number"
+                        name="model_number"
+                        ref="model_number"
                         autocomplete="off"
                         spellcheck="false"
-                        id="module_number"
-                        v-model="formData.module_number"
+                        id="model_number"
+                        v-model="formData.model_number"
                       />
                     </el-form-item>
                   </el-col>
@@ -354,11 +491,11 @@
 
     <template v-slot:form-footer>
       <el-button v-if="!productId" type="primary" size="mini" @click.prevent="handleActionForm(handleAdd)">
-        <fa-icon class="PopupForm__SaveIcon" icon="save" />
+        <i class="PopupForm__SaveIcon fas fa-save"></i>
         <span class="PopupForm_SaveLabel">Save</span>
       </el-button>
       <el-button v-else type="primary" size="mini" @click.prevent="handleActionForm(handleUpdate)">
-        <fa-icon class="PopupForm__SaveIcon" icon="save" />
+        <i class="PopupForm__SaveIcon fas fa-save"></i>
         <span class="PopupForm_SaveLabel">Update</span>
       </el-button>
     </template>
@@ -368,42 +505,55 @@
 <script>
 import FormAction from '@/components/FormAction';
 import UploadImage from '@/components/UploadImage';
+import AppCurrencyInput from '@/components/AppCurrencyInput';
 import { productRules } from '@/validations';
 import { mapActions } from 'vuex';
 import Editor from '@tinymce/tinymce-vue';
-import UploadImages from 'vue-upload-drop-images';
 import { tinymceConfig, tinymceApiKey } from '@/config/tinymce';
-import { changeToSlug } from '@/helpers';
 import { Message } from 'element-ui';
+import CloudinaryUpload from '@/components/CloudinaryUpload';
 
 const defaultFormData = {
-  name: 'sản phẩm 1',
-  active: '1',
-  mpn: 'npm sản phẩm 1',
-  description: '<p>mô tả sản phẩm 1</p>',
+  name: '',
+  active: '',
+  mpn: '',
+  description: '',
+  detail_information: '',
   tag_list: [],
   category_list: [],
-  images_desc: [],
-  min_price: '12',
-  max_price: '14',
+  media_list: [],
+  promotional_price: 0,
+  original_price: 0,
   featureImage: {
     url: '',
     file: null,
     isDel: false
   },
-  brand: 'thương hiệu 1',
-  module_number: 'module 1',
-  manufacturer_id: null,
+  brand: '',
+  model_number: '',
+  manufacturer_id: '',
+  requires_shipping: '',
+  warranty_period: '',
+  warranty_period_type: 'Tháng',
+  warranty_form: '',
+  warranty_place: '',
+  percent_refund: '',
+  return_time: '',
+  return_time_type: 'Tháng',
+  allow_inspection: ''
 };
 
-const defaultFormError = {};
+const defaultFormError = {
+  name: '',
+};
 
 export default {
   components: {
     FormAction,
     UploadImage,
+    CloudinaryUpload,
     'editor': Editor,
-    'upload-images': UploadImages
+    'app-currency-input': AppCurrencyInput
   },
   data() {
     return {
@@ -415,29 +565,19 @@ export default {
       tags: [],
       categorySubGroups: [],
       manufacturers: [],
+      isFormLoading: false,
     };
-  },
-  setup(context) {
-    console.log('setup');
   },
   watch: {
     $route(to, from) {
-      this.getFormName();
-      this.resetFormData();
       this.productId = to.params.id;
-      this.formSetup();
-      if (this.productId) {
-        this.getProductById()
+      if (to.name !== 'list-product') {
+        this.formSetup();
       }
     }
   },
   created() {
-    this.getFormName();
-    this.resetFormData();
     this.formSetup();
-    if (this.productId) {
-      this.getProductById()
-    }
   },
   computed: {
     tinymceSetup() {
@@ -448,9 +588,8 @@ export default {
     },
     categorySubGroupsHasCategories() {
       let result = this.categorySubGroups.filter(item => {
-        if (item.categories && item.categories.length) {
+        if (item.categories && item.categories.length)
           return item;
-        }
       });
       return result;
     }
@@ -460,18 +599,43 @@ export default {
       'setIsLoading': 'app/handleSetIsLoading',
       'fetchListManufacturer': 'manufacturer/fetchListManufacturer',
       'fetchListCategorySubGroup': 'categorySubGroup/fetchListCategorySubGroup',
-      'addProduct': 'product/addProduct'
+      'addProduct': 'product/addProduct',
+      'fetchProductItemById': 'product/fetchProductItemById',
+      'updateProduct': 'product/updateProduct'
     }),
     async formSetup() {
-      this.setIsLoading(true);
-      // ==================
-      const [manufacturersRes, categorieySubGroupRes] = await Promise.all([this.fetchListManufacturer(), this.fetchListCategorySubGroup()]);
-      this.manufacturers = manufacturersRes.manufacturers;
-      this.categorySubGroups = categorieySubGroupRes.categorySubGroups
-      // ==================
-      this.setIsLoading(false);
+      try {
+        this.resetFormData();
+        this.getFormName();
+        this.isFormLoading = true;
+        if (this.productId) {
+          let dataProduct = await this.fetchProductItemById(this.productId);
+          this.appendDataToForm(dataProduct.product);
+        }
+        const [ dataManufacturers,
+              categorieySubGroup ] = await Promise.all([ this.fetchListManufacturer(),
+                                                           this.fetchListCategorySubGroup() ]);
+        this.manufacturers = dataManufacturers.manufacturers;
+        this.categorySubGroups = categorieySubGroup.categorySubGroups
+        this.isFormLoading = false;
+      } catch (error) {
+        console.error('[App Error] => ', error);
+        if (error.status === 404) {
+          this.$confirm('Sản phẩm này không tồn tại, hoặc đã bị xóa trước đó !', 'Thông báo lỗi', {
+            confirmButtonText: 'Quay về',
+            cancelButtonText: 'Thêm mới',
+            type: 'error'
+          }).then(() => {
+            this.$router.push('/catalog/product');
+          }).catch(() => {
+            this.$router.push('/catalog/product/add');
+          });
+        } else {
+          this.$message.error('Có lỗi trong quá trình tải dữ liệu !');
+          this.$router.push('/catalog/product');
+        }
+      }
     },
-    coverValueToSlug(e) {},
     getFormName() {
       this.formName = this.$route.meta && this.$route.meta.title;
     },
@@ -479,51 +643,74 @@ export default {
       this.resetFormData();
       this.$router.push({ path: router, query });
     },
-    handleCloseForm() {this.back();},
+    handleCloseForm() {
+      this.back();
+    },
     saveFeatureImage(file) {
       this.formData.featureImage.file = file;
     },
     handleUploadImagesDesc(files) {
-      this.formData.images_desc = files;
-      console.log(this.formData.images_desc);
+      this.formData.media_list = files;
     },
-    resetFormData() {},
+    resetFormData() {
+      this.formData = {...defaultFormData};
+      this.formData.featureImage.url = '';
+      this.formData.featureImage.file = null;
+    },
     handleActionForm(callback) {
       this.$refs['formData'].validate(valid => {
         if (valid) {
-          this.setIsLoading(true);
           callback().then(res => {
-            console.log(res);
             Message({
               message: res.success,
               type: 'success',
               duration: 5 * 1000
             });
-            this.setIsLoading(false);
             this.back('/catalog/product', { form: 'success' });
           }).catch(error => {
-            console.log('App error: ', error);
+            console.error('[App Error] => ', error);
+            Message({
+              message: error.data.message,
+              type: 'error',
+              duration: 5 * 1000
+            });
+            this.$message.error('Dữ liệu không hợp lệ, vui lòng kiễm tra lại !');
+            this.appendErrorToForm(error.data.errors);
           });
-        } else {
-          this.$message.error('Dữ liệu không hợp lệ, vui lòng kiễm tra lại !');
         }
       });
     },
     handleAdd() {
       return this.addProduct(this.setFormData());
     },
-    handleUpdate() {},
+    handleUpdate() {
+      return this.updateProduct({ formData: this.setFormData(), id: this.productId });
+    },
     setFormData() {
       let formData = new FormData();
       formData.append('name', this.formData.name);
       formData.append('active', this.formData.active);
       formData.append('mpn', this.formData.mpn);
       formData.append('description', this.formData.description);
-      formData.append('min_price', this.formData.min_price);
-      formData.append('max_price', this.formData.max_price);
+      formData.append('detail_information', this.formData.detail_information);
+      formData.append('promotional_price', this.formData.promotional_price);
+      formData.append('original_price', this.formData.original_price);
       formData.append('brand', this.formData.brand);
-      formData.append('module_number', this.formData.module_number);
+      formData.append('model_number', this.formData.model_number);
       formData.append('manufacturer_id', this.formData.manufacturer_id);
+      formData.append('requires_shipping', this.formData.requires_shipping);
+
+      if (this.formData.warranty_period) {
+        formData.append('warranty_period', this.formData.warranty_period + ' ' + this.formData.warranty_period_type);
+      }
+      if (this.formData.return_time) {
+        formData.append('return_time', this.formData.return_time + ' ' + this.formData.return_time_type);
+      }
+
+      formData.append('warranty_form', this.formData.warranty_form);
+      formData.append('warranty_place', this.formData.warranty_place);
+      formData.append('percent_refund', this.formData.percent_refund);
+      formData.append('allow_inspection', this.formData.allow_inspection);
 
       if (this.formData.tag_list.length) {
         for (let i=0;i<this.formData.tag_list.length;i++) {
@@ -537,9 +724,10 @@ export default {
         }
       }
 
-      if (this.formData.images_desc.length) {
-        for (let i=0;i<this.formData.images_desc.length;i++) {
-          formData.append('images[]', this.formData.images_desc[i]);
+      if (this.formData.media_list.length) {
+        for (let i=0;i<this.formData.media_list.length;i++) {
+          formData.append(`media_list[${i}][type]`, [this.formData.media_list[i].resource_type]);
+          formData.append(`media_list[${i}][url]`, [this.formData.media_list[i].secure_url]);
         }
       }
 
@@ -547,14 +735,81 @@ export default {
         formData.append('images[feature]', this.formData.featureImage.file);
       }
 
-      console.log('formData: ', formData);
-      console.log('__formData__:', this.formData);
+      if (this.formData.featureImage.isDel) {
+        formData.append('delete_image[feature]', '1');
+      }
+
       return formData;
     },
-    appendErrorToForm(errors) {},
-    getProductById() {},
-    appendToFormData(data) {},
-    checkImageNotEmpty(img) {},
+    appendErrorToForm(errors) {
+      for (const [key, value] of Object.entries(errors)) {
+        this.formError[key] = value[0];
+      }
+    },
+    appendDataToForm(data) {
+      this.formData.name = data.name;
+      this.formData.active = data.active.toString();
+      this.formData.mpn = data.mpn;
+      this.formData.description = data.description;
+      this.formData.detail_information = data.detail_information;
+
+      if (data.categories) {
+        this.formData.category_list = data.categories.map(_c => _c.id);
+      }
+      if (data.media_products) {
+        this.formData.media_list = data.media_products.map(_mp => {
+          return { resource_type: _mp.type, secure_url: _mp.url };
+        });
+      }
+
+      this.formData.promotional_price = +data.promotional_price;
+      this.formData.original_price = +data.original_price;
+
+      this.formData.featureImage.url = data.image;
+
+      this.formData.brand = data.brand;
+      this.formData.model_number = data.model_number;
+
+      if (data.manufacturer) {
+        this.formData.manufacturer_id = data.manufacturer.id;
+      }
+
+      this.formData.requires_shipping = data.requires_shipping.toString();
+
+      if (data.warranty_period) {
+        this.formData.warranty_period = data.warranty_period.split(' ')[0];
+        this.formData.warranty_period_type = data.warranty_period.split(' ')[1];
+      }
+
+      this.formData.warranty_form = data.warranty_form;
+      this.formData.warranty_place = data.warranty_place;
+      this.formData.percent_refund = data.percent_refund;
+
+      if (data.return_time) {
+        this.formData.return_time = data.return_time.split(' ')[0];
+        this.formData.return_time_type = data.return_time.split(' ')[1];
+      }
+
+      this.formData.allow_inspection = data.allow_inspection.toString();
+
+    },
+    checkImageNotEmpty(img) {
+      if (img && !(img.split('?text=')[1] === 'No_Image_Found')) {
+        return true;
+      } return false;
+    },
+    handleClErrorMaxFile() {
+      this.$message.error('Chỉ có thể up tối đa 10 ảnh !');
+    },
+    handleUploadDescribeImages(images) {
+      let imagesObj = images.map(item => {
+        return {
+          resource_type: item.resource_type,
+          secure_url: item.secure_url
+        };
+      });
+      this.formData.media_list = [...imagesObj];
+    }
   }
 }
 </script>

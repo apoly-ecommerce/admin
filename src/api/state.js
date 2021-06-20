@@ -1,9 +1,8 @@
 import request from '@/utils/request';
 
-export function getStateByCountryId(countryId) {
+export function fetchListStateByCountryId(id) {
   return request({
-    url: 'api/location/statesByCountryId',
+    url: `api/setting/state/list/country/${id}`,
     method: 'get',
-    params: { countryId }
   });
 }

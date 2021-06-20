@@ -2,6 +2,7 @@
   <form-action
     :name="formName"
     :size="'500px'"
+    :isFormLoading="isFormLoading"
     @close="handleCloseForm"
   >
 
@@ -104,7 +105,7 @@
               <label for="public" class="FormLabel">
                 <span class="FormLabel__title">Order</span>
                 <el-tooltip class="item" effect="dark" placement="top" content="is Tooltip !">
-                  <fa-icon icon="question-circle" />
+                  <i class="fas fa-question-circle"></i>
                 </el-tooltip>
               </label>
               <el-input-number class="w-100"
@@ -125,7 +126,7 @@
               <label for="meta_title" class="FormLabel">
                 <span class="FormLabel__title">Meta title</span>
                 <el-tooltip class="item" effect="dark" placement="top" content="Meta title">
-                  <fa-icon icon="question-circle" />
+                  <i class="fas fa-question-circle"></i>
                 </el-tooltip>
               </label>
               <el-input
@@ -148,7 +149,7 @@
               <label for="meta_description" class="FormLabel">
                 <span class="FormLabel__title">Meta description</span>
                 <el-tooltip class="item" effect="dark" placement="top" content="is tooltip">
-                  <fa-icon icon="question-circle" />
+                  <i class="fas fa-question-circle"></i>
                 </el-tooltip>
               </label>
               <el-input
@@ -171,7 +172,7 @@
               <label for="Image cover" class="FormLabel">
                 <span class="FormLabel__title">Cover image</span>
                 <el-tooltip class="item" effect="dark" content="is tooltip" placement="top">
-                  <fa-icon icon="question-circle" />
+                  <i class="fas fa-question-circle"></i>
                 </el-tooltip>
               </label>
               <div v-if="checkImageNotEmpty(formData.coverImage.url)" class="ImageThumb_wrap">
@@ -200,11 +201,11 @@
 
     <template v-slot:form-footer>
       <el-button v-if="!categorySubGroupId" type="primary" size="mini" @click.prevent="handleActionForm(handleAdd)">
-        <fa-icon class="PopupForm__SaveIcon" icon="save" />
+        <i class="PopupForm__SaveIcon fas fa-save"></i>
         <span class="PopupForm_SaveLabel">Save</span>
       </el-button>
       <el-button v-else type="primary" size="mini" @click.prevent="handleActionForm(handleUpdate)">
-        <fa-icon class="PopupForm__SaveIcon" icon="save" />
+        <i class="PopupForm__SaveIcon fas fa-save"></i>
         <span class="PopupForm_SaveLabel">Update</span>
       </el-button>
     </template>
@@ -226,15 +227,15 @@ import { changeToSlug } from '@/helpers';
 import { Message } from 'element-ui';
 
 const defaultFormData = {
-  category_group_id: null,
-  name: null,
-  active: null,
+  category_group_id: '',
+  name: '',
+  active: '',
   order: 1,
-  slug: null,
-  meta_title: null,
-  meta_description: null,
+  slug: '',
+  meta_title: '',
+  meta_description: '',
   coverImage: {
-    url: null,
+    url: '',
     file: null,
     isDel: false
   }
@@ -259,27 +260,20 @@ export default {
       formError: {...defaultFormError},
       formRules: categorySubGroupRules,
       categorySubGroupId: this.$route.params.id,
-      categoryGroups: []
+      categoryGroups: [],
+      isFormLoading: false
     };
   },
   watch: {
     $route(to, from) {
-      this.getFormName();
-      this.resetFormData();
       this.categorySubGroupId = to.params.id;
-      this.formSetup();
-      if (this.categorySubGroupId) {
-        this.getCategorySubGroupById()
+      if (to.name !== 'list-category-sub-group') {
+        this.formSetup();
       }
     }
   },
   created() {
-    this.getFormName();
-    this.resetFormData();
     this.formSetup();
-    if (this.categorySubGroupId) {
-      this.getCategorySubGroupById()
-    }
   },
   computed: {
     getBaseUrl() {
@@ -288,16 +282,40 @@ export default {
   },
   methods: {
     ...mapActions({
-      'setIsLoading': 'app/handleSetIsLoading',
       'fetchListCategoryGroup': 'categoryGroup/fetchListCategoryGroup',
       'addCategorySubGroup': 'categorySubGroup/addCategorySubGroup',
-      'fetchListCategorySubGroupItemById': 'categorySubGroup/fetchListCategorySubGroupItemById',
+      'fetchCategorySubGroupItemById': 'categorySubGroup/fetchCategorySubGroupItemById',
       'updateCategorySubGroup': 'categorySubGroup/updateCategorySubGroup'
     }),
     async formSetup() {
-      const categoryGroupsPromise = this.fetchListCategoryGroup();
-      const [categoryGroupsResult] = await Promise.all([categoryGroupsPromise]);
-      this.categoryGroups = categoryGroupsResult.categoryGroups;
+      try {
+        this.resetFormData();
+        this.getFormName();
+        this.isFormLoading = true;
+        if (this.categorySubGroupId) {
+          let dataCategorySubGroup = await this.fetchCategorySubGroupItemById(this.categorySubGroupId);
+          this.appendDataToForm(dataCategorySubGroup.categorySubGroup);
+        }
+        let dataCategoryGroups = await this.fetchListCategoryGroup();
+        this.categoryGroups = dataCategoryGroups.categoryGroups;
+        this.isFormLoading = false;
+      } catch (error) {
+        if (error.status === 404) {
+          console.error('[App Error] => ', error);
+          this.$confirm('Nhóm danh mục phụ này không tồn tại, hoặc đã bị xóa trước đó !', 'Thông báo lỗi', {
+            confirmButtonText: 'Quay về',
+            cancelButtonText: 'Thêm mới',
+            type: 'error'
+          }).then(() => {
+            this.$router.push('/catalog/category-sub-group');
+          }).catch(() => {
+            this.$router.push('/catalog/category-sub-group/add');
+          });
+        } else {
+          this.$message.error('Có lỗi trong quá trình tải dữ liệu !');
+          this.$router.push('/catalog/category-sub-group');
+        }
+      }
     },
     coverValueToSlug(e) {
       let val = e.target.value;
@@ -306,9 +324,9 @@ export default {
     getFormName() {
       this.formName = this.$route.meta && this.$route.meta.title;
     },
-    back(router = '/catalog/category-sub-group') {
+    back(router = '/catalog/category-sub-group', query = {}) {
       this.resetFormData();
-      this.$router.push(router);
+      this.$router.push({ path: router, query });
     },
     handleCloseForm() {
       this.back();
@@ -325,22 +343,19 @@ export default {
     handleActionForm(callback) {
       this.$refs['formData'].validate(valid => {
         if (valid) {
-          this.setIsLoading(true);
           callback().then(res => {
             Message({
               message: res.success,
               type: 'success',
               duration: 5 * 1000
             });
-            this.setIsLoading(false);
-            this.back();
+            this.back('/catalog/category-sub-group', { form: 'success' });
           }).catch(error => {
             Message({
               message: error.data.message,
               type: 'error',
               duration: 5 * 1000
             });
-            this.setIsLoading(false);
             this.appendErrorToForm(error.data.errors);
           });
         }
@@ -374,17 +389,7 @@ export default {
         this.formError[key] = value[0];
       }
     },
-    getCategorySubGroupById() {
-      this.setIsLoading(true);
-      this.fetchListCategorySubGroupItemById(this.categorySubGroupId).then(res => {
-        this.appendToFormData(res.categorySubGroup);
-        this.setIsLoading(false);
-      }).catch(error => {
-        this.setIsLoading(false);
-        console.error('App Error:', error);
-      });
-    },
-    appendToFormData(data) {
+    appendDataToForm(data) {
       this.formData.category_group_id = data.group.id;
       this.formData.name = data.name;
       this.formData.slug = data.slug;

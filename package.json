@@ -10,10 +10,6 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.35",
-    "@fortawesome/free-solid-svg-icons": "^5.15.3",
-    "@fortawesome/pro-regular-svg-icons": "^5.1.0-8",
-    "@fortawesome/vue-fontawesome": "^2.0.2",
     "@tinymce/tinymce-vue": "^3.2.8",
     "axios": "^0.21.1",
     "babel-polyfill": "^6.26.0",
@@ -23,13 +19,14 @@
     "font-awesome": "^4.7.0",
     "font-awesome-picker": "^1.1.6",
     "js-cookie": "^2.2.1",
+    "moment": "^2.29.1",
     "nprogress": "^0.2.0",
     "vee-validate": "^4.3.6",
     "vfa-picker": "^5.9.1",
     "vue": "^2.6.12",
+    "vue-currency-input": "^1.22.6",
     "vue-i18n": "^8.24.4",
     "vue-router": "^3.5.1",
-    "vue-upload-drop-images": "^1.0.4",
     "vuex": "^3.6.2"
   },
   "devDependencies": {

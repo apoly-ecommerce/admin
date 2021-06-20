@@ -5,6 +5,7 @@ Vue.use(Vuex);
 
 // Modules
 import app from './modules/app';
+import auth from './modules/auth';
 import user from './modules/user';
 import country from './modules/country';
 import module from './modules/module';
@@ -15,10 +16,13 @@ import categorySubGroup from './modules/categorySubGroup';
 import category from './modules/category';
 import manufacturer from './modules/manufacturer';
 import product from './modules/product';
+import address from './modules/address';
+import customer from './modules/customer';
 
 const store = new Vuex.Store({
   modules: {
     app,
+    auth,
     user,
     module,
     country,
@@ -28,7 +32,9 @@ const store = new Vuex.Store({
     categorySubGroup,
     category,
     manufacturer,
-    product
+    product,
+    address,
+    customer
   }
 });
 

@@ -1,12 +1,12 @@
-import { getStateByCountryId } from '@/api/state';
+import { fetchListStateByCountryId } from '@/api/state';
 
 export default {
   /**
    * Get states by country id
    */
-   getStatesByCountryId({ commit }, countryId) {
+   fetchListStateByCountryId({ commit }, countryId) {
     return new Promise((resolve, reject) => {
-      getStateByCountryId(countryId).then(res => {
+      fetchListStateByCountryId(countryId).then(res => {
         resolve(res);
       }).catch(error => {
         reject(error);

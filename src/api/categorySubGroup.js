@@ -77,7 +77,7 @@ export function massRestoreCategorySubGroup(ids) {
   });
 }
 
-export function fetchListCategorySubGroupItemById(id) {
+export function fetchCategorySubGroupItemById(id) {
   return request({
     url: `api/admin/catalog/categorySubGroup/show/${id}`,
     method: 'get'

@@ -3,7 +3,6 @@ import { validEmail, validPhone } from '@/utils/validate';
 
 /**
  * Validate email.
- * @var function
  */
 const validateEmail = (rule, value, callback) => {
   if (! validEmail(value)) {
@@ -13,18 +12,15 @@ const validateEmail = (rule, value, callback) => {
 
 /**
  * Validate password.
- * @var function
  */
 const validatePassword = (rule, value, callback) => {
   if (value.length < 6) {
-    callback(new Error("The password can't be less than 6 digits !"));
+    callback(new Error("Mật khẩu không được ít hơn 6 chữ số !"));
   } else { callback() }
 }
 
 /**
  * Validate phone
- *
- * @var function
  */
 const validatePhone = (rule, value, callback) => {
   if (! validPhone(value)) {
@@ -33,16 +29,54 @@ const validatePhone = (rule, value, callback) => {
 }
 
 /**
+ * Validate price
+ */
+const validatePrice = (rule, value, callback) => {
+  if (value <= 0) {
+    callback(new Error('Giá trị số tiền phải lớn hơn 0đ'));
+  } else { callback() }
+}
+
+/**
  * Check user rule.
  * @var Object
  */
 export const userRules = {
-  full_name: [{ required: true, trigger: 'blur' }],
-  status: [{ required: true, trigger: 'blur' }],
-  email: [{ required: true, trigger: 'blur', validator: validateEmail }],
-  password: [{ required: true, trigger: 'blur', validator: validatePassword }],
-  re_password: [{ required: true, trigger: 'blur' }],
-  role: [{ required: true, trigger: 'blur' }],
+  name: [{ required: true, message: 'Vui lòng nhập tên user', trigger: 'blur' }],
+  active: [{ required: true, message: 'Vui lòng chọn trạng thái', trigger: 'blur' }],
+  email: [
+    { required: true, message: 'Vui lòng nhập email', trigger: 'blur' },
+    { trigger: 'blur', validator: validateEmail, trigger: 'blur' }
+  ],
+  password: [
+    { required: true, message: 'Vui lòng nhập mật khẩu', trigger: 'blur' },
+    { trigger: 'blur', validator: validatePassword, trigger: 'blur' }
+  ],
+  password_confirmation: [{ required: true, message: 'Vui lòng xác nhận lại mật khẩu', trigger: 'blur' }],
+  role_id: [{ required: true, message: 'Vui lòng nhập quyền cho user', trigger: 'blur' }],
+  sex: [{ required: true, message: 'Vui lòng chọn giới tính', trigger: 'blur' }],
+  phone: [
+    { required: true, message: 'Vui lòng nhập số điện thoại', trigger: 'blur' },
+    { trigger: 'blur', validator: validatePhone }
+  ]
+}
+
+/**
+ * Check customer rule.
+ * @var Object
+ */
+ export const customerRules = {
+  name: [{ required: true, message: 'Vui lòng nhập tên khách hàng', trigger: 'blur' }],
+  active: [{ required: true, message: 'Vui lòng chọn trạng thái', trigger: 'blur' }],
+  email: [
+    { required: true, message: 'Vui lòng nhập email', trigger: 'blur' },
+    { trigger: 'blur', validator: validateEmail, trigger: 'blur' }
+  ],
+  password: [
+    { required: true, message: 'Vui lòng nhập mật khẩu', trigger: 'blur' },
+    { trigger: 'blur', validator: validatePassword, trigger: 'blur' }
+  ],
+  password_confirmation: [{ required: true, message: 'Vui lòng xác nhận lại mật khẩu', trigger: 'blur' }],
 }
 
 /**
@@ -106,5 +140,13 @@ export const productRules = {
   name: [{ required: true, message: 'Vui lòng nhập tên sản phẩm', trigger: 'blur' }],
   description: [{ required: true, message: 'Vui lòng nhập mô tả sản phẩm', trigger: 'blur' }],
   active: [{ required: true, message: 'Vui lòng chọn trạng thái', trigger: 'blur' }],
-  category_list: [{ required: true, message: 'Vui lòng chọn ít nhất một da mục' }],
+  category_list: [{ required: true, message: 'Vui lòng chọn ít nhất một da mục', trigger: 'blur' }],
+  original_price: [
+    { required: true, message: 'Vui lòng nhập giá gốc sản phẩm', trigger: 'blur' },
+    { required: true, trigger: 'blur', validator: validatePrice }
+  ],
+  promotional_price: [
+    { required: true, message: 'Vui lòng nhập giá giá khuyến mãi sản phẩm', trigger: 'blur' },
+    { required: true, trigger: 'blur', validator: validatePrice }
+  ],
 };

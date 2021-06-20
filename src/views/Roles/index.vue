@@ -3,35 +3,43 @@
 
     <router-view :key="key"></router-view>
 
-    <page-table-content
-      :tableName="tableName"
-    >
+    <page-table-content :tableName="tableName">
 
       <template v-slot:tools>
-        <el-button size="mini" @click="handleSwichTabRole">{{ tableName === 'List Role' ? 'Role Trashed' : 'List Role' }}</el-button>
-        <router-link class="Table__tools-item" :to="{ name: 'add-role' }">Add Role</router-link>
+        <template>
+          <el-button v-if="isTabTrashed" size="mini" @click="getList">
+            <i class="fas fa-list"></i>
+            <span>Danh sách</span>
+          </el-button>
+          <el-button v-else size="mini" @click="getListTrashed">
+            <i class="fas fa-trash"></i>
+            <span>Thùng rác</span>
+          </el-button>
+        </template>
+
+        <router-link class="Table__tools-item" :to="{ name: 'add-role' }">Thêm mới</router-link>
       </template>
 
       <template v-slot:actions>
-        <el-select v-model="tableActions" size="mini" style="margin-right: 4px; width: 100px;" placeholder="Action">
-          <template v-if="tableName == 'List Role'">
-            <el-option :value="'trash'">
+        <el-select v-model="tableAction" size="mini" style="margin-right: 4px; width: 100px;" placeholder="Tùy chọn">
+          <template v-if="!isTabTrashed">
+            <el-option :value="'Trash'">
               <i class="el-icon-delete-solid"></i>
               <span>Trash</span>
             </el-option>
           </template>
           <template v-else>
-            <el-option :value="'restore'">
+            <el-option :value="'Restore'">
               <i class="el-icon-refresh-left"></i>
               <span>Restore</span>
             </el-option>
           </template>
-          <el-option :value="'delete'">
+          <el-option :value="'Delete'">
             <i class="el-icon-close"></i>
             <span>Delete</span>
           </el-option>
         </el-select>
-        <el-button v-if="tableActions" @click="handleTableAction" size="mini" type="primary">Append</el-button>
+        <el-button v-if="tableAction" @click="handleTableAction" size="mini" type="primary">Áp dụng</el-button>
       </template>
 
       <template v-slot:supports>
@@ -43,7 +51,7 @@
       <template v-slot:filters>
         <section v-if="tableSearch && tableSearch.options.length" class="SearchForm">
           <div class="d-flex">
-            <el-select class="el-FormControl_custom" v-model="tableSearch.optionSelected" placeholder="Select">
+            <el-select class="el-FormControl_custom FormSelectOptionSearch_SizeCustom" v-model="tableSearch.optionSelected" placeholder="Select">
               <el-option
                 v-for="(option, index) in tableSearch.options"
                 :key="index"
@@ -52,7 +60,7 @@
               </el-option>
             </el-select>
             <div class="SearchForm_FormGroup">
-              <fa-icon class="SearchForm__Icon" icon="search" />
+              <i class="SearchForm__Icon fas fa-search"></i>
               <el-input class="el-FormControl_custom" :placeholder="getPlaceholderSearch" v-model="tableSearch.value" autocomplete="off" spellcheck="false"></el-input>
             </div>
           </div>
@@ -61,36 +69,41 @@
 
       <template v-slot:main-content>
         <section class="TableBox_Content">
-
           <el-table
             ref="multipleTable"
-            :data="roleDataSearch"
+            :data="dataSearch"
             style="width: 100%"
             emptyText="Empty data !"
             v-loading="listLoading"
             @selection-change="handleSelectionChange"
           >
 
-            <el-table-column type="selection" width="55" />
-
-            <el-table-column type="expand">
+             <el-table-column type="expand">
               <template slot-scope="props">
                 <div class="ExpandData_Table">
                   <div v-if="props.row.created_at" class="ExpandData__Item">
-                    <strong>Created at:</strong>
-                    <span>{{ formatTime(props.row.created_at) }}</span>
+                    <el-tag type="success">
+                      <strong>Ngày tạo:</strong>
+                      <span>{{ formatTime(props.row.created_at) }}</span>
+                    </el-tag>
                   </div>
                   <div v-if="props.row.updated_at" class="ExpandData__Item">
-                    <strong>Updated at:</strong>
-                    <span>{{ formatTime(props.row.created_at) }}</span>
+                    <el-tag type="warning">
+                      <strong>Cập nhật gần nhất:</strong>
+                      <span>{{ formatTime(props.row.created_at) }}</span>
+                    </el-tag>
                   </div>
                   <div v-if="props.row.deleted_at" class="ExpandData__Item">
-                    <strong>Deleted at:</strong>
-                    <span>{{ formatTime(props.row.created_at) }}</span>
+                    <el-tag type="danger">
+                      <strong>Ngày xóa:</strong>
+                      <span>{{ formatTime(props.row.created_at) }}</span>
+                    </el-tag>
                   </div>
                 </div>
               </template>
             </el-table-column>
+
+            <el-table-column type="selection" width="50" />
 
             <el-table-column label="Name" property="name" width="550" sortable>
               <template slot-scope="{row}">
@@ -125,12 +138,12 @@
               <template slot-scope="{row}">
                 <el-button-group>
                   <template v-if="!row.deleted_at">
-                    <el-button @click="handleEditRole(row.id)" size="mini" type="primary" icon="el-icon-edit"></el-button>
-                    <el-button @click="handleTrashRole(row.id)" size="mini" type="danger" icon="el-icon-delete"></el-button>
+                    <el-button @click="handleEdit(row.id)" size="mini" type="primary" icon="el-icon-edit"></el-button>
+                    <el-button @click="handleTrash(row.id)" size="mini" type="danger" icon="el-icon-delete"></el-button>
                   </template>
                   <template v-else>
-                    <el-button @click="handleRestoreRole(row.id)" size="mini" type="primary" icon="el-icon-refresh-left"></el-button>
-                    <el-button @click="handleDestroyRole(row.id)" size="mini" type="danger" icon="el-icon-close"></el-button>
+                    <el-button @click="handleRestore(row.id)" size="mini" type="primary" icon="el-icon-refresh-left"></el-button>
+                    <el-button @click="handleDestroy(row.id)" size="mini" type="danger" icon="el-icon-close"></el-button>
                   </template>
                 </el-button-group>
               </template>
@@ -138,14 +151,10 @@
 
           </el-table>
         </section>
-
-        <template>
-          <pagination v-if="handleConditionPaginate('List Role')" :total="totalRole" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListRole" />
-          <pagination v-if="handleConditionPaginate('Role Trashed')" :total="totalRole" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListRoleTrash" />
-        </template>
-
       </template>
+
     </page-table-content>
+
   </section>
 </template>
 
@@ -154,7 +163,7 @@
 import PageTableContent from '@/components/PageTableContent';
 import Pagination from '@/components/Pagination';
 // Store
-import { mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 // Utils
 import { parseTime } from '@/utils/functions';
 
@@ -165,10 +174,10 @@ export default {
   },
   data() {
     return {
-      listRole: [],
-      totalRole: 0,
-      listLoading: true,
-      tableName: 'List Role',
+      totalRow: 0,
+      listLoading: false,
+      isTabTrashed: false,
+      tableName: 'Danh sách role',
       listQuery: {
         limit: 10,
         page: 1
@@ -176,25 +185,26 @@ export default {
       tableSearch: {
         value: '',
         options: [
-          { name: 'Name', value: 'name', placeholder: 'Enter the name' },
-          { name: 'Level', value: 'level', placeholder: 'Enter the role level' },
-          { name: 'Description', value: 'description', placeholder: 'Enter the role description' }
+          { name: 'Tên', value: 'name', placeholder: 'Nhập tên' },
         ],
         optionSelected: 'name'
       },
       multipleSelection: [],
-      tableActions: ''
+      tableAction: ''
     };
   },
   watch: {
-    $route() {
-      this.getListRole();
+    $route(to, from) {
+      this.reRenderDataFromUrl();
     }
   },
   created() {
-    this.getListRole();
+    this.getList();
   },
   computed: {
+    ...mapGetters({
+      'tableData': 'role/getRoles',
+    }),
     key() {
       return this.$route.path;
     },
@@ -202,9 +212,9 @@ export default {
       let optionCurrent = this.tableSearch.options.filter(item => item.value === this.tableSearch.optionSelected);
       return optionCurrent[0]['placeholder'];
     },
-    roleDataSearch() {
+    dataSearch() {
       const { value, optionSelected } = this.tableSearch;
-      let searchResult = this.listRole.filter(item => {
+      let searchResult = this.tableData.filter(item => {
         return !value || !item[optionSelected] || (item[optionSelected].toString().toLowerCase()).includes(value.toLowerCase());
       });
       return searchResult;
@@ -212,236 +222,223 @@ export default {
   },
   methods: {
     ...mapActions({
-      'fetchListRole': 'role/fetchListRole',
-      'fetchListRoleTrashed': 'role/fetchListRoleTrashed',
+      'fetchListRoleByPaginate': 'role/fetchListRoleByPaginate',
+      'fetchListRoleTrashedByPaginate': 'role/fetchListRoleTrashedByPaginate',
       'trashRole': 'role/trashRole',
       'restoreRole': 'role/restoreRole',
       'destroyRole': 'role/destroyRole',
       'massTrashRole': 'role/massTrashRole',
-      'massDestroyRole': 'role/massDestroyRole',
-      'massRestoreRole': 'role/massRestoreRole'
+      'massRestoreRole': 'role/massRestoreRole',
+      'massDestroyRole': 'role/massDestroyRole'
     }),
-    handleSwichTabRole() {
-      this.listQuery.page = 1;
-      if (this.tableName === 'List Role') {
-        this.getListRoleTrash();
-      } else {
-        this.getListRole();
-      }
-    },
-    handleConditionPaginate(tableName) {
-      return tableName === this.tableName && this.totalRole > 0;
-    },
     formatTime(time) {
       return parseTime(time);
-    },
-    toggleSelection(rows) {
-      if (rows) {
-        rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row);
-        });
-      } else {
-        this.$refs.multipleTable.clearSelection();
-      }
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-    getListRole() {
+    getList() {
       this.listLoading = true;
-      this.fetchListRole(this.listQuery).then(res => {
-        this.listLoading = false;
-        this.listRole  = res.roles.data;
-        this.totalRole = res.roles.total;
-        this.tableName = 'List Role';
+      this.fetchListRoleByPaginate(this.listQuery).then(res => {
+        this.listLoading  = false;
+        this.isTabTrashed = false;
+        this.totalRow = res.total;
       }).catch(error => {
         this.listLoading = false;
-        console.error('App: ', error);
+        console.error('[App Error] => ', error);
       });
     },
-    getListRoleTrash() {
+    getListTrashed() {
       this.listLoading = true;
-      this.fetchListRoleTrashed(this.listQuery).then(res => {
-        this.listLoading = false;
-        this.listRole  = res.trashed.data;
-        this.totalRole = res.trashed.total;
-        this.tableName = 'Role Trashed';
+      this.fetchListRoleTrashedByPaginate(this.listQuery).then(res => {
+        this.listLoading  = false;
+        this.isTabTrashed = true;
+        this.totalRow = res.total;
       }).catch(error => {
         this.listLoading = false;
-        console.error('App: ', error);
+        console.error('[App Error] => ', error);
       });
     },
-    handleRestoreRole(roleId) {
-      // code logic ...
-      this.restoreRole(roleId).then(res => {
+    handleTableAction() {
+      if (this.tableAction === 'Trash') {
+        this.handleMassTrash(); return;
+      }
+      if (this.tableAction === 'Delete') {
+        this.handleMassDestroy(); return;
+      }
+      if (this.tableAction === 'Restore') {
+        this.handleMassRestore(); return;
+      }
+    },
+    handleRestore(id) {
+      this.restoreRole(id).then(res => {
         this.$message({
           type: 'success',
           message: res.success
         });
-        this.getListRoleTrash();
+        this.reRenderDataFromFormAction();
       }).catch(error => {
-        this.$message.error('Failed to restore Role !');
+        this.$message.error('Khôi phục thất bại !');
         console.error('App: ', error);
-      })
+      });
     },
-    handleTrashRole(roleId) {
-      this.$confirm('Are you sure you want to move role to the trash ?', 'Confirm', {
-        confirmButtonText: 'Agree',
-        cancelButtonText: 'Cancel',
+    handleTrash(id) {
+      this.$confirm('Xác nhận chuyển quyền này vào thùng rác ?', 'Xác nhận', {
+        confirmButtonText: 'Đồng ý',
+        cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
         // code logic ...
-        this.trashRole(roleId).then(res => {
+        this.trashRole(id).then(res => {
           this.$message({
             type: 'success',
             message: res.success
           });
-          this.getListRole();
+          this.reRenderDataFromFormAction();
         }).catch(error => {
-          this.$message.error('Failed to move Role to trash !');
-          // console.error('App: ', error);
+          this.$message.error('Không chuyển được vào thùng rác !');
+          console.error('[App Error] => ', error);
         });
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: 'Move trash canceled !'
+          message: 'Đã hủy chuyển thùng rác !'
         });
       });
     },
-    handleDestroyRole(roleId) {
-      this.$confirm('Are you sure to delete this role ?', 'Confirm', {
-        confirmButtonText: 'Agree',
-        cancelButtonText: 'Cancel',
+    handleDestroy(id) {
+      this.$confirm('Xác nhận xóa vĩnh viễn quyền này ?', 'Xác nhận', {
+        confirmButtonText: 'Đồng ý',
+        cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        // code logic ...
-        this.destroyRole(roleId).then(res => {
+        // Code logic
+        this.destroyRole(id).then(res => {
           this.$message({
             type: 'success',
             message: res.success
           });
-          this.getListRoleTrash();
+          this.reRenderDataFromFormAction();
         }).catch(error => {
-          this.$message.error('Failed to permanent deletion Role !');
-          console.error('App: ', error);
+          this.$message.error('Xóa vĩnh viễn thất bại !');
+          console.error('[App Error] => ', error);
         });
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: 'Permanent deletion canceled !'
+          message: 'Đã hủy xóa vĩnh viễn !'
         });
       });
     },
-    handleTableAction() {
-      if (this.tableActions === 'delete') {
-        this.handleMassDestroyRole();
+    handleMassDestroy() {
+      let ids = this.multipleSelection.map(item => item.id);
+      if (!ids.length) {
+        this.$message.error('Vui lòng chọn ích nhất một một phần tử !');
         return;
       }
-      if (this.tableActions === 'trash') {
-        this.handleMassTrashRole();
-        return;
-      }
-      if (this.tableActions === 'restore') {
-        this.handleMassRestoreRole();
-        return;
-      }
-    },
-    handleMassDestroyRole() {
-      let roleIds = this.multipleSelection.map(item => item.id);
-      if (!roleIds.length) {
-        this.$message.error('Please select at least one role !');
-        return;
-      }
-      this.$confirm('Are you sure you want to permanently delete the role list?', 'Confirm', {
-        confirmButtonText: 'Agree',
-        cancelButtonText: 'Cancel',
+      this.$confirm('Xác nhận xóa vĩnh viễn danh sách này ?', 'Xác nhận', {
+        confirmButtonText: 'Đồng ý',
+        cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
         // code logic ...
-        this.massDestroyRole(roleIds).then(res => {
+        this.massDestroyRole(ids).then(res => {
           this.$message({
             type: 'success',
             message: res.success
           });
-          if (this.tableName === 'List Role') {
-            this.getListRole();
-          } else {
-            this.getListRoleTrash();
-          }
+          this.reRenderDataFromFormAction();
         }).catch(error => {
-          this.$message.error('Deleting the role list failed !');
-          console.error('App: ', error);
+          this.$message.error('Không xóa vĩnh viễn được danh sách này !');
+          console.error('[App Error] => ', error);
         });
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: 'Move trash canceled !'
+          message: 'Đã hủy xóa vĩnh viễn !'
         });
       });
     },
-    handleMassTrashRole() {
-      let roleIds = this.multipleSelection.map(item => item.id);
-      if (!roleIds.length) {
-        this.$message.error('Please select at least one role !');
+    handleMassTrash() {
+      let ids = this.multipleSelection.map(item => item.id);
+      if (!ids.length) {
+        this.$message.error('Vui lòng chọn ích nhất một quyền !');
         return;
       }
-      this.$confirm('Are you sure you want to move the list of roles to the trash ?', 'Confirm', {
-        confirmButtonText: 'Agree',
-        cancelButtonText: 'Cancel',
+      this.$confirm('Xác nhận chuyển danh sách này vào thùng rác ?', 'Xác nhận', {
+        confirmButtonText: 'Đồng ý',
+        cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
         // code logic ...
-        this.massTrashRole(roleIds).then(res => {
+        this.massTrashRole(ids).then(res => {
           this.$message({
             type: 'success',
             message: res.success
           });
-          this.getListRole();
+          this.reRenderDataFromFormAction();
         }).catch(error => {
-          this.$message.error('Moved list of roles in to trash failed !');
-          // console.error('App: ', error);
+          this.$message.error('Chuyển vào thùng rác không thành công !');
+          console.error('[App Error] => ', error);
         });
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: 'Move trash canceled !'
+          message: 'Đã hủy chuyển thùng rác !'
         });
       });
     },
-    handleMassRestoreRole() {
-      let roleIds = this.multipleSelection.map(item => item.id);
-      if (!roleIds.length) {
-        this.$message.error('Please select at least one role !');
+    handleMassRestore() {
+      let ids = this.multipleSelection.map(item => item.id);
+      if (!ids.length) {
+        this.$message.error('Vui lòng chọn ích nhất một phần tử !');
         return;
       }
-      this.$confirm('Are you sure you want to restore the role list ?', 'Confirm', {
-        confirmButtonText: 'Agree',
-        cancelButtonText: 'Cancel',
+      this.$confirm('Xác nhận khôi phục danh sách này ?', 'Xác nhận', {
+        confirmButtonText: 'Đồng ý',
+        cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
         // code logic ...
-        this.massRestoreRole(roleIds).then(res => {
+        this.massRestoreRole(ids).then(res => {
           this.$message({
             type: 'success',
             message: res.success
           });
-          this.getListRoleTrash();
+          this.reRenderDataFromFormAction();
         }).catch(error => {
-          this.$message.error('Restore list of roles failed !');
-          console.error('App: ', error);
+          this.$message.error('Khôi phục thất bại !');
+          console.error('[App Error] => ', error);
         });
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: 'Restore canceled !'
+          message: 'Đã hủy chuyển thùng rác !'
         });
       });
     },
-    handleEditRole(roleId) {
+    handleEdit(id) {
       this.$router.push({
         name: 'update-role',
-        params: { id: roleId }
+        params: { id }
       });
+    },
+    reRenderDataFromFormAction() {
+      this.tableAction = '';
+      if (this.tableData.length === 0) {
+        if (! this.isTabTrashed) { this.getList() }
+        else { this.getListTrashed(); }
+      }
+    },
+    reRenderDataFromUrl() {
+      this.tableAction = '';
+      if (this.$route.query.form === 'success') {
+        if (! this.isTabTrashed) { this.getList() }
+        else { this.getListTrashed(); }
+        let query = Object.assign({}, this.$route.query);
+        delete query.form;
+        this.$router.replace({ query });
+      };
     }
   }
 }

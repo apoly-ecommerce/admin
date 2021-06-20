@@ -85,7 +85,6 @@ export function fetchCategoryItemById(id) {
 }
 
 export function updateCategory(headers, data, id) {
-  console.log(headers, data, id);
   return request({
     url: `api/admin/catalog/category/update/${id}`,
     method: 'post',

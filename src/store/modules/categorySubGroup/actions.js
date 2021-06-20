@@ -9,7 +9,7 @@ import {
   massDestroyCategorySubGroup,
   restoreCategorySubGroup,
   massRestoreCategorySubGroup,
-  fetchListCategorySubGroupItemById,
+  fetchCategorySubGroupItemById,
   updateCategorySubGroup
 } from '@/api/categorySubGroup';
 
@@ -125,9 +125,9 @@ export default {
     })
   },
 
-  fetchListCategorySubGroupItemById({ commit }, id) {
+  fetchCategorySubGroupItemById({ commit }, id) {
     return new Promise((resolve, reject) => {
-      fetchListCategorySubGroupItemById(id)
+      fetchCategorySubGroupItemById(id)
       .then(res => resolve(res.data))
       .catch(error => reject(error));
     });
@@ -139,10 +139,7 @@ export default {
         'Content-type': 'multipart/form-data'
       };
       updateCategorySubGroup(headers, formData, id)
-      .then(res => {
-        commit('categorySubGroup/UPDATE_CATEGORY_GROUP', res.data.categorySubGroup, { root: true });
-        resolve(res.data);
-      })
+      .then(res => resolve(res.data))
       .catch(error => reject(error));
     });
   }

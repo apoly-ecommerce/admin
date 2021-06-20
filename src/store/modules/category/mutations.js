@@ -12,13 +12,4 @@ export default {
     state.listCategories = state.listCategories.filter(item => !ids.includes(item.id));
   },
 
-  UPDATE_CATEGORY: (state, data) => {
-    let { listCategories } = state;
-    let index = listCategories.findIndex(item => item.id === data.id );
-    if (index !== -1) {
-      state.listCategories.splice(index, 1, data);
-      console.log(state.listCategories);
-    } return;
-  }
-
 };

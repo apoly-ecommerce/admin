@@ -3,13 +3,13 @@
     <a href="javascript:;" class="NavBar_CustomMenu__link DropdownMenu__btn NavBar_MenuLink"
       @click.prevent="activeDropdownMenu(tabName)"
     >
-      <fa-icon class="NavBar_CustomMenu__icon" :icon="['fas', 'bullhorn']" />
+      <i class="NavBar_CustomMenu__icon fas fa-bullhorn"></i>
     </a>
     <ul class="DropdownMenu__table"
       v-if="dropdownName && dropdownName===tabName"
     >
-       <fa-icon class="DropdownMenu__btn--close"
-        :icon="['fas', 'times']"
+      <i
+        class="fas fa-times DropdownMenu__btn--close"
         @click="activeDropdownMenu('')"
       />
       <li class="DropdownMenu__title">You have 0 unread Announce</li>

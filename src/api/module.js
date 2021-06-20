@@ -1,6 +1,6 @@
 import request from '@/utils/request';
 
-export function getAllModules() {
+export function fetchListModule() {
   return request({
     url: 'api/admin/setting/module/list'
   });

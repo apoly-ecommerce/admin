@@ -3,16 +3,16 @@
 
     <template v-if="isMenuChildless && menuItem.link">
       <menu-link :to="menuItem.link">
-        <fa-icon class="AppSidebar_Wrap__MenuIcon" :icon="menuItem.icon" />
+        <i class="AppSidebar_Wrap__MenuIcon" :class="menuItem.icon"></i>
         <span class="AppSidebar_Wrap__MenuLabel">{{ menuItem.name }}</span>
       </menu-link>
     </template>
 
     <template v-if="isMenuHasChildren">
       <menu-link :VBToggle="slugMenuName(menuItem.name)">
-        <fa-icon class="AppSidebar_Wrap__MenuIcon" :icon="menuItem.icon" />
+        <i class="AppSidebar_Wrap__MenuIcon" :class="menuItem.icon"></i>
         <span class="AppSidebar_Wrap__MenuLabel">{{ menuItem.name }}</span>
-        <fa-icon class="TreeView__icon TreeView__icon--close" :icon="['fas', 'angle-right']"/>
+        <i class="fas fa-angle-right TreeView__icon TreeView__icon--close"></i>
       </menu-link>
       <el-submenu
         :id="slugMenuName(menuItem.name)"

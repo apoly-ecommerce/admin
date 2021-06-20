@@ -21,7 +21,7 @@ const mapSidebarMenu = [
       {
         name: 'Categories',
         icon: 'angle-double-right',
-        roles: handleCheckRoleToShow(['admin', 'editor']),
+        roles: true,
         children: [
           {
             name: 'Group',
@@ -47,75 +47,45 @@ const mapSidebarMenu = [
         name: 'Products',
         link: '/catalog/product',
         icon: 'angle-double-right',
-        roles: handleCheckRoleToShow(['admin', 'editor'])
+        roles: true
       },
       {
         name: 'Manufacturers',
         link: '/catalog/manufacturer',
         icon: 'angle-double-right',
-        roles: handleCheckRoleToShow(['admin', 'editor'])
+        roles: true
       },
     ]
   },
   {
     name: 'Admin',
     icon: 'user-secret',
-    roles: handleCheckRoleToShow(['admin', 'editor']),
+    roles: true,
     children: [
       {
-        name: 'Users',
-        link: '/users',
+        name: 'User',
+        link: '/admin/user',
         icon: 'angle-double-right',
-        roles: handleCheckRoleToShow(['admin', 'editor']),
+        roles: true,
       },
       {
         name: 'Customers',
-        link: '/customers',
+        link: '/admin/customer',
         icon: 'angle-double-right',
-        roles: handleCheckRoleToShow(['admin', 'editor'])
-      }
+        roles: true,
+      },
     ]
   },
   {
     name: 'Settings',
     icon: 'cogs',
-    roles: handleCheckRoleToShow(['admin', 'editor']),
+    roles: true,
     children: [
       {
         name: 'User roles',
-        link: '/roles',
+        link: '/setting/role',
         icon: 'angle-double-right',
-        roles: handleCheckRoleToShow(['admin', 'editor']),
-      },
-      {
-        name: 'System settings',
-        link: '/',
-        icon: 'angle-double-right',
-        roles: handleCheckRoleToShow(['admin', 'editor']),
-      },
-      {
-        name: 'Configuration',
-        link: '/',
-        icon: 'angle-double-right',
-        roles: handleCheckRoleToShow(['admin', 'editor']),
-      },
-      {
-        name: 'Business area',
-        link: '/',
-        icon: 'angle-double-right',
-        roles: handleCheckRoleToShow(['admin', 'editor']),
-      },
-      {
-        name: 'Currencies',
-        link: '/',
-        icon: 'angle-double-right',
-        roles: handleCheckRoleToShow(['admin', 'editor']),
-      },
-      {
-        name: 'Languages',
-        link: '/',
-        icon: 'angle-double-right',
-        roles: handleCheckRoleToShow(['admin', 'editor']),
+        roles: true,
       }
     ]
   }

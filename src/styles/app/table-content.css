@@ -12,6 +12,9 @@
     align-items: center;
     text-transform: uppercase;
   }
+  .Table-TableBox .el-table__body .el-button-group .el-button {
+    padding: 6px 8px;
+  }
   .Table-TableBox__header .Table__name {
     color: var(--second-color);
   }

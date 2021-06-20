@@ -5,4 +5,5 @@ export default {
   userInfo: {},
   role: {},
   role_permissions: [],
+  listUser: []
 };

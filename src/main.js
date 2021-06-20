@@ -5,20 +5,29 @@ import App from './App';
 import router from './router';
 import store from './store';
 
+
 // ApiAuthenticate
 import '@/middleware/apiAuth';
 
 // Plugins
 import './plugins';
 
-// Element ui
-import Element from 'element-ui'
+// Package
+import Element from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import enLang from 'element-ui/lib/locale/lang/vi';
+
+import VueCurrencyInput from "vue-currency-input";
+Vue.use(VueCurrencyInput);
 
 // Font awesome picker
 import VueFontAwesomePicker from "vfa-picker";
 Vue.use(VueFontAwesomePicker);
+
+// Moment js
+// import moment from 'moment';
+// Vue.use(moment);
+// Vue.prototype.moment = moment;
 
 // Common styles
 import './styles/common/index.css';
@@ -26,6 +35,7 @@ import './styles/common/index.css';
 Vue.use(Element, {
   locale: enLang
 });
+
 
 Vue.config.productionTip = false;
 

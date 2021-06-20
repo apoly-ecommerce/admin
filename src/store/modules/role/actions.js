@@ -1,119 +1,148 @@
 // Api
 import {
   addRole,
-  fetchListRole,
+  fetchListRoleByPaginate,
   trashRole,
-  fetchListRoleTrashed,
+  fetchListRoleTrashedByPaginate,
   restoreRole,
   destroyRole,
   massTrashRole,
   massDestroyRole,
   massRestoreRole,
   fetchRoleById,
-  getRolePermissionsByUser,
-  updateRole
+  fetchRolePermissionsByUser,
+  updateRole,
+  fetchListRole
 } from '@/api/role';
 
 export default {
 
-  getRolePermissionsByUser({ commit }) {
+  fetchRolePermissionsByUser({ commit }) {
     return new Promise((resolve, reject) => {
-      getRolePermissionsByUser().then(res => {
-        let { data } = res;
-        commit('user/SET_USER_ROLE', data.role, { root: true });
-        commit('user/SET_USER_ROLE_PERMISSIONS', data.role_permissions, { root: true });
-        resolve(res);
-      }).catch(error => reject(error));
-    });
-  },
-
-  addRole({commit}, roleData) {
-    return new Promise((resolve, reject) => {
-      addRole(roleData)
+      fetchRolePermissionsByUser()
       .then(res => resolve(res.data))
       .catch(error => reject(error));
     });
   },
 
-  updateRole({ commit }, { roleData, roleId }) {
-    console.log(roleData);
+  addRole({commit}, formData) {
     return new Promise((resolve, reject) => {
-      updateRole(roleData, roleId)
+      addRole(formData)
       .then(res => resolve(res.data))
       .catch(error => reject(error));
     });
   },
 
-  fetchListRole({commit}, listQuery) {
+  updateRole({ commit }, { formData, id }) {
     return new Promise((resolve, reject) => {
-      fetchListRole(listQuery)
+      updateRole(formData, id)
       .then(res => resolve(res.data))
       .catch(error => reject(error));
     });
   },
 
-  fetchListRoleTrashed({commit}, listQuery) {
+  fetchListRole({commit}) {
     return new Promise((resolve, reject) => {
-      fetchListRoleTrashed(listQuery)
+      fetchListRole()
       .then(res => resolve(res.data))
       .catch(error => reject(error));
     });
   },
 
-  trashRole({ commit }, roleId) {
+  fetchListRoleByPaginate({commit}, listQuery) {
     return new Promise((resolve, reject) => {
-      trashRole(roleId)
-      .then(res => resolve(res.data))
+      fetchListRoleByPaginate(listQuery)
+      .then(res => {
+        commit('role/SET_ROLES', res.data.roles, { root: true });
+        resolve(res.data);
+      })
+      .catch(error => reject(error));
+    });
+  },
+
+  fetchListRoleTrashedByPaginate({commit}, listQuery) {
+    return new Promise((resolve, reject) => {
+      fetchListRoleTrashedByPaginate(listQuery)
+      .then(res => {
+        commit('role/SET_ROLES', res.data.roles, { root: true });
+        resolve(res.data);
+      })
+      .catch(error => reject(error));
+    });
+  },
+
+  trashRole({ commit }, id) {
+    return new Promise((resolve, reject) => {
+      trashRole(id)
+      .then(res => {
+        commit('role/REMOVE_ROLE', id, { root: true });
+        resolve(res.data);
+      })
       .catch(error => reject(error))
     });
   },
 
-  restoreRole({ commit }, roleId) {
+  restoreRole({ commit }, id) {
     return new Promise((resolve, reject) => {
-      restoreRole(roleId)
-      .then(res => resolve(res.data))
+      restoreRole(id)
+      .then(res => {
+        commit('role/REMOVE_ROLE', id, { root: true });
+        resolve(res.data);
+      })
       .catch(error => reject(error));
     });
   },
 
-  destroyRole({ commit }, roleId) {
+  destroyRole({ commit }, id) {
     return new Promise((resolve, reject) => {
-      destroyRole(roleId)
-      .then(res => resolve(res.data))
+      destroyRole(id)
+      .then(res => {
+        commit('role/REMOVE_ROLE', id, { root: true });
+        resolve(res.data);
+      })
       .catch(error => reject(error));
     });
   },
 
-  massTrashRole({ commit }, roleIds) {
+  massTrashRole({ commit }, ids) {
     return new Promise((resolve, reject) => {
-      massTrashRole(roleIds)
-      .then(res => resolve(res.data))
+      massTrashRole(ids)
+      .then(res => {
+        commit('role/REMOVE_ROLES', ids, { root: true });
+        resolve(res.data);
+      })
       .catch(error => reject(error));
     });
   },
 
-  massDestroyRole({ commit }, roleIds) {
+  massDestroyRole({ commit }, ids) {
     return new Promise((resolve, reject) => {
-      massDestroyRole(roleIds)
-      .then(res => resolve(res.data))
+      massDestroyRole(ids)
+      .then(res => {
+        commit('role/REMOVE_ROLES', ids, { root: true });
+        resolve(res.data);
+      })
       .catch(error => reject(error));
     });
   },
 
-  massRestoreRole({ commit }, roleIds) {
+  massRestoreRole({ commit }, ids) {
     return new Promise((resolve, reject) => {
-      massRestoreRole(roleIds)
-      .then(res => resolve(res.data))
+      massRestoreRole(ids)
+      .then(res => {
+        commit('role/REMOVE_ROLES', ids, { root: true });
+        resolve(res.data);
+      })
       .catch(error => reject(error));
     });
   },
 
-  fetchRoleById({ commit }, roleId) {
+  fetchRoleById({ commit }, id) {
     return new Promise((resolve, reject) => {
-      fetchRoleById(roleId)
+      fetchRoleById(id)
       .then(res => resolve(res.data))
       .catch(error => reject(error));
     });
-  }
+  },
 
 };

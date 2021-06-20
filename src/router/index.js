@@ -193,9 +193,9 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '/roles',
+    path: '/setting/role',
     component: Layout,
-    redirect: '/roles/',
+    redirect: '/role/',
     meta: { title: 'Roles' },
     children: [
       {
@@ -219,10 +219,10 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '/users',
+    path: '/admin/user',
     component: Layout,
-    redirect: '/users/',
-    meta: { title: 'Users' },
+    redirect: '/user/',
+    meta: { title: 'User' },
     children: [
       {
         path: '',
@@ -240,15 +240,15 @@ export const asyncRoutes = [
         path: 'update/:id',
         name: 'update-user',
         component: () => import('@/views/Users/Components/FormUser'),
-        meta: { title: 'Update role' }
+        meta: { title: 'Update user' }
       }
     ]
   },
   {
-    path: '/customers',
+    path: '/admin/customer',
     component: Layout,
-    redirect: '/customers/',
-    meta: { title: 'Customers' },
+    redirect: '/user/',
+    meta: { title: 'List customer' },
     children: [
       {
         path: '',
@@ -260,7 +260,7 @@ export const asyncRoutes = [
         path: 'add',
         name: 'add-customer',
         component: () => import('@/views/Customers/Components/FormCustomer'),
-        meta: { title: 'Add customer' }
+        meta: { title: 'Add customer' },
       },
       {
         path: 'update/:id',

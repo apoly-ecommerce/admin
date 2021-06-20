@@ -1,1 +1,5 @@
-export default {};
+export default {
+  getRoles(state) {
+    return state.listRole;
+  }
+};

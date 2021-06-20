@@ -37,7 +37,7 @@
                       v-model="loginForm.email"
                     />
                     <div class="FormData__FormIcon">
-                      <fa-icon icon="envelope" />
+                      <i class="fas fa-envelope"></i>
                     </div>
                   </el-form-item>
 
@@ -66,7 +66,7 @@
                   </el-form-item>
 
                   <div class="FormData__FormIcon">
-                    <fa-icon @click="togglePwd" :icon="passwordType === 'password' ? 'eye-slash' : 'eye'" />
+                    <i @click="togglePwd" class="fas" :class="passwordType === 'password' ? 'fa-eye-slash' : 'fa-eye'"></i>
                   </div>
                 </div>
               </section>
@@ -154,7 +154,7 @@ export default {
   methods: {
     ...mapActions({
       'setisLoading': 'app/handleSetIsLoading',
-      'login'       : 'user/login'
+      'login'       : 'auth/login'
     }),
     checkCapslock(e) {
       const { key } = e;

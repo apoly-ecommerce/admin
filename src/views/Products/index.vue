@@ -1,5 +1,5 @@
 <template>
-  <section class="PageCategory">
+  <section class="PageProduct">
 
     <router-view :key="key"></router-view>
 
@@ -7,11 +7,11 @@
       <template v-slot:tools>
         <template>
           <el-button v-if="isTabTrashed" size="mini" @click="getList">
-            <fa-icon icon="list" />
+            <i class="fas fa-list"></i>
             <span>Danh sách</span>
           </el-button>
           <el-button v-else size="mini" @click="getListTrashed">
-            <fa-icon icon="trash" />
+            <i class="fas fa-trash"></i>
             <span>Thùng rác</span>
           </el-button>
         </template>
@@ -43,7 +43,7 @@
 
       <template v-slot:supports>
         <el-button
-          v-if="isTabTrashed && tableData.length"
+          v-if="isTabTrashed && tableData.length && tableData.length"
           class="m-1"
           type="danger"
           size="mini"
@@ -66,7 +66,7 @@
               </el-option>
             </el-select>
             <div class="SearchForm_FormGroup">
-              <fa-icon class="SearchForm__Icon" icon="search" />
+              <i class="SearchForm__Icon fas fa-search"></i>
               <el-input class="el-FormControl_custom" :placeholder="getPlaceholderSearch" v-model="tableSearch.value" autocomplete="off" spellcheck="false"></el-input>
             </div>
           </div>
@@ -142,6 +142,7 @@
                     :key="category.id"
                     size="mini"
                     type="info"
+                    class="my-1"
                   >{{ category.name }}</el-tag>
                 </h5>
               </template>
@@ -158,12 +159,13 @@
               <template slot-scope="{row}">
                 <el-button-group>
                   <template v-if="!row.deleted_at">
-                    <el-button @click="handleEdit(row.id)" size="mini" type="primary" icon="el-icon-edit"></el-button>
-                    <el-button @click="handleTrash(row.id)" size="mini" type="danger" icon="el-icon-delete"></el-button>
+                    <el-button @click="handleView(row.id)" size="mini" icon="el-icon-rank" />
+                    <el-button @click="handleEdit(row.id)" size="mini" type="primary" icon="el-icon-edit" />
+                    <el-button @click="handleTrash(row.id)" size="mini" type="danger" icon="el-icon-delete" />
                   </template>
                   <template v-else>
-                    <el-button @click="handleRestore(row.id)" size="mini" type="primary" icon="el-icon-refresh-left"></el-button>
-                    <el-button @click="handleDestroy(row.id)" size="mini" type="danger" icon="el-icon-close"></el-button>
+                    <el-button @click="handleRestore(row.id)" size="mini" type="primary" icon="el-icon-refresh-left" />
+                    <el-button @click="handleDestroy(row.id)" size="mini" type="danger" icon="el-icon-close" />
                   </template>
                 </el-button-group>
               </template>
@@ -177,10 +179,10 @@
           <pagination v-if="!isTabTrashed" :total="totalRow" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
           <pagination v-else :total="totalRow" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListTrashed" />
         </template>
-
       </template>
-
     </page-table-content>
+
+    <view-product :isShow="isShowDialog" :product="productSelected" @close="handleCloseDialog" />
 
   </section>
 </template>
@@ -189,6 +191,7 @@
 // Components
 import PageTableContent from '@/components/PageTableContent';
 import Pagination from '@/components/Pagination';
+import ViewProduct from './components/ViewProduct';
 // Store
 import { mapGetters, mapActions } from 'vuex';
 // Utils
@@ -198,6 +201,7 @@ export default {
   components: {
     PageTableContent,
     Pagination,
+    ViewProduct
   },
   data() {
     return {
@@ -217,8 +221,15 @@ export default {
         optionSelected: 'name'
       },
       multipleSelection: [],
-      tableAction: ''
+      tableAction: '',
+      productSelected: {},
+      isShowDialog: false
     };
+  },
+  watch: {
+    $route(to, from) {
+      this.reRenderDataFromUrl();
+    }
   },
   created() {
     this.getList();
@@ -268,7 +279,7 @@ export default {
         this.totalRow = res.total;
       }).catch(error => {
         this.listLoading = false;
-        console.error('App Error: ', error);
+        console.error('[App Error] => ', error);
       });
     },
     getListTrashed() {
@@ -279,7 +290,7 @@ export default {
         this.totalRow = res.total;
       }).catch(error => {
         this.listLoading = false;
-        console.log('App Error: ', error);
+        console.error('[App Error] => ', error);
       });
     },
     handleTableAction() {
@@ -299,7 +310,7 @@ export default {
           type: 'success',
           message: res.success
         });
-        this.reRenderFormData();
+        this.reRenderDataFromFormAction();
       }).catch(error => {
         this.$message.error('Khôi phục thất bại !');
         console.error('App: ', error);
@@ -317,10 +328,10 @@ export default {
             type: 'success',
             message: res.success
           });
-          this.reRenderFormData();
+          this.reRenderDataFromFormAction();
         }).catch(error => {
           this.$message.error('Chuyển vào thùng rác không thành công !');
-          console.error('App Error: ', error);
+          console.error('[App Error] => ', error);
         });
       }).catch(() => {
         this.$message({
@@ -341,10 +352,10 @@ export default {
             type: 'success',
             message: res.success
           });
-          this.reRenderFormData();
+          this.reRenderDataFromFormAction();
         }).catch(error => {
           this.$message.error('Xóa vĩnh viễn thất bại !');
-          console.error('App Error: ', error);
+          console.error('[App Error] => ', error);
         });
       }).catch(() => {
         this.$message({
@@ -370,10 +381,10 @@ export default {
             type: 'success',
             message: res.success
           });
-          this.reRenderFormData();
+          this.reRenderDataFromFormAction();
         }).catch(error => {
           this.$message.error('Danh sách xóa vĩnh viễn không thành công !');
-          console.error('App Error: ', error);
+          console.error('[App Error] => ', error);
         });
       }).catch(() => {
         this.$message({
@@ -399,10 +410,10 @@ export default {
             type: 'success',
             message: res.success
           });
-          this.reRenderFormData();
+          this.reRenderDataFromFormAction();
         }).catch(error => {
           this.$message.error('Chuyển danh sách vào thùng rác không thành công !');
-          console.error('App Error: ', error);
+          console.error('[App Error] => ', error);
         });
       }).catch(() => {
         this.$message({
@@ -426,7 +437,7 @@ export default {
           this.getList();
         }).catch(error => {
           this.$message.error('Quá trình xóa vĩnh viễn không thành công !');
-          console.error('App Error: ', error);
+          console.error('[App Error] => ', error);
         });
       }).catch(() => {
         this.$message({
@@ -452,10 +463,10 @@ export default {
             type: 'success',
             message: res.success
           });
-          this.reRenderFormData();
+          this.reRenderDataFromFormAction();
         }).catch(error => {
           this.$message.error('Khôi phục danh sách thất bại !');
-          console.error('App Error: ', error);
+          console.error('[App Error] => ', error);
         });
       }).catch(() => {
         this.$message({
@@ -470,15 +481,30 @@ export default {
         params: { id }
       });
     },
-    reRenderFormData() {
+    reRenderDataFromFormAction() {
       this.tableAction = '';
-      if (! this.tableData.length || this.$route.query.form === 'success') {
+      if (this.tableData.length === 0) {
+        if (! this.isTabTrashed) { this.getList() }
+        else { this.getListTrashed(); }
+      }
+    },
+    reRenderDataFromUrl() {
+      this.tableAction = '';
+      if (this.$route.query.form === 'success') {
         if (! this.isTabTrashed) { this.getList() }
         else { this.getListTrashed(); }
         let query = Object.assign({}, this.$route.query);
         delete query.form;
         this.$router.replace({ query });
       };
+    },
+    handleView(id) {
+      this.isShowDialog = true;
+      this.productSelected = this.tableData.filter(item => item.id === id)[0];
+    },
+    handleCloseDialog() {
+      this.productSelected = {};
+      this.isShowDialog = false;
     }
   }
 }

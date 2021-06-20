@@ -32,11 +32,12 @@ router.beforeEach(async(to, from, next) => {
 
           // store.dispatch('app/handleSetIsLoading', true);
 
-          const modulePromise = store.dispatch('module/getAllModules');
+          // const modulePromise = store.dispatch('module/getAllModules');
           const userInfoPromise = store.dispatch('user/getInfo');
-          const userRolePermissionsPromise  = store.dispatch('role/getRolePermissionsByUser');
+          const userAuthPromise = store.dispatch('auth/fetchUserAuth');
+          // const userRolePermissionsPromise  = store.dispatch('role/getRolePermissionsByUser');
 
-          let [userInfo, userRolePermissions, modulesApp] = await Promise.all([userInfoPromise, userRolePermissionsPromise, modulePromise]);
+          // let [userInfo, userRolePermissions, modulesApp] = await Promise.all([userInfoPromise, userRolePermissionsPromise, modulePromise]);
 
           // store.dispatch('app/handleSetIsLoading', false);
 

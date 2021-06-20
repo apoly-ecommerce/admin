@@ -42,6 +42,26 @@ export default {
 
   SET_USER_ROLE_PERMISSIONS: (state, role_permissions) => {
     state.role_permissions = role_permissions;
-  }
+  },
+
+  SET_USERS: (state, users) => {
+    if (users) state.listUser = users;
+  },
+
+  ADD_CATEGORY_GROUP_ITEM: (state, catGrpItem) => {
+    state.listUser.unshift(catGrpItem);
+  },
+
+  REMOVE_CATEGORY_GROUP: (state, id) => {
+    state.listUser = state.listUser.filter(item => item.id !== id);
+  },
+
+  REMOVE_USER: (state, id) => {
+    state.listUser = state.listUser.filter(item => item.id !== id);
+  },
+
+  REMOVE_USERS: (state, ids) => {
+    state.listUser = state.listUser.filter(item => !ids.includes(item.id));
+  },
 
 };

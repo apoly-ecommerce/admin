@@ -2,8 +2,10 @@
   <form-action
     :name="formName"
     :size="'800px'"
+    :isFormLoading="isFormLoading"
     @close="handleCloseForm"
   >
+
     <template v-slot:form-body>
       <el-form
         ref="formData"
@@ -37,7 +39,7 @@
               <label for="active" class="FormLabel">
                 <span class="FormLabel__title">Status *</span>
                 <el-tooltip class="item" effect="dark" placement="top" content="is Tooltip !">
-                  <fa-icon icon="question-circle" />
+                  <i class="fas fa-question-circle"></i>
                 </el-tooltip>
               </label>
               <el-select
@@ -60,7 +62,7 @@
               <label for="url" class="FormLabel">
                 <span class="FormLabel__title">Url</span>
                 <el-tooltip class="item" effect="dark" placement="top" content="Liên kết trang web chính thức của nhà sản xuất.">
-                  <fa-icon icon="question-circle" />
+                  <i class="fas fa-question-circle"></i>
                 </el-tooltip>
               </label>
               <el-input
@@ -106,7 +108,7 @@
               <label for="email" class="FormLabel">
                 <span class="FormLabel__title">Email</span>
                 <el-tooltip class="item" effect="dark" placement="top" content="Hệ thống sẽ sử dụng địa chỉ email này để liên lạc với nhà sản xuất.">
-                  <fa-icon icon="question-circle" />
+                  <i class="fas fa-question-circle"></i>
                 </el-tooltip>
               </label>
               <el-input
@@ -128,7 +130,7 @@
               <label for="phone" class="FormLabel">
                 <span class="FormLabel__title">Phone</span>
                 <el-tooltip class="item" effect="dark" placement="top" content="Số điện thoại hỗ trợ của nhà sản xuất.">
-                  <fa-icon icon="question-circle" />
+                  <i class="fas fa-question-circle"></i>
                 </el-tooltip>
               </label>
               <el-input
@@ -151,7 +153,7 @@
               <label for="description" class="FormLabel">
                 <span class="FormLabel__title">Description</span>
                 <el-tooltip class="item" effect="dark" placement="top" content="is tooltip">
-                  <fa-icon icon="question-circle" />
+                  <i class="fas fa-question-circle"></i>
                 </el-tooltip>
               </label>
               <el-input
@@ -202,7 +204,7 @@
               <label for="coverImage" class="FormLabel">
                 <span class="FormLabel__title">Cover image</span>
                 <el-tooltip class="item" effect="dark" content="is tooltip" placement="top">
-                  <fa-icon icon="question-circle" />
+                  <i class="fas fa-question-circle"></i>
                 </el-tooltip>
               </label>
               <template>
@@ -235,7 +237,7 @@
               <label for="Featured image" class="FormLabel">
                 <span class="FormLabel__title">Featured image</span>
                 <el-tooltip class="item" effect="dark" content="is tooltip" placement="top">
-                  <fa-icon icon="question-circle" />
+                  <i class="fas fa-question-circle"></i>
                 </el-tooltip>
               </label>
               <template>
@@ -267,11 +269,11 @@
 
     <template v-slot:form-footer>
       <el-button v-if="!manufacturerId" type="primary" size="mini" @click.prevent="handleActionForm(handleAdd)">
-        <fa-icon class="PopupForm__SaveIcon" icon="save" />
+        <i class="PopupForm__SaveIcon fas fa-save"></i>
         <span class="PopupForm_SaveLabel">Save</span>
       </el-button>
       <el-button v-else type="primary" size="mini" @click.prevent="handleActionForm(handleUpdate)">
-        <fa-icon class="PopupForm__SaveIcon" icon="save" />
+        <i class="PopupForm__SaveIcon fas fa-save"></i>
         <span class="PopupForm_SaveLabel">Update</span>
       </el-button>
     </template>
@@ -338,27 +340,20 @@ export default {
       formError: {...defaultFormError},
       formRules: manufacturerRules,
       manufacturerId: this.$route.params.id,
-      countries: []
+      countries: [],
+      isFormLoading: false
     };
   },
    watch: {
     $route(to, from) {
-      this.getFormName();
-      this.resetFormData();
       this.manufacturerId = to.params.id;
-      this.formSetup();
-      if (this.manufacturerId) {
-        this.getManufacturerById()
+      if (to.name !== 'list-manufacturer') {
+        this.formSetup();
       }
     }
   },
   created() {
-    this.getFormName();
-    this.resetFormData();
     this.formSetup();
-    if (this.manufacturerId) {
-      this.getManufacturerById()
-    }
   },
   methods: {
     ...mapActions({
@@ -369,9 +364,34 @@ export default {
       'updateManufacturer': 'manufacturer/updateManufacturer'
     }),
     async formSetup() {
-      const countriesPromise = this.fetchListCountries();
-      const [countriesResult] = await Promise.all([countriesPromise]);
-      this.countries = countriesResult.countries;
+      try {
+        this.resetFormData();
+        this.getFormName();
+        this.isFormLoading = true;
+        if (this.manufacturerId) {
+          let dataManufacturer = await this.fetchManufacturerItemById(this.manufacturerId);
+          this.appendDataToForm(dataManufacturer.manufacturer);
+        }
+        const [dataCountries] = await Promise.all([this.fetchListCountries()]);
+        this.countries = dataCountries.countries;
+        this.isFormLoading = false;
+      } catch (error) {
+        if (error.status === 404) {
+          console.error('[App Error] => ', error);
+          this.$confirm('Nhà cung cấp này không tồn tại, hoặc đã bị xóa trước đó !', 'Thông báo lỗi', {
+            confirmButtonText: 'Quay về',
+            cancelButtonText: 'Thêm mới',
+            type: 'error'
+          }).then(() => {
+            this.$router.push('/catalog/manufacturer');
+          }).catch(() => {
+            this.$router.push('/catalog/manufacturer/add');
+          });
+        } else {
+          this.$message.error('Có lỗi trong quá trình tải dữ liệu !');
+          this.$router.push('/catalog/manufacturer');
+        }
+      }
     },
     coverValueToSlug(e) {
       let val = e.target.value;
@@ -411,14 +431,12 @@ export default {
     handleActionForm(callback) {
       this.$refs['formData'].validate(valid => {
         if (valid) {
-          this.setIsLoading(true);
           callback().then(res => {
             Message({
               message: res.success,
               type: 'success',
               duration: 5 * 1000
             });
-            this.setIsLoading(false);
             this.back('/catalog/manufacturer', { form: 'success' });
           }).catch(error => {
             Message({
@@ -426,7 +444,6 @@ export default {
               type: 'error',
               duration: 5 * 1000
             });
-            this.setIsLoading(false);
             this.appendErrorToForm(error.data.errors);
           });
         }
@@ -475,17 +492,7 @@ export default {
         this.formError[key] = value[0];
       }
     },
-     getManufacturerById() {
-      this.setIsLoading(true);
-      this.fetchManufacturerItemById(this.manufacturerId).then(res => {
-        this.appendToFormData(res.manufacturer);
-        this.setIsLoading(false);
-      }).catch(error => {
-        this.setIsLoading(false);
-        console.error('App Error:', error);
-      });
-    },
-    appendToFormData(data) {
+    appendDataToForm(data) {
       this.formData.name = data.name;
       this.formData.active = data.active.toString();
       this.formData.slug = changeToSlug(data.name);

@@ -8,11 +8,11 @@
       <template v-slot:tools>
         <template>
           <el-button v-if="isTabTrashed" size="mini" @click="getList">
-            <fa-icon icon="list" />
+            <i class="fas fa-list"></i>
             <span>Danh sách</span>
           </el-button>
           <el-button v-else size="mini" @click="getListTrashed">
-            <fa-icon icon="trash" />
+            <i class="fas fa-trash"></i>
             <span>Thùng rác</span>
           </el-button>
         </template>
@@ -60,7 +60,7 @@
               </el-option>
             </el-select>
             <div class="SearchForm_FormGroup">
-              <fa-icon class="SearchForm__Icon" icon="search" />
+              <i class="SearchForm__Icon fas fa-search"></i>
               <el-input class="el-FormControl_custom" :placeholder="getPlaceholderSearch" v-model="tableSearch.value" autocomplete="off" spellcheck="false"></el-input>
             </div>
           </div>
@@ -226,7 +226,7 @@ export default {
   },
   watch: {
     $route(to, from) {
-      this.reRenderFormData();
+      this.reRenderDataFromUrl();
     }
   },
   created() {
@@ -276,7 +276,7 @@ export default {
         this.totalRow = res.total;
       }).catch(error => {
         this.listLoading = false;
-        console.error('App Error: ', error);
+        console.error('[App Error] => ', error);
       });
     },
     getListTrashed() {
@@ -287,7 +287,7 @@ export default {
         this.totalRow = res.total;
       }).catch(error => {
         this.listLoading = false;
-        console.log('App Error: ', error);
+        console.error('[App Error] => ', error);
       });
     },
     handleTableAction() {
@@ -307,14 +307,14 @@ export default {
           type: 'success',
           message: res.success
         });
-        this.reRenderFormData();
+        this.reRenderDataFromFormAction();
       }).catch(error => {
         this.$message.error('Khôi phục thất bại !');
         console.error('App: ', error);
       });
     },
     handleTrash(id) {
-      this.$confirm('Xác nhận chuyển nhóm danh mục phụ vào thùng rác ?', 'Xác nhận', {
+      this.$confirm('Xác nhận chuyển phần từ này vào thùng rác ?', 'Xác nhận', {
         confirmButtonText: 'Đồng ý',
         cancelButtonText: 'Hủy',
         type: 'warning'
@@ -325,10 +325,10 @@ export default {
             type: 'success',
             message: res.success
           });
-          this.reRenderFormData();
+          this.reRenderDataFromFormAction();
         }).catch(error => {
           this.$message.error('Không chuyển được vào thùng rác !');
-          console.error('App Error: ', error);
+          console.error('[App Error] => ', error);
         });
       }).catch(() => {
         this.$message({
@@ -338,9 +338,9 @@ export default {
       });
     },
     handleDestroy(id) {
-      this.$confirm('Xác nhận xóa vĩnh viễn nhóm danh mục phụ này ?', 'Xác nhận', {
-        confirmButtonText: 'Agree',
-        cancelButtonText: 'Cancel',
+      this.$confirm('Xác nhận xóa vĩnh viễn phần tử này ?', 'Xác nhận', {
+        confirmButtonText: 'Đồng ý',
+        cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
         // Code logic
@@ -349,10 +349,10 @@ export default {
             type: 'success',
             message: res.success
           });
-          this.reRenderFormData();
+          this.reRenderDataFromFormAction();
         }).catch(error => {
           this.$message.error('Xóa vĩnh viễn thất bại !');
-          console.error('App Error: ', error);
+          console.error('[App Error] => ', error);
         });
       }).catch(() => {
         this.$message({
@@ -364,10 +364,10 @@ export default {
     handleMassDestroy() {
       let ids = this.multipleSelection.map(item => item.id);
       if (!ids.length) {
-        this.$message.error('Vui lòng chọn ích nhất một nhóm danh mục !');
+        this.$message.error('Vui lòng chọn ích nhất một một phần tử !');
         return;
       }
-      this.$confirm('Xác nhận xóa vĩnh viễn danh sách nhóm danh mục phụ này ?', 'Xác nhận', {
+      this.$confirm('Xác nhận xóa vĩnh viễn danh sách này ?', 'Xác nhận', {
         confirmButtonText: 'Đồng ý',
         cancelButtonText: 'Hủy',
         type: 'warning'
@@ -378,10 +378,10 @@ export default {
             type: 'success',
             message: res.success
           });
-          this.reRenderFormData();
+          this.reRenderDataFromFormAction();
         }).catch(error => {
-          this.$message.error('Không xóa vĩnh viễn được danh sách nhóm danh mục !');
-          console.error('App Error: ', error);
+          this.$message.error('Không xóa vĩnh viễn được danh sách này !');
+          console.error('[App Error] => ', error);
         });
       }).catch(() => {
         this.$message({
@@ -393,10 +393,10 @@ export default {
     handleMassTrash() {
       let ids = this.multipleSelection.map(item => item.id);
       if (!ids.length) {
-        this.$message.error('Vui lòng chọn ích nhất một nhóm danh mục phụ !');
+        this.$message.error('Vui lòng chọn ích nhất một phần tử !');
         return;
       }
-      this.$confirm('Xác nhận chuyển danh sách nhóm danh mục phụ này vào thùng rác ?', 'Xác nhận', {
+      this.$confirm('Xác nhận chuyển danh sách này vào thùng rác ?', 'Xác nhận', {
         confirmButtonText: 'Đồng ý',
         cancelButtonText: 'Hủy',
         type: 'warning'
@@ -407,10 +407,10 @@ export default {
             type: 'success',
             message: res.success
           });
-          this.reRenderFormData();
+          this.reRenderDataFromFormAction();
         }).catch(error => {
           this.$message.error('Chuyển vào thùng rác không thành công !');
-          console.error('App Error: ', error);
+          console.error('[App Error] => ', error);
         });
       }).catch(() => {
         this.$message({
@@ -422,10 +422,10 @@ export default {
     handleMassRestore() {
       let ids = this.multipleSelection.map(item => item.id);
       if (!ids.length) {
-        this.$message.error('Vui lòng chọn ích nhất một nhóm danh mục !');
+        this.$message.error('Vui lòng chọn ích nhất một phần tử !');
         return;
       }
-      this.$confirm('Xác nhận khôi phục danh sách nhóm danh mục phụ này ?', 'Xác nhận', {
+      this.$confirm('Xác nhận khôi phục danh sách này ?', 'Xác nhận', {
         confirmButtonText: 'Đồng ý',
         cancelButtonText: 'Hủy',
         type: 'warning'
@@ -436,10 +436,10 @@ export default {
             type: 'success',
             message: res.success
           });
-          this.reRenderFormData();
+          this.reRenderDataFromFormAction();
         }).catch(error => {
           this.$message.error('Khôi phục thất bại !');
-          console.error('App Error: ', error);
+          console.error('[App Error] => ', error);
         });
       }).catch(() => {
         this.$message({
@@ -454,9 +454,16 @@ export default {
         params: { id }
       });
     },
-    reRenderFormData() {
+    reRenderDataFromFormAction() {
       this.tableAction = '';
-      if (! this.tableData.length || this.$route.query.form === 'success') {
+      if (this.tableData.length === 0) {
+        if (! this.isTabTrashed) { this.getList() }
+        else { this.getListTrashed(); }
+      }
+    },
+    reRenderDataFromUrl() {
+      this.tableAction = '';
+      if (this.$route.query.form === 'success') {
         if (! this.isTabTrashed) { this.getList() }
         else { this.getListTrashed(); }
         let query = Object.assign({}, this.$route.query);

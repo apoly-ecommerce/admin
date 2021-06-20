@@ -16,17 +16,24 @@ export function updateRole(data, id) {
   });
 }
 
-export function fetchListRole(query) {
+export function fetchListRole() {
   return request({
     url: 'api/admin/setting/role/list',
+    method: 'get'
+  });
+}
+
+export function fetchListRoleByPaginate(query) {
+  return request({
+    url: 'api/admin/setting/role/list/paginate',
     method: 'get',
     params: query
   });
 }
 
-export function fetchListRoleTrashed(query) {
+export function fetchListRoleTrashedByPaginate(query) {
   return request({
-    url: 'api/admin/setting/role/list/trashed',
+    url: 'api/admin/setting/role/list/trashed/paginate',
     method: 'get',
     params: query
   });
@@ -84,7 +91,7 @@ export function fetchRoleById(id) {
   });
 }
 
-export function getRolePermissionsByUser() {
+export function fetchRolePermissionsByUser() {
   return request({
     url: 'api/admin/setting/role/getRolePermissionsByUser',
     method: 'get'

@@ -1,16 +1,13 @@
 // Api
-import { getAllModules } from '@/api/module';
+import { fetchListModule } from '@/api/module';
 
 export default {
 
-    getAllModules({ commit }) {
+  fetchListModule({ commit }) {
       return new Promise((resolve, reject) => {
-        getAllModules().then(res => {
-          commit('module/SET_MODULES', res.data.modules, { root: true });
-          resolve(res);
-        }).catch(error => {
-          reject(error);
-        });
+        fetchListModule()
+        .then(res => resolve(res.data))
+        .catch(error => reject(error));
       });
     }
 };

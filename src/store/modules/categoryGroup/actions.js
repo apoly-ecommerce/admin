@@ -139,10 +139,7 @@ export default {
         'Content-Type': 'multipart/form-data'
       };
       updateCategoryGroup(headers, data, id)
-      .then(res => {
-        commit('categoryGroup/UPDATE_CATEGORY_GROUP', res.data.categoryGroup, { root: true });
-        resolve(res.data);
-      })
+      .then(res => resolve(res.data))
       .catch(error => reject(error));
     });
   }

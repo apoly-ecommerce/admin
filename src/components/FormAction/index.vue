@@ -1,27 +1,25 @@
 <template>
   <section class="PopupForm">
     <section class="PopupForm_Wrap" :style="`width: ${size}`">
-      <section class="PopupForm_Content">
-
+      <div v-show="isFormLoading" class="PopupForm__Loader">
+        <div class="lds-facebook"><div></div><div></div><div></div></div>
+        <span>Đang tải dữ liệu ...</span>
+      </div>
+      <section v-show="!isFormLoading" class="PopupForm_Content">
         <section class="PopupForm_FormBody" :key="key">
-
           <section class="PopupForm__header">
             <div class="PopupForm__name">{{ name }}</div>
             <button type="button" class="PopupForm__Btn PopupForm__Btn--close" @click="$emit('close')">
-              <fa-icon icon="times" />
+              <i class="fas fa-times"></i>
             </button>
           </section>
-
           <section class="PopupForm__body">
             <slot name="form-body" />
           </section>
-
           <section class="PopupForm__footer">
             <slot name="form-footer" />
           </section>
-
         </section>
-
       </section>
     </section>
   </section>
@@ -38,9 +36,13 @@ export default {
       type: String,
       require: true
     },
-      size: {
+    size: {
       type: String,
       default: '500px'
+    },
+    isFormLoading: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {

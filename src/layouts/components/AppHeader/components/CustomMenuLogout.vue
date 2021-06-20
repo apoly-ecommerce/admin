@@ -1,7 +1,7 @@
 <template>
   <li class="NavBar_CustomMenu__item">
     <a href="javascript:;" @click.prevent="handleShowDialog" class="NavBar_CustomMenu__link NavBar_MenuLink">
-      <fa-icon class="NavBar_CustomMenu__icon" icon="sign-out-alt" />
+      <i class="NavBar_CustomMenu__icon fas fa-sign-out-alt"></i>
       <span class="NavBar_CustomMenu__label">Log out</span>
     </a>
     <form-confirm

@@ -2,6 +2,7 @@
   <form-action
     :name="formName"
     :size="'800px'"
+    :isFormLoading="isFormLoading"
     @close="handleCloseForm"
   >
 
@@ -39,7 +40,7 @@
               <label for="order" class="FormLabel">
                 <span class="FormLabel__title">Order</span>
                 <el-tooltip class="item" effect="dark" placement="top" content="is Tooltip !">
-                  <fa-icon icon="question-circle" />
+                  <i class="fas fa-question-circle"></i>
                 </el-tooltip>
               </label>
               <el-input-number class="w-100"
@@ -101,13 +102,13 @@
               </label>
               <el-select
                 v-model="formData.active"
-                placeholder="Select"
+                placeholder="Chọn trạng thái"
                 id="active"
                 class="w-100"
                 tabindex="2"
               >
-                <el-option value="1" label="Active"/>
-                <el-option value="0" label="Inactive"/>
+                <el-option value="1" label="Publish"/>
+                <el-option value="0" label="Pending"/>
               </el-select>
               <div v-if="formError.active" class="el-form-item__error">{{ formError.active }}</div>
             </el-form-item>
@@ -120,7 +121,7 @@
               <label for="description" class="FormLabel">
                 <span class="FormLabel__title">Description</span>
                 <el-tooltip class="item" effect="dark" placement="top" content="is tooltip">
-                  <fa-icon icon="question-circle" />
+                  <i class="fas fa-question-circle"></i>
                 </el-tooltip>
               </label>
               <el-input
@@ -144,7 +145,7 @@
               <label for="Background image" class="FormLabel">
                 <span class="FormLabel__title">Background image</span>
                 <el-tooltip class="item" effect="dark" content="is tooltip" placement="top">
-                  <fa-icon icon="question-circle" />
+                  <i class="fas fa-question-circle"></i>
                 </el-tooltip>
               </label>
               <div v-if="checkImageNotEmpty(formData.backgroundImage.url)" class="ImageThumb_wrap">
@@ -172,7 +173,7 @@
               <label for="Image cover" class="FormLabel">
                 <span class="FormLabel__title">Cover image</span>
                 <el-tooltip class="item" effect="dark" content="is tooltip" placement="top">
-                  <fa-icon icon="question-circle" />
+                  <i class="fas fa-question-circle"></i>
                 </el-tooltip>
               </label>
               <div v-if="checkImageNotEmpty(formData.coverImage.url)" class="ImageThumb_wrap">
@@ -202,7 +203,7 @@
               <label for="meta_title" class="FormLabel">
                 <span class="FormLabel__title">Meta title</span>
                 <el-tooltip class="item" effect="dark" placement="top" content="Meta title">
-                  <fa-icon icon="question-circle" />
+                  <i class="fas fa-question-circle"></i>
                 </el-tooltip>
               </label>
               <el-input
@@ -213,7 +214,7 @@
                 tabindex="6"
                 autocomplete="off"
                 spellcheck="false"
-                id="name"
+                id="meta_title"
                 v-model="formData.meta_title"
               />
             </el-form-item>
@@ -226,7 +227,7 @@
               <label for="meta_description" class="FormLabel">
                 <span class="FormLabel__title">Meta description</span>
                 <el-tooltip class="item" effect="dark" placement="top" content="is tooltip">
-                  <fa-icon icon="question-circle" />
+                  <i class="fas fa-question-circle"></i>
                 </el-tooltip>
               </label>
               <el-input
@@ -249,11 +250,11 @@
 
     <template v-slot:form-footer>
       <el-button v-if="!categoryGroupId" type="primary" size="mini" @click.prevent="handleActionForm(handleAdd)">
-        <fa-icon class="PopupForm__SaveIcon" icon="save" />
+        <i class="PopupForm__SaveIcon fas fa-save"></i>
         <span class="PopupForm_SaveLabel">Save</span>
       </el-button>
       <el-button v-else type="primary" size="mini" @click.prevent="handleActionForm(handleUpdate)">
-        <fa-icon class="PopupForm__SaveIcon" icon="save" />
+        <i class="PopupForm__SaveIcon fas fa-save"></i>
         <span class="PopupForm_SaveLabel">Update</span>
       </el-button>
     </template>
@@ -275,24 +276,24 @@ import { changeToSlug } from '@/helpers';
 import { Message } from 'element-ui';
 
 const defaultFormData = {
-  name: null,
+  name: '',
   order: 1,
-  slug: null,
+  slug: '',
   icon: 'cube',
-  active: null,
-  description: null,
+  active: '',
+  description: '',
   backgroundImage: {
-    url: null,
+    url: '',
     isDel: false,
     file: null
   },
   coverImage: {
-    url: null,
+    url: '',
     isDel: false,
     file: null
   },
-  meta_title: null,
-  meta_description: null
+  meta_title: '',
+  meta_description: ''
 };
 
 const defaultFormError = {
@@ -313,24 +314,19 @@ export default {
       formError: {...defaultFormError},
       formRules: categoryGroupRules,
       categoryGroupId: this.$route.params.id,
+      isFormLoading: false
     };
   },
   watch: {
     $route(to, from) {
-      this.getFormName();
-      this.resetFormData();
       this.categoryGroupId = to.params.id;
-      if (this.categoryGroupId) {
-        this.getCategoryGroupById();
+      if (to.name !== 'list-category-group') {
+        this.formSetup();
       }
     }
   },
    created() {
-    this.getFormName();
-    this.resetFormData();
-    if (this.categoryGroupId) {
-      this.getCategoryGroupById();
-    }
+    this.formSetup();
   },
   computed: {
     getUriForCategoryGroup() {
@@ -344,6 +340,34 @@ export default {
       'fetchCategoryGroupItemById': 'categoryGroup/fetchCategoryGroupItemById',
       'updateCategoryGroup': 'categoryGroup/updateCategoryGroup'
     }),
+    async formSetup() {
+      try {
+        this.resetFormData();
+        this.getFormName();
+        this.isFormLoading = true;
+        if (this.categoryGroupId) {
+          let dataCategoryGroup = await this.fetchCategoryGroupItemById(this.categoryGroupId);
+          this.appendDataToForm(dataCategoryGroup.categoryGroup);
+        }
+        this.isFormLoading = false;
+      } catch (error) {
+        if (error.status === 404) {
+          console.error('[App Error] => ', error);
+          this.$confirm('Nhóm danh mục này không tồn tại, hoặc đã bị xóa trước đó !', 'Thông báo lỗi', {
+            confirmButtonText: 'Quay về',
+            cancelButtonText: 'Thêm mới',
+            type: 'error'
+          }).then(() => {
+            this.$router.push('/catalog/category-group');
+          }).catch(() => {
+            this.$router.push('/catalog/category-group/add');
+          });
+        } else {
+          this.$message.error('Có lỗi trong quá trình tải dữ liệu !');
+          this.$router.push('/catalog/category-group');
+        }
+      }
+    },
     coverValueToSlug(e) {
       let val = e.target.value;
       this.formData.slug = changeToSlug(val);
@@ -351,9 +375,9 @@ export default {
     getFormName() {
       this.formName = this.$route.meta && this.$route.meta.title;
     },
-    back(router = '/catalog/category-group') {
+    back(router = '/catalog/category-group', query = {}) {
       this.resetFormData();
-      this.$router.push(router);
+      this.$router.push({ path: router, query });
     },
     handleCloseForm() {
       this.back();
@@ -376,22 +400,21 @@ export default {
     handleActionForm(callback) {
       this.$refs['formData'].validate(valid => {
         if (valid) {
-          this.setIsLoading(true);
           callback().then(res => {
             Message({
               message: res.success,
               type: 'success',
               duration: 5 * 1000
             });
-            this.setIsLoading(false);
-            this.back();
+            this.back('/catalog/category-group', { form: 'success' });
           }).catch(error => {
+            console.error('[App Error] => ', error);
             Message({
               message: error.data.message,
               type: 'error',
               duration: 5 * 1000
             });
-            this.setIsLoading(false);
+            this.$message.error('Dữ liệu không hợp lệ, vui lòng kiễm tra lại !');
             this.appendErrorToForm(error.data.errors);
           });
         }
@@ -432,17 +455,7 @@ export default {
         this.formError[key] = value[0];
       }
     },
-    getCategoryGroupById() {
-      this.setIsLoading(true);
-      this.fetchCategoryGroupItemById(this.categoryGroupId).then(res => {
-        this.setIsLoading(false);
-        this.appendToFormData(res.categoryGroup);
-      }).catch(error => {
-        this.setIsLoading(false);
-        console.error('App Error:', error);
-      });
-    },
-    appendToFormData(data) {
+    appendDataToForm(data) {
       this.formData.name  = data.name;
       this.formData.order = data.order;
       this.formData.slug  = data.slug;
