@@ -108,7 +108,7 @@
 
              <el-table-column label="Background image" property="background_image_url" width="170">
               <template slot-scope="{row}">
-                <div class="TableThumb_ThumbImage">
+                <div class="TableThumb_ThumbImage normal">
                   <img :src="row.background_image_url" alt="" class="image medium">
                 </div>
               </template>
@@ -116,7 +116,7 @@
 
              <el-table-column label="Cover image" property="cover_image_url" width="170">
               <template slot-scope="{row}">
-                <div class="TableThumb_ThumbImage">
+                <div class="TableThumb_ThumbImage normal">
                   <img :src="row.cover_image_url" alt="" class="image medium">
                 </div>
               </template>
@@ -152,12 +152,23 @@
               <template slot-scope="{row}">
                 <el-button-group>
                   <template v-if="!row.deleted_at">
-                    <el-button @click="handleEdit(row.id)" size="mini" type="primary" icon="el-icon-edit"></el-button>
-                    <el-button @click="handleTrash(row.id)" size="mini" type="danger" icon="el-icon-delete"></el-button>
+                    <el-tooltip content="Thông tin" placement="top">
+                      <el-button @click="handleView(row.id)" size="mini" icon="el-icon-rank" />
+                    </el-tooltip>
+                    <el-tooltip content="Chỉnh sửa" placement="top">
+                      <el-button @click="handleEdit(row.id)" size="mini" icon="el-icon-edit" />
+                    </el-tooltip>
+                    <el-tooltip content="Chuyển vào thùng rác" placement="top">
+                      <el-button @click="handleTrash(row.id)" size="mini" icon="el-icon-delete" />
+                    </el-tooltip>
                   </template>
                   <template v-else>
-                    <el-button @click="handleRestore(row.id)" size="mini" type="primary" icon="el-icon-refresh-left"></el-button>
-                    <el-button @click="handleDestroy(row.id)" size="mini" type="danger" icon="el-icon-close"></el-button>
+                    <el-tooltip content="Khôi phục" placement="top">
+                      <el-button @click="handleRestore(row.id)" size="mini" icon="el-icon-refresh-left" />
+                    </el-tooltip>
+                    <el-tooltip content="Xóa vĩnh viễn" placement="top">
+                      <el-button @click="handleDestroy(row.id)" size="mini" icon="el-icon-close" />
+                    </el-tooltip>
                   </template>
                 </el-button-group>
               </template>
@@ -180,12 +191,9 @@
 </template>
 
 <script>
-// Components
 import PageTableContent from '@/components/PageTableContent';
 import Pagination from '@/components/Pagination';
-// Store
 import { mapGetters, mapActions } from 'vuex';
-// Utils
 import { parseTime } from '@/utils/functions';
 
 export default {
@@ -216,11 +224,6 @@ export default {
       multipleSelection: [],
       tableAction: '',
     };
-  },
-  watch: {
-    $route(to, from) {
-      this.reRenderDataFromUrl();
-    }
   },
   created() {
     this.getList();
@@ -312,7 +315,6 @@ export default {
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        // code logic ...
         this.trashCategoryGroup(id).then(res => {
           this.$message({
             type: 'success',
@@ -336,7 +338,6 @@ export default {
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        // Code logic
         this.destroyCategoryGroup(id).then(res => {
           this.$message({
             type: 'success',
@@ -365,7 +366,6 @@ export default {
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        // code logic ...
         this.massDestroyCategoryGroup(ids).then(res => {
           this.$message({
             type: 'success',
@@ -394,7 +394,6 @@ export default {
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        // code logic ...
         this.massTrashCategoryGroup(ids).then(res => {
           this.$message({
             type: 'success',
@@ -423,7 +422,6 @@ export default {
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        // code logic ...
         this.massRestoreCategoryGroup(ids).then(res => {
           this.$message({
             type: 'success',
@@ -454,16 +452,9 @@ export default {
         else { this.getListTrashed(); }
       }
     },
-    reRenderDataFromUrl() {
-      this.tableAction = '';
-      if (this.$route.query.form === 'success') {
-        if (! this.isTabTrashed) { this.getList() }
-        else { this.getListTrashed(); }
-        let query = Object.assign({}, this.$route.query);
-        delete query.form;
-        this.$router.replace({ query });
-      };
-    }
+    handleView(id) {
+      console.log(id);
+    },
   }
 }
 </script>

@@ -159,13 +159,23 @@
               <template slot-scope="{row}">
                 <el-button-group>
                   <template v-if="!row.deleted_at">
-                    <el-button @click="handleView(row.id)" size="mini" icon="el-icon-rank" />
-                    <el-button @click="handleEdit(row.id)" size="mini" type="primary" icon="el-icon-edit" />
-                    <el-button @click="handleTrash(row.id)" size="mini" type="danger" icon="el-icon-delete" />
+                    <el-tooltip content="Thông tin" placement="top">
+                      <el-button @click="handleView(row.id)" size="mini" icon="el-icon-rank" />
+                    </el-tooltip>
+                    <el-tooltip content="Chỉnh sửa" placement="top">
+                      <el-button @click="handleEdit(row.id)" size="mini" icon="el-icon-edit" />
+                    </el-tooltip>
+                    <el-tooltip content="Chuyển vào thùng rác" placement="top">
+                      <el-button @click="handleTrash(row.id)" size="mini" icon="el-icon-delete" />
+                    </el-tooltip>
                   </template>
                   <template v-else>
-                    <el-button @click="handleRestore(row.id)" size="mini" type="primary" icon="el-icon-refresh-left" />
-                    <el-button @click="handleDestroy(row.id)" size="mini" type="danger" icon="el-icon-close" />
+                    <el-tooltip content="Khôi phục" placement="top">
+                      <el-button @click="handleRestore(row.id)" size="mini" icon="el-icon-refresh-left" />
+                    </el-tooltip>
+                    <el-tooltip content="Xóa vĩnh viễn" placement="top">
+                      <el-button @click="handleDestroy(row.id)" size="mini" icon="el-icon-close" />
+                    </el-tooltip>
                   </template>
                 </el-button-group>
               </template>
@@ -188,13 +198,10 @@
 </template>
 
 <script>
-// Components
 import PageTableContent from '@/components/PageTableContent';
 import Pagination from '@/components/Pagination';
 import ViewProduct from './components/ViewProduct';
-// Store
 import { mapGetters, mapActions } from 'vuex';
-// Utils
 import { parseTime } from '@/utils/functions';
 
 export default {
@@ -225,11 +232,6 @@ export default {
       productSelected: {},
       isShowDialog: false
     };
-  },
-  watch: {
-    $route(to, from) {
-      this.reRenderDataFromUrl();
-    }
   },
   created() {
     this.getList();
@@ -341,7 +343,7 @@ export default {
       });
     },
     handleDestroy(id) {
-      this.$confirm('Xác nhận xóa vĩnh danh sách này ?', 'Xác nhận', {
+      this.$confirm('Xác nhận xóa vĩnh viễn khách hàng này ?', 'Xác nhận', {
         confirmButtonText: 'Đồng ý',
         cancelButtonText: 'Hủy',
         type: 'warning'
@@ -487,16 +489,6 @@ export default {
         if (! this.isTabTrashed) { this.getList() }
         else { this.getListTrashed(); }
       }
-    },
-    reRenderDataFromUrl() {
-      this.tableAction = '';
-      if (this.$route.query.form === 'success') {
-        if (! this.isTabTrashed) { this.getList() }
-        else { this.getListTrashed(); }
-        let query = Object.assign({}, this.$route.query);
-        delete query.form;
-        this.$router.replace({ query });
-      };
     },
     handleView(id) {
       this.isShowDialog = true;

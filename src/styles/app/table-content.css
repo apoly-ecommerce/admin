@@ -1,194 +1,231 @@
 .PageContent {
-    position: relative;
-    background-color: var(--app-bg);
-    box-shadow: rgb(0 0 0 / 10%) 0px 1px 1px;
-    margin-bottom: 20px;
-  }
-  .Table-TableBox .Table-TableBox__header {
-    border-bottom: 1px solid var(--header-bg);
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    text-transform: uppercase;
-  }
-  .Table-TableBox .el-table__body .el-button-group .el-button {
-    padding: 6px 8px;
-  }
-  .Table-TableBox__header .Table__name {
-    color: var(--second-color);
-  }
-  .Table-TableBox__header .Table__tools {
-    color: var(--second-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .Table-TableBox__header .Table__tools .Table__tools-item {
-    background-color: #03a9f4;
-    color: var(--app-color);
-    font-size: .8rem;
-    padding: 5.2px 15px;
-    margin-left: 4px;
-    border-radius: 3px;
-    border: 1px solid #03a9f4;
-  }
-  .Table-TableBox .Table-TableBox__body {
-    padding: 10px;
-  }
-  .SortTable_Wrap .TableBox_Actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  .TableBox_Actions__supports .Supports_Button-GroupButton {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-  }
-  .Supports_Button-GroupButton .Button__Item {
-    border: 1px solid #ddd;
-    font-size: .75rem;
-    padding: 6px 10px;
-    border-right-color: transparent;
-    text-transform: uppercase;
-  }
-  .Supports_Button-GroupButton .Button__Item:last-child {
-    border-right-color: #ddd;
-  }
-  .Supports_Button-GroupButton .Button__Item:hover {
-    color: #333;
-    border-color: #8c8c8c;
-    background-color: #d4d4d4;
-    border-right-color: 1px solid #333;
-  }
-  .TableBox_Actions__filters .SearchForm_FormGroup {
-    position: relative;
-    width: 320px;
-  }
-  .TableBox_Actions__filters .SearchForm__Icon {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    color: #585454;
-    font-size: .9rem;
-    padding: 0 10px;
-    box-sizing: content-box;
-  }
-  .TableBox_Actions__filters .el-FormControl_custom .el-input__suffix {
-    top: 4px;
-  }
-  .TableBox_Actions__filters .el-FormControl_custom .el-input__inner {
-    line-height: 1.2;
-    height: 32px;
-    padding: 0 10px;
-    margin-right: 3px;
-    border-radius: 0;
-  }
-  .TableBox_Actions__filters .SearchForm__FormControl {
-    display: block;
-    width: 100%;
-    border: 1px solid #ddd;
-    padding: 5px 5px 5px 30px;
-  }
-  .TableBox_Content .thumb-iframe {
-    display: block;
-    position: relative;
-  }
-  .TableBox_Content .Img-Circle {
-    display: block;
-    border-radius: 100%;
-  }
-  .TableBox_Content .Img-Small {
-    display: block;
-    width: 40px;
-    height: 40px;
-  }
-  .TableBox_Content thead th {
-    border-bottom-width: 2px!important;
-    font-weight: 500;
-  }
-  .TableBox_Content thead th .el-checkbox__inner {
-    margin-left: 5px;
-  }
-  .TableBox_Content .el-checkbox__inner::after {
-    left: 6px;
-    top: 3px;
-  }
-  .TableBox_Content thead th:last-child,
-  .TableBox_Content td:last-child {
-    text-align: right;
-  }
-  .TableBox_Content thead .order {
-    width: 40px;
-    text-align: center;
-  }
-  .TableBox_Content .el-checkbox__inner {
-    width: 18px;
-    height: 18px;
-  }
-  .TableBox_Content td {
-    font-size: .9rem;
-    color: #666;
-    vertical-align: middle;
-  }
-  .TableBox_Content td .table-option-item {
-    color: #666;
-    font-size: .9rem;
-    padding: 2px;
-  }
-  .TableBox_Content .image.thumbNail {
-    width: 100px;
-    height: 100px;
-    overflow: hidden;
-  }
-  .TableBox_Content .image.thumbNail img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-  .Table-TableBox__Paginate .custom-select {
-    border: 1px solid #dee2e6;
-    padding: 4px 8px;
-    margin-right: 3px;
-    margin-top: 0!important;
-    color: #605a5a;
-    font-size: .9rem;
-  }
-  .el-button-group .el-button--primary:last-child {
-    padding-bottom: 6px;
-  }
-  .el-table__body td.el-table__expanded-cell {
-    padding: 10px 10px;
-    background-color: #f6f6f6!important;
-    font-size: .8rem;
-  }
-  .el-table__body td.el-table__expanded-cell .ExpandData__Item {
-    padding: 3px 0;
-  }
-  .TableThumb_ThumbImage {
-    display: block;
-    overflow: hidden;
-    max-width: 60%;
-    max-height: 80px;
-  }
-  .TableThumb_ThumbImage .image {
-    max-width: 100%;
-    height: auto;
-    object-fit: contain;
-    display: block;
-  }
-  .TableBox_Content .line-txt-top {
-    font-size: .8rem;
-    font-weight: 400;
-    color: #383636;
-  }
-  .TableBox_Content .line-txt-bottom {
-    font-size: .7rem;
-    color: #383636;
-  }
-  .FormSelectOptionSearch_SizeCustom {
-    width: 120px;
-  }
+  position: relative;
+  background-color: var(--app-bg);
+  box-shadow: rgb(0 0 0 / 10%) 0px 1px 1px;
+  margin-bottom: 20px;
+}
+.Table-TableBox .Table-TableBox__header {
+  border-bottom: 1px solid var(--header-bg);
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-transform: uppercase;
+}
+.Table-TableBox .el-table__body .el-button-group .el-button {
+  padding: 6px 8px;
+}
+.Table-TableBox__header .Table__name {
+  color: var(--second-color);
+}
+.Table-TableBox__header .Table__tools {
+  color: var(--second-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.Table-TableBox__header .Table__tools .Table__tools-item {
+  background-color: #03a9f4;
+  color: var(--app-color);
+  font-size: .8rem;
+  padding: 5.2px 15px;
+  margin-left: 4px;
+  border-radius: 3px;
+  border: 1px solid #03a9f4;
+}
+.Table-TableBox .Table-TableBox__body {
+  padding: 10px;
+}
+.SortTable_Wrap .TableBox_Actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.TableBox_Actions__supports .Supports_Button-GroupButton {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.Supports_Button-GroupButton .Button__Item {
+  border: 1px solid #ddd;
+  font-size: .75rem;
+  padding: 6px 10px;
+  border-right-color: transparent;
+  text-transform: uppercase;
+}
+.Supports_Button-GroupButton .Button__Item:last-child {
+  border-right-color: #ddd;
+}
+.Supports_Button-GroupButton .Button__Item:hover {
+  color: #333;
+  border-color: #8c8c8c;
+  background-color: #d4d4d4;
+  border-right-color: 1px solid #333;
+}
+.TableBox_Actions__filters .SearchForm_FormGroup {
+  position: relative;
+  width: 320px;
+}
+.TableBox_Actions__filters .SearchForm__Icon {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  color: #585454;
+  font-size: .9rem;
+  padding: 0 10px;
+  box-sizing: content-box;
+}
+.TableBox_Actions__filters .el-FormControl_custom .el-input__suffix {
+  top: 4px;
+}
+.TableBox_Actions__filters .el-FormControl_custom .el-input__inner {
+  line-height: 1.2;
+  height: 32px;
+  padding: 0 10px;
+  margin-right: 3px;
+  border-radius: 0;
+}
+.TableBox_Actions__filters .SearchForm__FormControl {
+  display: block;
+  width: 100%;
+  border: 1px solid #ddd;
+  padding: 5px 5px 5px 30px;
+}
+.TableBox_Content .thumb-iframe {
+  display: block;
+  position: relative;
+}
+.TableBox_Content .Img-Circle {
+  display: block;
+  border-radius: 100%;
+}
+.TableBox_Content .Img-Small {
+  display: block;
+  width: 40px;
+  height: 40px;
+}
+.TableBox_Content thead th {
+  border-bottom-width: 2px!important;
+  font-weight: 500;
+}
+.TableBox_Content thead th .el-checkbox__inner {
+  margin-left: 5px;
+}
+.TableBox_Content .el-checkbox__inner::after {
+  left: 6px;
+  top: 3px;
+}
+.TableBox_Content thead th:last-child,
+.TableBox_Content td:last-child {
+  text-align: right;
+}
+.TableBox_Content thead .order {
+  width: 40px;
+  text-align: center;
+}
+.TableBox_Content .el-checkbox__inner {
+  width: 18px;
+  height: 18px;
+}
+.TableBox_Content td {
+  font-size: .9rem;
+  color: #666;
+  vertical-align: middle;
+}
+.TableBox_Content td .table-option-item {
+  color: #666;
+  font-size: .9rem;
+  padding: 2px;
+}
+.TableBox_Content .image.thumbNail {
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+}
+.TableBox_Content .image.thumbNail img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.Table-TableBox__Paginate .custom-select {
+  border: 1px solid #dee2e6;
+  padding: 4px 8px;
+  margin-right: 3px;
+  margin-top: 0!important;
+  color: #605a5a;
+  font-size: .9rem;
+}
+.el-button-group .el-button--primary:last-child {
+  padding-bottom: 6px;
+}
+.el-table__body td.el-table__expanded-cell {
+  padding: 10px 10px;
+  background-color: #f6f6f6!important;
+  font-size: .8rem;
+}
+.el-table__body td.el-table__expanded-cell .ExpandData__Item {
+  padding: 3px 0;
+}
+.TableThumb_ThumbImage {
+  display: block;
+  overflow: hidden;
+  width: 80px;
+  height: 80px;
+}
+.TableThumb_ThumbImage .image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.TableBox_Content .line-txt-top {
+  font-size: .8rem;
+  font-weight: 400;
+  color: #383636;
+}
+.TableBox_Content .line-txt-bottom {
+  font-size: .7rem;
+  color: #383636;
+}
+.FormSelectOptionSearch_SizeCustom {
+  width: 120px;
+}
+.TableThumb_ThumbImage.normal {
+  display: block;
+  width: 70px;
+  height: 70px;
+}
+.TableThumb_ThumbImage.avatar {
+  display: block;
+  width: 40px;
+  height: 40px;
+}
+.CircleThumb {
+  display: block;
+  border-radius: 100%;
+}
+.txt-large-size {
+  margin: 0 4px;
+  margin-bottom: 5px;
+  font-size: .9rem;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.mini-tag {
+  height: 17px;
+  line-height: 13px;
+  margin-left: 10px;
+}
+
+.el-tag.el-tag--info {
+    background-color: #f4f4f5;
+    border-color: #e9e9eb;
+    color: #565656;
+}
+
+.raw-content ul {
+  list-style: inside;
+}

@@ -15,18 +15,21 @@ import {
 
 export default {
 
-  addCategory({ commit }, formData) {
+  addCategory({ dispatch }, formData) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-type': 'multipart/form-data'
       };
       addCategory(headers, formData)
-      .then(res => resolve(res.data))
+      .then(res => {
+        dispatch('category/fetchCategoryByPaginate', { limit: 10, page: 1 }, { root: true });
+        resolve(res.data);
+      })
       .catch(error => reject(error));
     });
   },
 
-  fetchListCategory({ commit }) {
+  fetchListCategory() {
     return new Promise((resolve, reject) => {
       fetchListCategory()
       .then(res => resolve(res.data))
@@ -122,7 +125,7 @@ export default {
     })
   },
 
-  fetchCategoryItemById({ commit }, id) {
+  fetchCategoryItemById({}, id) {
     return new Promise((resolve, reject) => {
       fetchCategoryItemById(id)
       .then(res => resolve(res.data))
@@ -130,13 +133,16 @@ export default {
     });
   },
 
-  updateCategory({ commit }, { formData, id }) {
+  updateCategory({ dispatch }, { formData, id }) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-type': 'multipart/form-data'
       };
       updateCategory(headers, formData, id)
-      .then(res => resolve(res.data))
+      .then(res => {
+        dispatch('category/fetchCategoryByPaginate', { limit: 10, page: 1 }, { root: true });
+        resolve(res.data);
+      })
       .catch(error => reject(error));
     });
   }

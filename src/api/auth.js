@@ -3,7 +3,7 @@ import request from '@/utils/request';
 export function login(data) {
   return request({
     url: 'api/admin/auth/login',
-    method: 'post',
+    method: 'POST',
     data
   });
 }
@@ -11,7 +11,7 @@ export function login(data) {
 export function logout() {
   return request({
     url: 'api/admin/auth/logout',
-    method: 'post',
+    method: 'POST',
   });
 }
 
@@ -19,6 +19,6 @@ export function logout() {
 export function fetchUserAuth() {
   return request({
     url: 'api/admin/admin/user/auth',
-    method: 'get',
+    method: 'GET',
   });
 }

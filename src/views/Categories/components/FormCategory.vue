@@ -5,7 +5,6 @@
     :isFormLoading="isFormLoading"
     @close="handleCloseForm"
   >
-
     <template v-slot:form-body>
       <el-form
         ref="formData"
@@ -13,7 +12,6 @@
         :rules="formRules"
         @submit.prevent
       >
-
         <el-row :gutter="5">
           <el-col :span="12" class="p-1">
             <el-form-item prop="name">
@@ -87,7 +85,7 @@
 
           <el-col :span="6" class="p-1">
             <el-form-item prop="active">
-              <label for="slug" class="FormLabel">
+              <label for="active" class="FormLabel">
                 <span class="FormLabel__title">Status *</span>
               </label>
               <el-select
@@ -270,16 +268,11 @@
 </template>
 
 <script>
-// Components @ > *
 import FormAction from '@/components/FormAction';
 import UploadImage from '@/components/UploadImage';
-// Validations
 import { categoryRules } from '@/validations';
-// Store
 import { mapActions } from 'vuex';
-// Helpers
 import { changeToSlug } from '@/helpers';
-
 import { Message } from 'element-ui';
 
 const defaultFormData = {
@@ -378,13 +371,13 @@ export default {
             cancelButtonText: 'Thêm mới',
             type: 'error'
           }).then(() => {
-            this.$router.push('/catalog/category');
+            this.back();
           }).catch(() => {
-            this.$router.push('/catalog/category/add');
+            this.back('/catalog/category/add');
           });
         } else {
           this.$message.error('Có lỗi trong quá trình tải dữ liệu !');
-          this.$router.push('/catalog/category');
+          this.back();
         }
       }
     },
@@ -395,9 +388,9 @@ export default {
     getFormName() {
       this.formName = this.$route.meta && this.$route.meta.title;
     },
-    back(router = '/catalog/category', query = {}) {
+    back(router = '/catalog/category') {
       this.resetFormData();
-      this.$router.push({ path: router, query });
+      this.$router.push({ path: router });
     },
     handleCloseForm() {
       this.back();
@@ -413,7 +406,6 @@ export default {
       this.formData.coverImage.url   = '';
       this.formData.coverImage.file  = null;
       this.formData.coverImage.isDel = false;
-
       this.formData.featureImage.url   = '';
       this.formData.featureImage.file  = null;
       this.formData.featureImage.isDel = false;
@@ -427,13 +419,16 @@ export default {
               type: 'success',
               duration: 5 * 1000
             });
-            this.back('/catalog/category', { form: 'success' });
+            this.back();
           }).catch(error => {
-            Message({
-              message: error.data.message,
-              type: 'error',
-              duration: 5 * 1000
-            });
+            console.error('[App Error] => ', error);
+            if (error.status === 422) {
+              Message({
+                message: 'Dữ liệu không hợp lệ, vui lòng kiễm tra lại !',
+                type: 'error',
+                duration: 5 * 1000
+              });
+            }
             this.appendErrorToForm(error.data.errors);
           });
         }
@@ -455,7 +450,6 @@ export default {
       formData.append('order', this.formData.order);
       formData.append('meta_title', this.formData.meta_title);
       formData.append('meta_description', this.formData.meta_description);
-      // Start file ...
       if (this.formData.coverImage.isDel) {
         formData.append('delete_image[cover]', '1');
       }
@@ -468,7 +462,6 @@ export default {
       if (this.formData.featureImage.file) {
         formData.append('images[feature]', this.formData.featureImage.file);
       }
-      // End file ...
       return formData;
     },
     appendErrorToForm(errors) {

@@ -4,7 +4,6 @@
     <router-view :key="key"></router-view>
 
     <page-table-content :tableName="tableName">
-
       <template v-slot:tools>
         <template>
           <el-button v-if="isTabTrashed" size="mini" @click="getList">
@@ -116,7 +115,7 @@
             <!-- data table -->
             <el-table-column label="Avatar" prop="image" width="150">
               <template slot-scope="{row}">
-                <div class="TableThumb_ThumbImage">
+                <div class="TableThumb_ThumbImage avatar CircleThumb">
                   <img :src="row.image" alt="" class="image medium">
                 </div>
               </template>
@@ -205,13 +204,10 @@
 </template>
 
 <script>
-// Components
 import PageTableContent from '@/components/PageTableContent';
 import Pagination from '@/components/Pagination';
 import ViewUser from './Components/ViewUser';
-// Store
 import { mapGetters, mapActions } from 'vuex';
-// Utils
 import { parseTime } from '@/utils/functions';
 
 export default {
@@ -245,11 +241,6 @@ export default {
       userSelected: {},
       isShowDialog: false
     };
-  },
-  watch: {
-    $route(to, from) {
-      this.reRenderDataFromUrl();
-    }
   },
   created() {
     this.getList();
@@ -502,16 +493,6 @@ export default {
         if (! this.isTabTrashed) { this.getList() }
         else { this.getListTrashed(); }
       }
-    },
-    reRenderDataFromUrl() {
-      this.tableAction = '';
-      if (this.$route.query.form === 'success') {
-        if (! this.isTabTrashed) { this.getList() }
-        else { this.getListTrashed(); }
-        let query = Object.assign({}, this.$route.query);
-        delete query.form;
-        this.$router.replace({ query });
-      };
     },
     handleView(id) {
       this.isShowDialog = true;

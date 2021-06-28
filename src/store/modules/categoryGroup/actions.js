@@ -15,21 +15,21 @@ import {
 
 export default {
 
-  addCategoryGroup({ commit }, formData) {
+  addCategoryGroup({ dispatch }, formData) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-Type': 'multipart/form-data'
       };
       addCategoryGroup(headers, formData)
       .then(res => {
-        commit('categoryGroup/ADD_CATEGORY_GROUP_ITEM', res.data.catGrp, { root: true });
+        dispatch('categoryGroup/fetchListCategoryGroupByPaginate', { limit: 10, page: 1 }, { root: true });
         resolve(res.data);
       })
       .catch(error => reject(error));
     });
   },
 
-  fetchListCategoryGroup({ commit }) {
+  fetchListCategoryGroup({}) {
     return new Promise((resolve, reject) => {
       fetchListCategoryGroup()
       .then(res => resolve(res.data))
@@ -125,7 +125,7 @@ export default {
     });
   },
 
-  fetchCategoryGroupItemById({ commit }, id) {
+  fetchCategoryGroupItemById({}, id) {
     return new Promise((resolve, reject) => {
       fetchCategoryGroupItemById(id)
       .then(res => resolve(res.data))
@@ -133,15 +133,19 @@ export default {
     });
   },
 
-  updateCategoryGroup({ commit }, { data, id }) {
+  updateCategoryGroup({ dispatch }, { data, id }) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-Type': 'multipart/form-data'
       };
       updateCategoryGroup(headers, data, id)
-      .then(res => resolve(res.data))
+      .then(res => {
+        dispatch('categoryGroup/fetchListCategoryGroupByPaginate', { limit: 10, page: 1 }, { root: true });
+        resolve(res.data)
+      })
       .catch(error => reject(error));
     });
   }
+
 
 };

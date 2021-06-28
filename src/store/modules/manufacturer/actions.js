@@ -16,18 +16,21 @@ import {
 
 export default {
 
-  addManufacturer({ commit }, formData) {
+  addManufacturer({ dispatch }, formData) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-type': 'multipart/form-data'
       };
       addManufacturer(headers, formData)
-      .then(res => resolve(res.data))
+      .then(res => {
+        dispatch('manufacturer/fetchListManufacturerByPaginate', { limit: 10, page: 1 }, { root: true });
+        resolve(res.data);
+      })
       .catch(error => reject(error));
     });
   },
 
-  fetchListManufacturer({ commit }) {
+  fetchListManufacturer({}) {
     return new Promise((resolve, reject) => {
       fetchListManufacturer()
       .then(res => resolve(res.data))
@@ -123,7 +126,7 @@ export default {
     })
   },
 
-  fetchManufacturerItemById({ commit }, id) {
+  fetchManufacturerItemById({}, id) {
     return new Promise((resolve, reject) => {
       fetchManufacturerItemById(id)
       .then(res => resolve(res.data))
@@ -131,18 +134,21 @@ export default {
     });
   },
 
-  updateManufacturer({ commit }, { formData, id }) {
+  updateManufacturer({ dispatch }, { formData, id }) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-type': 'multipart/form-data'
       };
       updateManufacturer(headers, formData, id)
-      .then(res => resolve(res.data))
+      .then(res => {
+        dispatch('manufacturer/fetchListManufacturerByPaginate', { limit: 10, page: 1 }, { root: true });
+        resolve(res.data);
+      })
       .catch(error => reject(error));
     });
   },
 
-  emptyTrashManufacturer({ commit }) {
+  emptyTrashManufacturer() {
     return new Promise((resolve, reject) => {
       emptyTrashManufacturer()
       .then(res => resolve(res.data))

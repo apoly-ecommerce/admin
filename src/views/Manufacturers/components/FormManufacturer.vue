@@ -5,7 +5,6 @@
     :isFormLoading="isFormLoading"
     @close="handleCloseForm"
   >
-
     <template v-slot:form-body>
       <el-form
         ref="formData"
@@ -13,7 +12,6 @@
         :rules="formRules"
         @submit.prevent
       >
-
         <el-row :gutter="5">
           <el-col :span="16" class="p-1">
             <el-form-item prop="name">
@@ -281,16 +279,11 @@
 </template>
 
 <script>
-// Components @ > *
 import FormAction from '@/components/FormAction';
 import UploadImage from '@/components/UploadImage';
-// Validations
 import { manufacturerRules } from '@/validations';
-// Store
 import { mapActions } from 'vuex';
-// Helpers
 import { changeToSlug } from '@/helpers';
-
 import { Message } from 'element-ui';
 
 const defaultFormData = {
@@ -383,13 +376,13 @@ export default {
             cancelButtonText: 'Thêm mới',
             type: 'error'
           }).then(() => {
-            this.$router.push('/catalog/manufacturer');
+            this.back();
           }).catch(() => {
-            this.$router.push('/catalog/manufacturer/add');
+            this.back('/catalog/manufacturer/add');
           });
         } else {
           this.$message.error('Có lỗi trong quá trình tải dữ liệu !');
-          this.$router.push('/catalog/manufacturer');
+          this.back();
         }
       }
     },
@@ -400,11 +393,13 @@ export default {
     getFormName() {
       this.formName = this.$route.meta && this.$route.meta.title;
     },
-    back(router = '/catalog/manufacturer', query = {}) {
+    back(router = '/catalog/manufacturer') {
       this.resetFormData();
-      this.$router.push({ path: router, query });
+      this.$router.push({ path: router });
     },
-    handleCloseForm() { this.back(); },
+    handleCloseForm() {
+      this.back();
+    },
     saveLogoImage(file) {
       this.formData.logoImage.file = file;
     },
@@ -437,13 +432,16 @@ export default {
               type: 'success',
               duration: 5 * 1000
             });
-            this.back('/catalog/manufacturer', { form: 'success' });
+            this.back();
           }).catch(error => {
-            Message({
-              message: error.data.message,
-              type: 'error',
-              duration: 5 * 1000
-            });
+            console.error('[App Error] => ', error);
+            if (error.status === 422) {
+              Message({
+                message: 'Dữ liệu không hợp lệ, vui lòng kiễm tra lại !',
+                type: 'error',
+                duration: 5 * 1000
+              });
+            }
             this.appendErrorToForm(error.data.errors);
           });
         }
@@ -465,7 +463,6 @@ export default {
       formData.append('email', this.formData.email);
       formData.append('phone', this.formData.phone);
       formData.append('description', this.formData.description);
-      // Start file ...
       if (this.formData.logoImage.isDel) {
         formData.append('delete_image[logo]', '1');
       }
@@ -484,7 +481,6 @@ export default {
       if (this.formData.featureImage.file) {
         formData.append('images[feature]', this.formData.featureImage.file);
       }
-      // End file ...
       return formData;
     },
     appendErrorToForm(errors) {

@@ -1,4 +1,3 @@
-// Api
 import {
   addRole,
   fetchListRoleByPaginate,
@@ -17,7 +16,7 @@ import {
 
 export default {
 
-  fetchRolePermissionsByUser({ commit }) {
+  fetchRolePermissionsByUser() {
     return new Promise((resolve, reject) => {
       fetchRolePermissionsByUser()
       .then(res => resolve(res.data))
@@ -25,23 +24,29 @@ export default {
     });
   },
 
-  addRole({commit}, formData) {
+  addRole({ dispatch }, formData) {
     return new Promise((resolve, reject) => {
       addRole(formData)
-      .then(res => resolve(res.data))
+      .then(res => {
+        dispatch('role/fetchListRoleByPaginate', { limit: 10, page: 1 }, { root: true });
+        resolve(res.data);
+      })
       .catch(error => reject(error));
     });
   },
 
-  updateRole({ commit }, { formData, id }) {
+  updateRole({ dispatch }, { formData, id }) {
     return new Promise((resolve, reject) => {
       updateRole(formData, id)
-      .then(res => resolve(res.data))
+      .then(res => {
+        dispatch('role/fetchListRoleByPaginate', { limit: 10, page: 1 }, { root: true });
+        resolve(res.data);
+      })
       .catch(error => reject(error));
     });
   },
 
-  fetchListRole({commit}) {
+  fetchListRole() {
     return new Promise((resolve, reject) => {
       fetchListRole()
       .then(res => resolve(res.data))
@@ -137,7 +142,7 @@ export default {
     });
   },
 
-  fetchRoleById({ commit }, id) {
+  fetchRoleById({}, id) {
     return new Promise((resolve, reject) => {
       fetchRoleById(id)
       .then(res => resolve(res.data))

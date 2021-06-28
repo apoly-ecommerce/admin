@@ -97,7 +97,7 @@
 
           <el-col :span="8" class="p-1">
             <el-form-item prop="active">
-              <label for="public" class="FormLabel">
+              <label for="active" class="FormLabel">
                 <span class="FormLabel__title">Status*</span>
               </label>
               <el-select
@@ -107,8 +107,8 @@
                 class="w-100"
                 tabindex="2"
               >
-                <el-option value="1" label="Publish"/>
-                <el-option value="0" label="Pending"/>
+                <el-option value="1" label="Active"/>
+                <el-option value="0" label="Inactive"/>
               </el-select>
               <div v-if="formError.active" class="el-form-item__error">{{ formError.active }}</div>
             </el-form-item>
@@ -258,19 +258,14 @@
         <span class="PopupForm_SaveLabel">Update</span>
       </el-button>
     </template>
-
   </form-action>
 </template>
 
 <script>
-// Components @ > *
 import FormAction from '@/components/FormAction';
 import UploadImage from '@/components/UploadImage';
-// Validations
 import { categoryGroupRules } from '@/validations';
-// Store
 import { mapActions } from 'vuex';
-// Helpers
 import { changeToSlug } from '@/helpers';
 
 import { Message } from 'element-ui';
@@ -358,26 +353,25 @@ export default {
             cancelButtonText: 'Thêm mới',
             type: 'error'
           }).then(() => {
-            this.$router.push('/catalog/category-group');
+            this.back();
           }).catch(() => {
-            this.$router.push('/catalog/category-group/add');
+            this.back('/catalog/category-group/add');
           });
         } else {
           this.$message.error('Có lỗi trong quá trình tải dữ liệu !');
-          this.$router.push('/catalog/category-group');
+          this.back();
         }
       }
     },
     coverValueToSlug(e) {
-      let val = e.target.value;
-      this.formData.slug = changeToSlug(val);
+      this.formData.slug = changeToSlug(e.target.value);
     },
     getFormName() {
       this.formName = this.$route.meta && this.$route.meta.title;
     },
-    back(router = '/catalog/category-group', query = {}) {
+    back(router = '/catalog/category-group') {
       this.resetFormData();
-      this.$router.push({ path: router, query });
+      this.$router.push({ path: router });
     },
     handleCloseForm() {
       this.back();
@@ -406,15 +400,16 @@ export default {
               type: 'success',
               duration: 5 * 1000
             });
-            this.back('/catalog/category-group', { form: 'success' });
+            this.back();
           }).catch(error => {
             console.error('[App Error] => ', error);
-            Message({
-              message: error.data.message,
-              type: 'error',
-              duration: 5 * 1000
-            });
-            this.$message.error('Dữ liệu không hợp lệ, vui lòng kiễm tra lại !');
+            if (error.status === 422) {
+              Message({
+                message: 'Dữ liệu không hợp lệ, vui lòng kiễm tra lại !',
+                type: 'error',
+                duration: 5 * 1000
+              });
+            }
             this.appendErrorToForm(error.data.errors);
           });
         }

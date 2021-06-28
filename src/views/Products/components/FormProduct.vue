@@ -5,7 +5,6 @@
     :isFormLoading="isFormLoading"
     @close="handleCloseForm"
   >
-
     <template v-slot:form-body>
       <el-form
         ref="formData"
@@ -13,7 +12,6 @@
         :rules="formRules"
         @submit.prevent
       >
-
         <el-row :gutter="5">
           <el-col :span="16" class="p-1">
             <div class="FormOption__Item">
@@ -626,22 +624,22 @@ export default {
             cancelButtonText: 'Thêm mới',
             type: 'error'
           }).then(() => {
-            this.$router.push('/catalog/product');
+            this.back();
           }).catch(() => {
-            this.$router.push('/catalog/product/add');
+            this.back('/catalog/product/add');
           });
         } else {
           this.$message.error('Có lỗi trong quá trình tải dữ liệu !');
-          this.$router.push('/catalog/product');
+          this.back();
         }
       }
     },
     getFormName() {
       this.formName = this.$route.meta && this.$route.meta.title;
     },
-    back(router = '/catalog/product', query = {}) {
+    back(router = '/catalog/product') {
       this.resetFormData();
-      this.$router.push({ path: router, query });
+      this.$router.push({ path: router });
     },
     handleCloseForm() {
       this.back();
@@ -653,7 +651,8 @@ export default {
       this.formData.media_list = files;
     },
     resetFormData() {
-      this.formData = {...defaultFormData};
+      this.formData  = {...defaultFormData};
+      this.formError = {...defaultFormError};
       this.formData.featureImage.url = '';
       this.formData.featureImage.file = null;
     },
@@ -666,15 +665,16 @@ export default {
               type: 'success',
               duration: 5 * 1000
             });
-            this.back('/catalog/product', { form: 'success' });
+            this.back();
           }).catch(error => {
             console.error('[App Error] => ', error);
-            Message({
-              message: error.data.message,
-              type: 'error',
-              duration: 5 * 1000
-            });
-            this.$message.error('Dữ liệu không hợp lệ, vui lòng kiễm tra lại !');
+            if (error.status === 422) {
+              Message({
+                message: 'Dữ liệu không hợp lệ, vui lòng kiễm tra lại !',
+                type: 'error',
+                duration: 5 * 1000
+              });
+            }
             this.appendErrorToForm(error.data.errors);
           });
         }
@@ -748,7 +748,7 @@ export default {
     },
     appendDataToForm(data) {
       this.formData.name = data.name;
-      this.formData.active = data.active.toString();
+      this.formData.active = data.active ? '1' : '0';
       this.formData.mpn = data.mpn;
       this.formData.description = data.description;
       this.formData.detail_information = data.detail_information;
@@ -774,7 +774,7 @@ export default {
         this.formData.manufacturer_id = data.manufacturer.id;
       }
 
-      this.formData.requires_shipping = data.requires_shipping.toString();
+      this.formData.requires_shipping = data.requires_shipping ? '1' : '0';
 
       if (data.warranty_period) {
         this.formData.warranty_period = data.warranty_period.split(' ')[0];
@@ -790,7 +790,7 @@ export default {
         this.formData.return_time_type = data.return_time.split(' ')[1];
       }
 
-      this.formData.allow_inspection = data.allow_inspection.toString();
+      this.formData.allow_inspection = data.allow_inspection ? '1' : '0';
 
     },
     checkImageNotEmpty(img) {

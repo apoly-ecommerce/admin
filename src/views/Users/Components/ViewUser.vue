@@ -25,7 +25,11 @@
                   </tr>
                   <tr>
                     <th>My Shop:</th>
-                    <td>{{ user.shop && user.shop.length ? user.shop.name : 'Không có' }}</td>
+                    <td>
+                      <span v-if="user.shop">{{ user.shop.name }}</span>
+                      <span v-else-if="user.owns">{{ user.owns.name }}</span>
+                      <span v-else>Không có</span>
+                    </td>
                   </tr>
                   <tr>
                     <th>Quyền:</th>
@@ -53,14 +57,14 @@
                     </td>
                   </tr>
                   <tr>
-                    <th>Member since:</th>
+                    <th>Tham gia từ:</th>
                     <td>{{ fromNow(user.created_at) }}</td>
                   </tr>
                 </tbody>
               </table>
             </el-tab-pane>
             <el-tab-pane label="MÔ TẢ BẢN THÂN">
-              <article class="description">{{ user.description }}</article>
+              <article class="description">{{ user.description || 'Không có' }}</article>
             </el-tab-pane>
             <el-tab-pane label="THÔNG TIN LIÊN HỆ">
               <table>
@@ -76,24 +80,27 @@
                   <tr v-if="user.primaryAddress">
                     <th>Address:</th>
                     <td>
-                      <p v-if="user.primaryAddress.address_line_1">
-                        {{ user.primaryAddress.address_line_1 }}
-                      </p>
-                      <p v-if="user.primaryAddress.address_line_2">
-                        {{ user.primaryAddress.address_line_2 }}
-                      </p>
-                      <p v-if="user.primaryAddress.state_id">
-                        {{ user.primaryAddress.state.name }}
-                      </p>
-                      <p v-if="user.primaryAddress.city">
-                        {{ user.primaryAddress.city }}
-                      </p>
-                      <p v-if="user.primaryAddress.country">
-                        {{ user.primaryAddress.country.name }}
-                      </p>
-                      <p v-if="user.primaryAddress.phone">
-                        P: {{ user.primaryAddress.phone }}
-                      </p>
+                      <div v-if="user.primaryAddress">
+                        <p v-if="user.primaryAddress.address_line_1">
+                          {{ user.primaryAddress.address_line_1 }}
+                        </p>
+                        <p v-if="user.primaryAddress.address_line_2">
+                          {{ user.primaryAddress.address_line_2 }}
+                        </p>
+                        <p v-if="user.primaryAddress.state_id">
+                          {{ user.primaryAddress.state.name }}
+                        </p>
+                        <p v-if="user.primaryAddress.city">
+                          {{ user.primaryAddress.city }}
+                        </p>
+                        <p v-if="user.primaryAddress.country">
+                          {{ user.primaryAddress.country.name }}
+                        </p>
+                        <p v-if="user.primaryAddress.phone">
+                          Phone: {{ user.primaryAddress.phone }}
+                        </p>
+                      </div>
+                      <div v-else>Không có</div>
                     </td>
                   </tr>
                 </tbody>
@@ -111,62 +118,30 @@
 
 <script>
 import moment from 'moment';
+import { checkAddressExists, toGeocodeString } from '@/helpers';
 
 export default {
   name: 'view-user',
   props: {
-    user: {
-      type: Object,
-      default: {}
-    },
-    isShow: {
-      type: Boolean,
-      default: false
-    }
+    user: { type: Object, default: {} },
+    isShow: { type: Boolean, default: false }
   },
   methods: {
     close() {
       this.$emit('close');
     },
     formatDob(dateStr) {
+      if (!dateStr) return 'Không có';
       return moment(dateStr).locale('vi').format('DD-MM-YYYY');
     },
     fromNow(dateStr) {
       return moment(dateStr).locale('vi').fromNow();
     },
     toGeocodeString(address) {
-      let data = [];
-      if (!address) return;
-      if (address.address_line_1) {
-        data.push(address.address_line_1);
-      }
-      if (address.address_line_2) {
-        data.push(address.address_line_2);
-      }
-      if (address.city) {
-        data.push(address.city);
-      }
-      if (address.state_id) {
-        data.push(address.state.name);
-      }
-      if (address.zip_code) {
-        data.push(address.zip_code);
-      }
-      if (address.country_id) {
-        data.push(address.country.name);
-      }
-      let str = data.join(', ');
-      let result = str.replaceAll(' ', '+');
-      return result;
+      return toGeocodeString(address);
     },
     checkAddressExists(address) {
-      if (!address) return;
-      if (
-        (address.address_line_1 || address.address_line_2) &&
-        address.city && address.state_id && address.zip_code && address.country_id
-      ) {
-        return true;
-      } else return false;
+      return checkAddressExists(address);
     }
   }
 }

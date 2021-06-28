@@ -1,32 +1,9 @@
 import request from '@/utils/request';
 
-export function login(data) {
-  return request({
-    url: 'api/admin/auth/login',
-    method: 'post',
-    data
-  });
-}
-
-export function logout() {
-  return request({
-    url: 'api/admin/auth/logout',
-    method: 'post',
-  });
-}
-
-export function getInfo() {
-  return request({
-    url: 'api/admin/admin/user/info',
-    method: 'get',
-  });
-}
-
-
 export function addUser(headers, data) {
   return request({
     url: 'api/admin/admin/user/add',
-    method: 'post',
+    method: 'POST',
     headers,
     data
   });
@@ -35,14 +12,14 @@ export function addUser(headers, data) {
 export function fetchListUser() {
   return request({
     url: 'api/admin/admin/user/list',
-    method: 'get'
+    method: 'GET'
   });
 }
 
 export function fetchListUserByPaginate(query) {
   return request({
     url: 'api/admin/admin/user/list/paginate',
-    method: 'get',
+    method: 'GET',
     params: query
   });
 }
@@ -50,7 +27,7 @@ export function fetchListUserByPaginate(query) {
 export function fetchListUserTrashedByPaginate(query) {
   return request({
     url: 'api/admin/admin/user/list/trashed/paginate',
-    method: 'get',
+    method: 'GET',
     params: query
   });
 }
@@ -58,14 +35,14 @@ export function fetchListUserTrashedByPaginate(query) {
 export function trashUser(id) {
   return request({
     url: `api/admin/admin/user/trash/${id}`,
-    method: 'delete'
+    method: 'DELETE'
   });
 }
 
 export function massTrashUser(ids) {
   return request({
     url: 'api/admin/admin/user/massTrash',
-    method: 'delete',
+    method: 'DELETE',
     params: { ids }
   });
 }
@@ -73,14 +50,14 @@ export function massTrashUser(ids) {
 export function destroyUser(id) {
   return request({
     url: `api/admin/admin/user/destroy/${id}`,
-    method: 'delete'
+    method: 'DELETE'
   });
 }
 
 export function massDestroyUser(ids) {
   return request({
     url: 'api/admin/admin/user/massDestroy',
-    method: 'delete',
+    method: 'DELETE',
     params: { ids }
   });
 }
@@ -88,14 +65,14 @@ export function massDestroyUser(ids) {
 export function restoreUser(id) {
   return request({
     url: `api/admin/admin/user/restore/${id}`,
-    method: 'patch',
+    method: 'PATCH',
   });
 }
 
 export function massRestoreUser(ids) {
   return request({
     url: 'api/admin/admin/user/massRestore',
-    method: 'patch',
+    method: 'PATCH',
     params: { ids }
   });
 }
@@ -103,16 +80,16 @@ export function massRestoreUser(ids) {
 export function fetchUserItemById(id) {
   return request({
     url: `api/admin/admin/user/show/${id}`,
-    method: 'get'
+    method: 'GET'
   });
 }
 
 export function updateUser(headers, data, id) {
   return request({
     url: `api/admin/admin/user/update/${id}`,
-    method: 'post',
+    method: 'POST',
     headers,
-    params: { _method: 'put' },
+    params: { _method: 'PUT' },
     data
   });
 }
@@ -120,8 +97,8 @@ export function updateUser(headers, data, id) {
 export function updatePasswordUser(data, id) {
   return request({
     url: `api/admin/admin/user/update/password/${id}`,
-    method: 'post',
-    params: { _method: 'put' },
+    method: 'POST',
+    params: { _method: 'PUT' },
     data
   });
 }
@@ -129,6 +106,6 @@ export function updatePasswordUser(data, id) {
 export function emptyTrashUser() {
   return request({
     url: 'api/admin/admin/user/emptyTrash',
-    method: 'delete'
+    method: 'DELETE'
   });
 }

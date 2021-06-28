@@ -177,10 +177,11 @@ export default {
           this.login(this.loginForm).then(() => {
             this.$router.push({ path: this.redirect || '/', query: this.otherQuery });
             this.setisLoading(false);
-          }).catch( eRes => {
+          }).catch( err => {
+            console.log(err);
             this.setisLoading(false);
-            if (eRes.errors && eRes.errors.account && eRes.errors.account.length) {
-              this.error.account = eRes.errors.account || '';
+            if (err.errors && err.errors.account && err.errors.account.length) {
+              this.error.account = err.errors.account || '';
             } else {
               this.error.account = 'Login failed !';
             }

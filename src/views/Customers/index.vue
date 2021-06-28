@@ -4,7 +4,6 @@
     <router-view :key="key"></router-view>
 
     <page-table-content :tableName="tableName">
-
       <template v-slot:tools>
         <template>
           <el-button v-if="isTabTrashed" size="mini" @click="getList">
@@ -116,7 +115,7 @@
             <!-- data table -->
             <el-table-column label="Avatar" prop="image" width="150">
               <template slot-scope="{row}">
-                <div class="TableThumb_ThumbImage">
+                <div class="TableThumb_ThumbImage avatar CircleThumb">
                   <img :src="row.image" alt="" class="image medium">
                 </div>
               </template>
@@ -170,8 +169,8 @@
                     <el-tooltip content="Đổi mật khẩu" placement="top">
                       <el-button @click="handleEdit(row.id, 'password')" size="mini" icon="el-icon-lock" />
                     </el-tooltip>
-                    <el-tooltip content="Đổi địa chỉ" placement="top">
-                      <el-button @click="handleEdit(row.id, 'address')" size="mini" icon="el-icon-location-outline" />
+                    <el-tooltip content="Sổ địa chỉ" placement="top">
+                      <el-button @click="$router.push({ path: `/address/addresses/customer/${row.id}` })" size="mini" icon="el-icon-notebook-2" />
                     </el-tooltip>
                     <el-tooltip content="Chuyển vào thùng rác" placement="top">
                       <el-button @click="handleTrash(row.id)" size="mini" icon="el-icon-delete" />
@@ -205,13 +204,10 @@
 </template>
 
 <script>
-// Components
 import PageTableContent from '@/components/PageTableContent';
 import Pagination from '@/components/Pagination';
 import ViewCustomer from './components/ViewCustomer';
-// Store
 import { mapGetters, mapActions } from 'vuex';
-// Utils
 import { parseTime } from '@/utils/functions';
 
 export default {
@@ -245,11 +241,6 @@ export default {
       customerSelected: {},
       isShowDialog: false
     };
-  },
-  watch: {
-    $route(to, from) {
-      this.reRenderDataFromUrl();
-    }
   },
   created() {
     this.getList();
@@ -503,16 +494,6 @@ export default {
         else { this.getListTrashed(); }
       }
     },
-    reRenderDataFromUrl() {
-      this.tableAction = '';
-      if (this.$route.query.form === 'success') {
-        if (! this.isTabTrashed) { this.getList() }
-        else { this.getListTrashed(); }
-        let query = Object.assign({}, this.$route.query);
-        delete query.form;
-        this.$router.replace({ query });
-      };
-    },
     handleView(id) {
       this.isShowDialog = true;
       this.customerSelected = this.tableData.filter(item => item.id === id)[0];
@@ -520,7 +501,7 @@ export default {
     handleCloseDialog() {
       this.customerSelected = {};
       this.isShowDialog = false;
-    },
+    }
   }
 }
 </script>

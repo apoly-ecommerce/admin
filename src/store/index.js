@@ -3,7 +3,6 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-// Modules
 import app from './modules/app';
 import auth from './modules/auth';
 import user from './modules/user';
@@ -18,6 +17,14 @@ import manufacturer from './modules/manufacturer';
 import product from './modules/product';
 import address from './modules/address';
 import customer from './modules/customer';
+import shop from './modules/shop';
+import merchant from './modules/merchant';
+import banner from './modules/banner';
+import bannerGroup from './modules/bannerGroup';
+import slider from './modules/slider';
+import theme from './modules/theme';
+import system from './modules/system';
+import faq from './modules/faq';
 
 const store = new Vuex.Store({
   modules: {
@@ -34,7 +41,15 @@ const store = new Vuex.Store({
     manufacturer,
     product,
     address,
-    customer
+    customer,
+    shop,
+    merchant,
+    banner,
+    bannerGroup,
+    slider,
+    theme,
+    system,
+    faq
   }
 });
 

@@ -214,16 +214,11 @@
 </template>
 
 <script>
-// Components @ > *
 import FormAction from '@/components/FormAction';
 import UploadImage from '@/components/UploadImage';
-// Validations
 import { categorySubGroupRules } from '@/validations';
-// Store
 import { mapActions } from 'vuex';
-// Helpers
 import { changeToSlug } from '@/helpers';
-
 import { Message } from 'element-ui';
 
 const defaultFormData = {
@@ -307,13 +302,13 @@ export default {
             cancelButtonText: 'Thêm mới',
             type: 'error'
           }).then(() => {
-            this.$router.push('/catalog/category-sub-group');
+            this.back();
           }).catch(() => {
-            this.$router.push('/catalog/category-sub-group/add');
+            this.back('/catalog/category-sub-group/add');
           });
         } else {
           this.$message.error('Có lỗi trong quá trình tải dữ liệu !');
-          this.$router.push('/catalog/category-sub-group');
+          this.back();
         }
       }
     },
@@ -324,9 +319,9 @@ export default {
     getFormName() {
       this.formName = this.$route.meta && this.$route.meta.title;
     },
-    back(router = '/catalog/category-sub-group', query = {}) {
+    back(router = '/catalog/category-sub-group') {
       this.resetFormData();
-      this.$router.push({ path: router, query });
+      this.$router.push({ path: router });
     },
     handleCloseForm() {
       this.back();
@@ -349,13 +344,16 @@ export default {
               type: 'success',
               duration: 5 * 1000
             });
-            this.back('/catalog/category-sub-group', { form: 'success' });
+            this.back();
           }).catch(error => {
-            Message({
-              message: error.data.message,
-              type: 'error',
-              duration: 5 * 1000
-            });
+            console.error('[App Error] => ', error);
+            if (error.status === 422) {
+              Message({
+                message: 'Dữ liệu không hợp lệ, vui lòng kiễm tra lại !',
+                type: 'error',
+                duration: 5 * 1000
+              });
+            }
             this.appendErrorToForm(error.data.errors);
           });
         }

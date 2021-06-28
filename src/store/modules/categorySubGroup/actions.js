@@ -15,14 +15,14 @@ import {
 
 export default {
 
-  addCategorySubGroup({ commit }, formData) {
+  addCategorySubGroup({ dispatch }, formData) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-type': 'multipart/form-data'
       };
       addCategorySubGroup(headers, formData)
       .then(res => {
-        commit('categorySubGroup/ADD_CATEGORY_SUB_GROUP_ITEM', res.data.categorySubGroup, { root: true });
+        dispatch('categorySubGroup/fetchListCategorySubGroupByPaginate', { limit: 10, page: 1 }, { root: true });
         resolve(res.data);
       })
       .catch(error => reject(error));
@@ -125,7 +125,7 @@ export default {
     })
   },
 
-  fetchCategorySubGroupItemById({ commit }, id) {
+  fetchCategorySubGroupItemById({}, id) {
     return new Promise((resolve, reject) => {
       fetchCategorySubGroupItemById(id)
       .then(res => resolve(res.data))
@@ -133,13 +133,16 @@ export default {
     });
   },
 
-  updateCategorySubGroup({ commit }, { formData, id }) {
+  updateCategorySubGroup({ dispatch }, { formData, id }) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-type': 'multipart/form-data'
       };
       updateCategorySubGroup(headers, formData, id)
-      .then(res => resolve(res.data))
+      .then(res => {
+        dispatch('categorySubGroup/fetchListCategorySubGroupByPaginate', { limit: 10, page: 1 }, { root: true });
+        resolve(res.data);
+      })
       .catch(error => reject(error));
     });
   }

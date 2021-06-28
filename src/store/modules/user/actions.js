@@ -1,9 +1,4 @@
-import { setToken, removeToken, getToken } from '@/utils/auth';
-import router, { resetRouter } from '@/router';
 import {
-  login,
-  getInfo,
-  logout,
   addUser,
   fetchListUser,
   fetchListUserByPaginate,
@@ -22,77 +17,21 @@ import {
 
 export default {
 
-  login({ commit }, userInfo) {
-    const { email, password }  = userInfo;
-    return new Promise((resolve, reject) => {
-      login({email: email.trim(), password: password})
-      .then(res => {
-        const { data } = res;
-        commit('user/SET_TOKEN', data.accessToken, { root: true });
-        setToken(data.accessToken);
-        resolve();
-      })
-      .catch(err => {
-        reject(err);
-      });
-    });
-  },
-
-  logout({ commit }) {
-    return new Promise((resolve, reject) => {
-      logout()
-      .then(res => {
-        commit('user/SET_TOKEN', '', { root: true });
-        commit('user/SET_ROLE', '', { root: true });
-        commit('user/RESET_USER_INFO', '', { root: true });
-        removeToken();
-        resetRouter();
-        resolve(res.data);
-      })
-      .catch(err => {
-          reject(err);
-      });
-    });
-  },
-
-  getInfo({ commit }) {
-    return new Promise((resolve, reject) => {
-      getInfo()
-      .then(res => {
-        commit('user/SET_USER_INFO', res.data.user, { root: true })
-        resolve(res.data);
-      })
-      .catch(err => {
-        reject(err);
-      });
-    });
-  },
-
-  resetToken({ commit }) {
-    return new Promise(resolve => {
-      commit('user/SET_TOKEN', '', { root: true });
-      commit('user/SET_ROLE', '', { root: true });
-      commit('user/RESET_USER_INFO', '', { root: true });
-      removeToken();
-      resolve();
-    });
-  },
-
-  addUser({ commit }, formData) {
+  addUser({ dispatch }, formData) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-Type': 'multipart/form-data'
       };
       addUser(headers, formData)
       .then(res => {
-        console.log(res);
+        dispatch('user/fetchListUserByPaginate', { limit: 10, page: 1 }, { root: true });
         resolve(res.data);
       })
       .catch(err => reject(err));
     });
   },
 
-  fetchListUser({ commit }) {
+  fetchListUser() {
     return new Promise((resolve, reject) => {
       fetchListUser()
       .then(res => resolve(res.data))
@@ -188,7 +127,7 @@ export default {
     });
   },
 
-  fetchUserItemById({ commit }, id) {
+  fetchUserItemById({}, id) {
     return new Promise((resolve, reject) => {
       fetchUserItemById(id)
       .then(res => resolve(res.data))
@@ -196,26 +135,29 @@ export default {
     });
   },
 
-  updateUser({ commit }, { formData, id }) {
+  updateUser({ dispatch }, { formData, id }) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-Type': 'multipart/form-data'
       };
       updateUser(headers, formData, id)
-      .then(res => resolve(res.data))
+      .then(res => {
+        dispatch('user/fetchListUserByPaginate', { limit: 10, page: 1 }, { root: true });
+        resolve(res.data);
+      })
       .catch(err => reject(err));
     });
   },
 
-  updatePasswordUser({ commit }, { formData, id }) {
+  updatePasswordUser({}, { formData, id }) {
     return new Promise((resolve, reject) => {
       updatePasswordUser(formData, id)
-      .then(res => resolve(res.data))
+      .then(res =>  resolve(res.data) )
       .catch(err => reject(err));
     });
   },
 
-  emptyTrashUser({ commit }) {
+  emptyTrashUser() {
     return new Promise((resolve, reject) => {
       emptyTrashUser()
       .then(res => resolve(res.data))

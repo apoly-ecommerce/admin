@@ -3,7 +3,7 @@ import request from '@/utils/request';
 export function addManufacturer(headers, data) {
   return request({
     url: 'api/admin/catalog/manufacturer/add',
-    method: 'post',
+    method: 'POST',
     headers,
     data
   });
@@ -12,14 +12,14 @@ export function addManufacturer(headers, data) {
 export function fetchListManufacturer() {
   return request({
     url: 'api/admin/catalog/manufacturer/list',
-    method: 'get'
+    method: 'GET'
   });
 }
 
 export function fetchListManufacturerByPaginate(query) {
   return request({
     url: 'api/admin/catalog/manufacturer/list/paginate',
-    method: 'get',
+    method: 'GET',
     params: query
   });
 }
@@ -27,7 +27,7 @@ export function fetchListManufacturerByPaginate(query) {
 export function fetchListManufacturerTrashedByPaginate(query) {
   return request({
     url: 'api/admin/catalog/manufacturer/list/trashed/paginate',
-    method: 'get',
+    method: 'GET',
     params: query
   });
 }
@@ -35,14 +35,14 @@ export function fetchListManufacturerTrashedByPaginate(query) {
 export function trashManufacturer(id) {
   return request({
     url: `api/admin/catalog/manufacturer/trash/${id}`,
-    method: 'delete'
+    method: 'DELETE'
   });
 }
 
 export function massTrashManufacturer(ids) {
   return request({
     url: 'api/admin/catalog/manufacturer/massTrash',
-    method: 'delete',
+    method: 'DELETE',
     params: { ids }
   });
 }
@@ -50,14 +50,14 @@ export function massTrashManufacturer(ids) {
 export function destroyManufacturer(id) {
   return request({
     url: `api/admin/catalog/manufacturer/destroy/${id}`,
-    method: 'delete'
+    method: 'DELETE'
   });
 }
 
 export function massDestroyManufacturer(ids) {
   return request({
     url: 'api/admin/catalog/manufacturer/massDestroy',
-    method: 'delete',
+    method: 'DELETE',
     params: { ids }
   });
 }
@@ -65,14 +65,14 @@ export function massDestroyManufacturer(ids) {
 export function restoreManufacturer(id) {
   return request({
     url: `api/admin/catalog/manufacturer/restore/${id}`,
-    method: 'patch',
+    method: 'PATCH',
   });
 }
 
 export function massRestoreManufacturer(ids) {
   return request({
     url: 'api/admin/catalog/manufacturer/massRestore',
-    method: 'patch',
+    method: 'PATCH',
     params: { ids }
   });
 }
@@ -80,7 +80,7 @@ export function massRestoreManufacturer(ids) {
 export function fetchManufacturerItemById(id) {
   return request({
     url: `api/admin/catalog/manufacturer/show/${id}`,
-    method: 'get'
+    method: 'GET'
   });
 }
 
@@ -88,9 +88,9 @@ export function updateManufacturer(headers, data, id) {
   console.log(headers, data, id);
   return request({
     url: `api/admin/catalog/manufacturer/update/${id}`,
-    method: 'post',
+    method: 'POST',
     headers,
-    params: { _method: 'put' },
+    params: { _method: 'PUT' },
     data
   });
 }
@@ -98,6 +98,6 @@ export function updateManufacturer(headers, data, id) {
 export function emptyTrashManufacturer() {
   return request({
     url: 'api/admin/catalog/manufacturer/emptyTrash',
-    method: 'delete'
+    method: 'DELETE'
   });
 }

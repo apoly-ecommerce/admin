@@ -1,3 +1,4 @@
+
 <template>
   <form-action
     :name="formName"
@@ -400,16 +401,11 @@
 </template>
 
 <script>
-// Components @ > *
 import FormAction from '@/components/FormAction';
 import UploadImage from '@/components/UploadImage';
-// Validations
 import { userRules } from '@/validations';
-// Store
 import { mapActions } from 'vuex';
-
 import { Message } from 'element-ui';
-
 import moment from 'moment';
 
 const defaultFormData = {
@@ -517,22 +513,22 @@ export default {
             cancelButtonText: 'Thêm mới',
             type: 'error'
           }).then(() => {
-            this.$router.push('/admin/user');
+            this.back();
           }).catch(() => {
-            this.$router.push('/admin/user/add');
+            this.back('/admin/user/add');
           });
         } else {
           this.$message.error('Có lỗi trong quá trình tải dữ liệu !');
-          this.$router.push('/admin/user');
+          this.back();
         }
       }
     },
     getFormName() {
       this.formName = this.$route.meta && this.$route.meta.title;
     },
-    back(router = '/admin/user', query = {}) {
+    back(router = '/admin/user') {
       this.resetFormData();
-      this.$router.push({ path: router, query });
+      this.$router.push({ path: router });
     },
     saveAvatarImage(file) {
       this.formData.avatarImage.file = file;
@@ -559,16 +555,17 @@ export default {
               type: 'success',
               duration: 5 * 1000
             });
-            this.back('/admin/user', { form: 'success' });
+            this.back();
           }).catch(error => {
-            if (error.data) {
+            console.error('[App Error] => ', error);
+            if (error.status === 422) {
               Message({
-                message: error.data.message,
+                message: 'Dữ liệu không hợp lệ, vui lòng kiễm tra lại !',
                 type: 'error',
                 duration: 5 * 1000
               });
-              this.appendErrorToForm(error.data.errors);
             }
+            this.appendErrorToForm(error.data.errors);
           });
         }
       });
@@ -577,18 +574,17 @@ export default {
       return this.addUser(this.setFormData());
     },
     handleUpdate() {
-      let updateType = this.$route.query.update;
-      if (updateType === 'origin') {
+      if (this.$route.query.update === 'origin') {
         return this.updateUser({ formData: this.setFormData(), id: this.userId });
       }
-      if (updateType === 'password') {
+      if (this.$route.query.update === 'password') {
         const formData = {
           password: this.formData.password,
           password_confirmation: this.formData.password_confirmation
         };
         return this.updatePasswordUser({ formData, id: this.userId });
       }
-      if (updateType === 'address') {
+      if (this.$route.query.update === 'address') {
         const { address_line_1, address_line_2, city, zip_code, phone, country_id, state_id } = this.formData;
         const formData = { address_line_1, address_line_2, city, zip_code, phone, country_id, state_id };
         return this.updateAddress({ formData, id: this.addressId });
@@ -641,16 +637,15 @@ export default {
       this.formData.dob = data.dob;
       this.formData.sex = data.sex;
       this.formData.description = data.description ? data.description : '';
-      this.formData.address_line_1 = data.primaryAddress.address_line_1;
-      this.formData.address_line_2 = data.primaryAddress.address_line_2;
-      this.formData.city = data.primaryAddress.city;
-      this.formData.zip_code = data.primaryAddress.zip_code;
-      this.formData.phone = data.phone;
-      this.formData.country_id = data.primaryAddress.country_id;
-      this.formData.state_id = data.primaryAddress.state_id;
+      this.formData.address_line_1 = data.primaryAddress ? data.primaryAddress.address_line_1 : '';
+      this.formData.address_line_2 = data.primaryAddress ? data.primaryAddress.address_line_2 : '';
+      this.formData.city = data.primaryAddress ? data.primaryAddress.city : '';
+      this.formData.zip_code = data.primaryAddress ? data.primaryAddress.zip_code : '';
+      this.formData.phone = data.primaryAddress ? data.primaryAddress.phone : '';
+      this.formData.country_id = data.primaryAddress ? data.primaryAddress.country_id : '';
+      this.formData.state_id = data.primaryAddress ? data.primaryAddress.state_id : '';
       this.formData.avatarImage.url = data.image;
-
-      this.addressId = data.primaryAddress.id;
+      this.addressId = data.primaryAddress ? data.primaryAddress.id : '';
     },
     checkImageNotEmpty(img) {
       if (img && !(img.split('?text=')[1] === 'No_Image_Found')) {

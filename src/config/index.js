@@ -77,6 +77,63 @@ const mapSidebarMenu = [
     ]
   },
   {
+    name: 'Vendor',
+    icon: 'user-secret',
+    roles: true,
+    children: [
+      {
+        name: 'Merchants',
+        link: '/vendor/merchant',
+        icon: 'angle-double-right',
+        roles: true,
+      },
+      {
+        name: 'Shops',
+        link: '/vendor/shop',
+        icon: 'angle-double-right',
+        roles: true,
+      },
+    ]
+  },
+  {
+    name: 'Appearance',
+    icon: 'user-secret',
+    roles: true,
+    children: [
+      {
+        name: 'Banners',
+        link: '/appearance/banner',
+        icon: 'angle-double-right',
+        roles: true,
+      },
+      {
+        name: 'Sliders',
+        link: '/appearance/slider',
+        icon: 'angle-double-right',
+        roles: true,
+      },
+      {
+        name: 'Theme Options',
+        link: '/appearance/theme/option',
+        icon: 'angle-double-right',
+        roles: true,
+      },
+    ]
+  },
+  {
+    name: 'Utilities',
+    icon: 'cogs',
+    roles: true,
+    children: [
+      {
+        name: 'Faqs',
+        link: '/utility/faq',
+        icon: 'angle-double-right',
+        roles: true,
+      }
+    ]
+  },
+  {
     name: 'Settings',
     icon: 'cogs',
     roles: true,
@@ -84,6 +141,12 @@ const mapSidebarMenu = [
       {
         name: 'User roles',
         link: '/setting/role',
+        icon: 'angle-double-right',
+        roles: true,
+      },
+      {
+        name: 'System settings',
+        link: '/setting/system/general',
         icon: 'angle-double-right',
         roles: true,
       }

@@ -12,12 +12,4 @@ export default {
     state.listCustomer = state.listCustomer.filter(item => !ids.includes(item.id));
   },
 
-  UPDATE_PRODUCT: (state, data) => {
-    let { listProduct } = state;
-    let index = listProduct.findIndex(item => item.id === data.id );
-    if (index !== -1) {
-      state.listCustomer.splice(index, 1, data);
-    } return;
-  }
-
 };

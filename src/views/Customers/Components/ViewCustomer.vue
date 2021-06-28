@@ -22,15 +22,15 @@
           <el-row :gutter="5">
             <el-col :span="8">
               <div class="middle-heading">ĐÃ CHI</div>
-              <div class="middle-content">12.000.000đ</div>
+              <div class="middle-content">{{ formatCurrency(customer.total_spent) }}</div>
             </el-col>
             <el-col :span="8">
               <div class="middle-heading">THAM GIA TỪ</div>
-              <div class="middle-content">1 YEAR AGO</div>
+              <div class="middle-content">{{ fromNow(customer.created_at) }}</div>
             </el-col>
             <el-col :span="8">
               <div class="middle-heading"># SỐ ĐƠN ĐẶT</div>
-              <div class="middle-content">12</div>
+              <div class="middle-content">{{ customer.orders_count || 0 }}</div>
             </el-col>
           </el-row>
         </section>
@@ -89,7 +89,7 @@
                     {{ address.country.name }}
                   </p>
                   <p v-if="address.phone">
-                    P: {{ address.phone }}
+                    Phone: {{ address.phone }}
                   </p>
                 </address>
               </div>
@@ -97,7 +97,7 @@
                 <iframe width="100%" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" :src="`https://maps.google.it/maps?q=${toGeocodeString(customer.primaryAddress)}&output=embed`"></iframe>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="ĐƠN ĐẶT HÀNG MỚI NHẤT">
+            <el-tab-pane v-if="userAuth.is_from_platform" label="ĐƠN ĐẶT HÀNG MỚI NHẤT">
               <el-table
                 ref="latest_orders"
                 :data="customer.latest_orders"
@@ -136,7 +136,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import moment from 'moment';
+import { checkAddressExists, toGeocodeString, formatCurrency } from '@/helpers';
 
 export default {
   name: 'view-customer',
@@ -150,6 +152,11 @@ export default {
       default: false
     }
   },
+  computed: {
+    ...mapGetters({
+      'userAuth': 'auth/getUserAuth'
+    })
+  },
   methods: {
     close() {
       this.$emit('close');
@@ -161,38 +168,13 @@ export default {
       return moment(dateStr).locale('vi').fromNow();
     },
     toGeocodeString(address) {
-      let data = [];
-      if (!address) return;
-      if (address.address_line_1) {
-        data.push(address.address_line_1);
-      }
-      if (address.address_line_2) {
-        data.push(address.address_line_2);
-      }
-      if (address.city) {
-        data.push(address.city);
-      }
-      if (address.state_id) {
-        data.push(address.state.name);
-      }
-      if (address.zip_code) {
-        data.push(address.zip_code);
-      }
-      if (address.country_id) {
-        data.push(address.country.name);
-      }
-      let str = data.join(', ');
-      let result = str.replaceAll(' ', '+');
-      return result;
+      return toGeocodeString(address);
     },
     checkAddressExists(address) {
-      if (!address) return;
-      if (
-        (address.address_line_1 || address.address_line_2) &&
-        address.city && address.state_id && address.zip_code && address.country_id
-      ) {
-        return true;
-      } else return false;
+      return checkAddressExists(address);
+    },
+    formatCurrency(number) {
+      return formatCurrency(number);
     }
   }
 }

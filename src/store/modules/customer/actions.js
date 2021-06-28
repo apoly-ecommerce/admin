@@ -11,26 +11,27 @@ import {
   restoreCustomer,
   massRestoreCustomer,
   updateCustomer,
+  updatePasswordCustomer,
   emptyTrashCustomer
 } from '@/api/customer';
 
 export default {
 
-  addCustomer({ commit }, formData) {
+  addCustomer({ dispatch }, formData) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-Type': 'multipart/form-data'
       };
       addCustomer(headers, formData)
       .then(res => {
-        console.log(res);
+        dispatch('customer/fetchListCustomerByPaginate', { limit: 10, page: 1 }, { root: true });
         resolve(res.data)
       })
       .catch(error => reject(error));
     });
   },
 
-  fetchCustomerItemById({ commit }, id) {
+  fetchCustomerItemById({}, id) {
     return new Promise((resolve, reject) => {
       fetchCustomerItemById(id)
       .then(res => resolve(res.data))
@@ -38,7 +39,7 @@ export default {
     });
   },
 
-  fetchListCustomer({ commit }, query) {
+  fetchListCustomer({}, query) {
     return new Promise((resolve, reject) => {
       fetchListCustomer(query)
       .then(res => resolve(res.data))
@@ -134,15 +135,31 @@ export default {
     });
   },
 
-  updateCustomer({ commit }, { formData, id }) {
+  updateCustomer({ dispatch }, { formData, id }) {
     return new Promise((resolve, reject) => {
-      updateCustomer(formData, id)
-      .then(res => resolve(res.data))
+      const headers = {
+        'Content-Type': 'multipart/form-data'
+      };
+      updateCustomer(headers, formData, id)
+      .then(res => {
+        dispatch('customer/fetchListCustomerByPaginate', { limit: 10, page: 1 }, { root: true });
+        resolve(res.data);
+      })
       .catch(error => reject(error));
     });
   },
 
-  emptyTrashCustomer({ commit }) {
+  updatePasswordCustomer({}, { formData, id }) {
+    return new Promise((resolve, reject) => {
+      updatePasswordCustomer(formData, id)
+      .then(res => {
+        resolve(res.data)
+      })
+      .catch(err => reject(err));
+    });
+  },
+
+  emptyTrashCustomer() {
     return new Promise((resolve, reject) => {
       emptyTrashCustomer()
       .then(res => resolve(res.data))

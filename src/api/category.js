@@ -3,7 +3,7 @@ import request from '@/utils/request';
 export function addCategory(headers, data) {
   return request({
     url: 'api/admin/catalog/category/add',
-    method: 'post',
+    method: 'POST',
     headers,
     data
   });
@@ -12,14 +12,14 @@ export function addCategory(headers, data) {
 export function fetchListCategory() {
   return request({
     url: 'api/admin/catalog/category/list',
-    method: 'get'
+    method: 'GET'
   });
 }
 
 export function fetchCategoryByPaginate(query) {
   return request({
     url: 'api/admin/catalog/category/list/paginate',
-    method: 'get',
+    method: 'GET',
     params: query
   });
 }
@@ -27,7 +27,7 @@ export function fetchCategoryByPaginate(query) {
 export function fetchListCategoryTrashedByPaginate(query) {
   return request({
     url: 'api/admin/catalog/category/list/trashed/paginate',
-    method: 'get',
+    method: 'GET',
     params: query
   });
 }
@@ -35,14 +35,14 @@ export function fetchListCategoryTrashedByPaginate(query) {
 export function trashCategory(id) {
   return request({
     url: `api/admin/catalog/category/trash/${id}`,
-    method: 'delete'
+    method: 'DELETE'
   });
 }
 
 export function massTrashCategory(ids) {
   return request({
     url: 'api/admin/catalog/category/massTrash',
-    method: 'delete',
+    method: 'DELETE',
     params: { ids }
   });
 }
@@ -50,14 +50,14 @@ export function massTrashCategory(ids) {
 export function destroyCategory(id) {
   return request({
     url: `api/admin/catalog/category/destroy/${id}`,
-    method: 'delete'
+    method: 'DELETE'
   });
 }
 
 export function massDestroyCategory(ids) {
   return request({
     url: 'api/admin/catalog/category/massDestroy',
-    method: 'delete',
+    method: 'DELETE',
     params: { ids }
   });
 }
@@ -65,14 +65,14 @@ export function massDestroyCategory(ids) {
 export function restoreCategory(id) {
   return request({
     url: `api/admin/catalog/category/restore/${id}`,
-    method: 'patch',
+    method: 'PATCH',
   });
 }
 
 export function massRestoreCategory(ids) {
   return request({
     url: 'api/admin/catalog/category/massRestore',
-    method: 'patch',
+    method: 'PATCH',
     params: { ids }
   });
 }
@@ -80,16 +80,16 @@ export function massRestoreCategory(ids) {
 export function fetchCategoryItemById(id) {
   return request({
     url: `api/admin/catalog/category/show/${id}`,
-    method: 'get'
+    method: 'GET'
   });
 }
 
 export function updateCategory(headers, data, id) {
   return request({
     url: `api/admin/catalog/category/update/${id}`,
-    method: 'post',
+    method: 'POST',
     headers,
-    params: { _method: 'put' },
+    params: { _method: 'PUT' },
     data
   });
 }

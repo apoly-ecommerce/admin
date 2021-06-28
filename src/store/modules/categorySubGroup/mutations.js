@@ -4,10 +4,6 @@ export default {
     state.listCategorySubGroups = categorySubGroups;
   },
 
-  ADD_CATEGORY_SUB_GROUP_ITEM: (state, categorySubGroupItem) => {
-    state.listCategorySubGroups.unshift(categorySubGroupItem);
-  },
-
   REMOVE_CATEGORY_SUB_GROUP: (state, id) => {
     state.listCategorySubGroups = state.listCategorySubGroups.filter(item => item.id !== id);
   },

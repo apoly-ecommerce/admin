@@ -24,7 +24,7 @@ router.beforeEach(async(to, from, next) => {
     } else {
       next();
       // Determine whether the user has obtained his permission roles through getInfo
-      const hasRoles = store.getters['user/getRoles'] && store.getters['user/getRoles'].length > 0;
+      const hasRoles = store.getters['auth/getRoleAuth'] && store.getters['auth/getRoleAuth'].length > 0;
       if (hasRoles) {
         next();
       } else {
@@ -33,7 +33,7 @@ router.beforeEach(async(to, from, next) => {
           // store.dispatch('app/handleSetIsLoading', true);
 
           // const modulePromise = store.dispatch('module/getAllModules');
-          const userInfoPromise = store.dispatch('user/getInfo');
+          // const userInfoPromise = store.dispatch('user/getInfo');
           const userAuthPromise = store.dispatch('auth/fetchUserAuth');
           // const userRolePermissionsPromise  = store.dispatch('role/getRolePermissionsByUser');
 
@@ -48,7 +48,7 @@ router.beforeEach(async(to, from, next) => {
 
         } catch (error) {
           console.log(error);
-          console.error("there's an error !");
+          console.error("There's an error !");
           // store.dispatch('app/handleSetIsLoading', false);
         }
       }

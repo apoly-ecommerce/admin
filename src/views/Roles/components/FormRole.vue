@@ -13,7 +13,7 @@
         @submit.prevent
       >
         <el-row :gutter="5">
-          <el-col :span="merchant_user ? 16 : 8" class="p-1">
+          <el-col :span="userAuth.merchant_user ? 16 : 8" class="p-1">
             <el-form-item prop="name">
               <label for="name" class="FormLabel">
                 <span class="FormLabel__title">Name</span>
@@ -36,7 +36,7 @@
             </el-form-item>
           </el-col>
 
-          <el-col v-if="!merchant_user" :span="8" class="p-1">
+          <el-col v-if="!userAuth.merchant_user" :span="8" class="p-1">
             <el-form-item prop="public">
               <label for="public" class="FormLabel">
                 <span class="FormLabel__title">Role type</span>
@@ -65,12 +65,12 @@
                 <el-tooltip class="item" effect="dark" content="Role level will be use determine who can control who. Example: An user with role level 2 can't modify any the user with role level 1. Keep emty if the role is for end level users." placement="top">
                   <i class="fas fa-question-circle"></i>
                 </el-tooltip>
-                <small v-if="accessLevel" class="p-2">(Between {{ accessLevel }} and 99)</small>
+                <small v-if="userAuth.accessLevel" class="p-2">(Between {{ userAuth.accessLevel }} and 99)</small>
               </label>
               <el-input-number class="w-100"
                 v-model="formData.level"
                 size="medium"
-                :min="accessLevel"
+                :min="userAuth.accessLevel"
                 :max="99"
                 ref="level"
                 tabindex="3"
@@ -179,15 +179,10 @@
 </template>
 
 <script>
-// Components @ > *
 import FormAction from '@/components/FormAction';
-// Store
 import { mapGetters, mapActions } from 'vuex';
-// Validations
 import { roleRules } from '@/validations';
-// Helpers
 import { formatModuleAccess } from '@/helpers';
-
 import { Message } from 'element-ui';
 
 const defaultFormData = {
@@ -238,15 +233,14 @@ export default {
   },
   computed: {
     ...mapGetters({
-      'merchant_user': 'user/get_merchant_user',
-      'accessLevel': 'user/getAccessLevel',
+      'userAuth': 'auth/getUserAuth'
     }),
      handleModuleAllowForRole() {
       let moduleAccess = [];
       if (this.role.id === 3) { this.formData.public = '1' }
       this.modules.forEach(module => {
         let access_level = module.access.toLowerCase();
-        if (access_level === 'common' || access_level === 'merchant' && this.merchant_user ||
+        if (access_level === 'common' || access_level === 'merchant' && this.userAuth.merchant_user ||
         (this.role) &&
         (
           (this.publicId === 1 && 'merchant' === access_level) ||
@@ -293,13 +287,13 @@ export default {
             cancelButtonText: 'Thêm mới',
             type: 'error'
           }).then(() => {
-            this.$router.push('/setting/role');
+            this.back();
           }).catch(() => {
-            this.$router.push('/setting/role/add');
+            this.back('/setting/role/add');
           });
         } else {
           this.$message.error('Có lỗi trong quá trình tải dữ liệu !');
-          this.$router.push('/setting/role');
+          this.back();
         }
       }
     },
@@ -391,9 +385,9 @@ export default {
         this.handleGetListPermission();
         if (valid) {
           let error = true;
-          if (this.formData.level < this.accessLevel) {
+          if (this.formData.level < this.userAuth.accessLevel) {
             error = true;
-            this.formError.level_error = `Level value must be greater than or equal to ${this.accessLevel}`;
+            this.formError.level_error = `Level value must be greater than or equal to ${this.userAuth.accessLevel}`;
           } else {
             error = false;
             this.formError.level_error = '';
@@ -405,14 +399,16 @@ export default {
                 type: 'success',
                 duration: 5 * 1000
               });
-              this.back('/setting/role', { form: 'success' });
+              this.back();
             }).catch(error => {
               console.error('[App Error] => ', error);
-              Message({
-                message: error.data.errors.name[0],
-                type: 'error',
-                duration: 5 * 1000
-              });
+              if (error.status === 422) {
+                Message({
+                  message: 'Dữ liệu không hợp lệ, vui lòng kiễm tra lại !',
+                  type: 'error',
+                  duration: 5 * 1000
+                });
+              }
               this.appendErrorToForm(error.data.errors);
             });
           }

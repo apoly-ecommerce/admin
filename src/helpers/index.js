@@ -34,8 +34,56 @@ const formatModuleAccess = (moduleAccess) => {
   return arr[moduleAccess];
 }
 
+const checkAddressExists = (address) => {
+  if (!address) return;
+  if (
+    (address.address_line_1 || address.address_line_2) &&
+    address.city && address.state_id && address.zip_code && address.country_id
+  ) {
+    return true;
+  } else return false;
+}
+
+const toGeocodeString = (address) => {
+  let data = [];
+  if (!address) return;
+  if (address.address_line_1) {
+    data.push(address.address_line_1);
+  }
+  if (address.address_line_2) {
+    data.push(address.address_line_2);
+  }
+  if (address.city) {
+    data.push(address.city);
+  }
+  if (address.state_id) {
+    data.push(address.state.name);
+  }
+  if (address.zip_code) {
+    data.push(address.zip_code);
+  }
+  if (address.country_id) {
+    data.push(address.country.name);
+  }
+  let str = data.join(', ');
+  let result = str.replaceAll(' ', '+');
+  return result;
+}
+
+const formatCurrency = (number) => {
+  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number);
+};
+
+const strUcFirst = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 export {
   changeToSlug,
   getCurrentYear,
   formatModuleAccess,
+  checkAddressExists,
+  toGeocodeString,
+  formatCurrency,
+  strUcFirst
 };

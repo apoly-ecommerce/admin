@@ -38,8 +38,7 @@ const validatePrice = (rule, value, callback) => {
 }
 
 /**
- * Check user rule.
- * @var Object
+ * Check User rule.
  */
 export const userRules = {
   name: [{ required: true, message: 'Vui lòng nhập tên user', trigger: 'blur' }],
@@ -62,8 +61,7 @@ export const userRules = {
 }
 
 /**
- * Check customer rule.
- * @var Object
+ * Check Customer rule.
  */
  export const customerRules = {
   name: [{ required: true, message: 'Vui lòng nhập tên khách hàng', trigger: 'blur' }],
@@ -80,8 +78,7 @@ export const userRules = {
 }
 
 /**
- * Check role.
- * @var Object
+ * Check Role.
  */
 export const roleRules = {
   name:  [{ required: true, message: 'Vui lòng nhập tên của vai trò !', trigger: 'blur' }],
@@ -90,8 +87,7 @@ export const roleRules = {
 };
 
 /**
- * Check category group
- * @var Object
+ * Check Category group
  */
 export const categoryGroupRules = {
   name: [{ required: true, message: 'Vui lòng nhập tên nhóm danh mục !', trigger: 'blur' }],
@@ -100,8 +96,7 @@ export const categoryGroupRules = {
 };
 
 /**
- * Check category sub group
- * @var Object
+ * Check Category sub group
  */
 export const categorySubGroupRules = {
   name: [{ required: true, message: 'Vui lòng nhập tên nhóm danh mục phụ !', trigger: 'blur' }],
@@ -111,8 +106,7 @@ export const categorySubGroupRules = {
 };
 
 /**
- * Check category
- * @var Object
+ * Check Category
  */
  export const categoryRules = {
   name: [{ required: true, message: 'Vui lòng nhập tên danh mục', trigger: 'blur' }],
@@ -123,7 +117,6 @@ export const categorySubGroupRules = {
 
 /**
  * Check Manufacturer
- * @var Object
  */
 export const manufacturerRules = {
   name: [{ required: true, message: 'Vui lòng nhập tên', trigger: 'blur' }],
@@ -133,8 +126,7 @@ export const manufacturerRules = {
 };
 
 /**
- * Check product
- * @var Object
+ * Check Product
  */
 export const productRules = {
   name: [{ required: true, message: 'Vui lòng nhập tên sản phẩm', trigger: 'blur' }],
@@ -149,4 +141,88 @@ export const productRules = {
     { required: true, message: 'Vui lòng nhập giá giá khuyến mãi sản phẩm', trigger: 'blur' },
     { required: true, trigger: 'blur', validator: validatePrice }
   ],
+};
+
+/**
+ * Check Address
+ */
+ export const addressRules = {
+   address_type: [{ required: true, message: 'Vui lòng chọn loại địa chỉ', trigger: 'blur'}],
+   address_line_1: [{ required: true, message: 'Vui Lòng nhập tên đường 1', trigger: 'blur'}],
+   city: [{ required: true, message: 'Vui lòng nhập thành phố', trigger: 'blur'}],
+   zip_code: [{ required: true, message: 'Vui lòng nhập mã vùng', trigger: 'blur'}],
+   phone: [
+     { required: true, message: 'Vui lòng nhập số điện thoại', trigger: 'blur'},
+     { trigger: 'blur', validator: validatePhone }
+  ],
+   country: [{ required: true, message: 'Vui lòng chọn quốc gia', trigger: 'blur'}],
+   state: [{ required: true, message: 'Vui lòng chọn khu vực', trigger: 'blur'}]
+};
+
+/**
+ * Check Shop
+ */
+export const shopRules = {
+  name: [{ required: true, message: 'Vui lòng điềm trường này', trigger: 'blur' }],
+  active: [{ required: true, message: 'Vui lòng chọn trạng thái', trigger: 'blur' }],
+  email: [{ required: true, trigger: 'blur', validator: validateEmail }],
+  legal_name: [{ required: true, message: 'Vui lòng điền trường này', trigger: 'blur' }],
+};
+
+/**
+ * Check Merchant
+ */
+export const merchantRules = {
+  name: [{ required: true, message: 'Vui lòng điền trường này', trigger: 'blur' }],
+  active: [{ required: true, message: 'Vui lòng chọn trạng thái', trigger: 'blur' }],
+  email: [{ required: true, trigger: 'blur', validator: validateEmail }],
+  password: [
+    { required: true, message: 'Vui lòng nhập mật khẩu', trigger: 'blur' },
+    { trigger: 'blur', validator: validatePassword, trigger: 'blur' }
+  ],
+  shop_name: [{ required: true, message: 'Vui lòng điền trường này', trigger: 'blur' }],
+  legal_name: [{ required: true, message: 'Vui lòng điền trường này', trigger: 'blur' }],
+  slug: [{ required: true, message: 'Vui lòng điền trường này', trigger: 'blur' }],
+};
+
+/**
+ * Check Banner
+ */
+export const bannerRules = {
+  link: [{ required: true, message: 'Vui lòng điền trường này', trigger: 'blur' }],
+  group_id: [{ required: true, message: 'Vui lòng chọn nhóm banner', trigger: 'blur' }]
+};
+
+/**
+ * Check Banner
+ */
+ export const sliderRules = {};
+
+ /**
+  * Check Setting System General rule
+  */
+export const settingSystemGeneralRule = {
+  name: [{ required: true, message: 'Vui lòng điền trường này.', trigger: 'blur' }],
+  legal_name: [{ required: true, message: 'Vui lòng điền trường này', trigger: 'blur' }],
+  email: [
+    { required: true, message: 'Vui lòng điền trường này', trigger: 'blur' },
+    { required: true, trigger: 'blur', validator: validateEmail },
+  ],
+};
+
+ /**
+  * Check FaqTopic rule
+  */
+export const faqTopicRules = {
+  name: [{ required: true, message: 'Vui lòng điền trường này.', trigger: 'blur' }],
+  for: [{ required: true, message: 'Vui lòng điền trường này.', trigger: 'blur' }]
+};
+
+ /**
+  * Check Faq rule
+  */
+export const faqRules = {
+  question: [{ required: true, message: 'Vui lòng điền trường này.', trigger: 'blur' }],
+  faq_topic_id: [{ required: true, message: 'Vui lòng điền trường này.', trigger: 'blur' }],
+  answer: [{ required: true, message: 'Vui lòng điền trường này.', trigger: 'blur' }]
 };

@@ -286,7 +286,7 @@
                 <label for="country_id" class="FormLabel">
                   <span class="FormLabel__title">Country</span>
                 </label>
-                  <el-select
+                <el-select
                   v-model="formData.country_id"
                   filterable
                   ref="country_id"
@@ -378,16 +378,11 @@
 </template>
 
 <script>
-// Components @ > *
 import FormAction from '@/components/FormAction';
 import UploadImage from '@/components/UploadImage';
-// Validations
 import { customerRules } from '@/validations';
-// Store
 import { mapActions } from 'vuex';
-
 import { Message } from 'element-ui';
-
 import moment from 'moment';
 
 const defaultFormData = {
@@ -492,22 +487,22 @@ export default {
             cancelButtonText: 'Thêm mới',
             type: 'error'
           }).then(() => {
-            this.$router.push('/admin/customer');
+            this.back();
           }).catch(() => {
-            this.$router.push('/admin/customer/add');
+            this.back('/admin/customer/add');
           });
         } else {
           this.$message.error('Có lỗi trong quá trình tải dữ liệu !');
-          this.$router.push('/admin/customer');
+          this.back();
         }
       }
     },
     getFormName() {
       this.formName = this.$route.meta && this.$route.meta.title;
     },
-    back(router = '/admin/customer', query = {}) {
+    back(router = '/admin/customer') {
       this.resetFormData();
-      this.$router.push({ path: router, query });
+      this.$router.push({ path: router });
     },
     saveAvatarImage(file) {
       this.formData.avatarImage.file = file;
@@ -516,7 +511,8 @@ export default {
       this.back();
     },
     resetFormData() {
-      this.formData = {...defaultFormData};
+      this.formData  = {...defaultFormData};
+      this.formError = {...defaultFormError};
       this.formData.avatarImage.url   = '';
       this.formData.avatarImage.file  = null;
       this.formData.avatarImage.isDel = false;
@@ -534,16 +530,17 @@ export default {
               type: 'success',
               duration: 5 * 1000
             });
-            this.back('/admin/customer', { form: 'success' });
+            this.back();
           }).catch(error => {
-            if (error.data) {
+            console.error('[App Error] => ', error);
+            if (error.status === 422) {
               Message({
-                message: error.data.message,
+                message: 'Dữ liệu không hợp lệ, vui lòng kiễm tra lại !',
                 type: 'error',
                 duration: 5 * 1000
               });
-              this.appendErrorToForm(error.data.errors);
             }
+            this.appendErrorToForm(error.data.errors);
           });
         }
       });
@@ -609,16 +606,15 @@ export default {
       this.formData.dob = data.dob;
       this.formData.sex = data.sex;
       this.formData.description = data.description ? data.description : '';
-      this.formData.address_line_1 = data.primaryAddress.address_line_1;
-      this.formData.address_line_2 = data.primaryAddress.address_line_2;
-      this.formData.city = data.primaryAddress.city;
-      this.formData.zip_code = data.primaryAddress.zip_code;
-      this.formData.phone = data.phone;
-      this.formData.country_id = data.primaryAddress.country_id;
-      this.formData.state_id = data.primaryAddress.state_id;
+      this.formData.address_line_1 = data.primaryAddress ? data.primaryAddress.address_line_1 : '';
+      this.formData.address_line_2 = data.primaryAddress ? data.primaryAddress.address_line_2 : '';
+      this.formData.city = data.primaryAddress ? data.primaryAddress.city : '';
+      this.formData.zip_code = data.primaryAddress ? data.primaryAddress.zip_code : '';
+      this.formData.phone = data.primaryAddress ? data.primaryAddress.phone : '';
+      this.formData.country_id = data.primaryAddress ? data.primaryAddress.country_id : '';
+      this.formData.state_id = data.primaryAddress ? data.primaryAddress.state_id : '';
       this.formData.avatarImage.url = data.image;
-
-      this.addressId = data.primaryAddress.id;
+      this.addressId = data.primaryAddress ? data.primaryAddress.id : '';
     },
     checkImageNotEmpty(img) {
       if (img && !(img.split('?text=')[1] === 'No_Image_Found')) {

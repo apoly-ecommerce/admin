@@ -18,7 +18,6 @@
 import { mapActions } from 'vuex';
 // Components
 import FormConfirm from '@/components/FormConfirm';
-import { MessageBox } from 'element-ui';
 
 export default {
   name: 'custom-menu-logout',
@@ -32,7 +31,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      'logout' : 'user/logout'
+      'logout' : 'auth/logout'
     }),
     closeDialog() {
       this.isShowDialog = false;
@@ -44,9 +43,9 @@ export default {
           message: res.success
         });
         this.$router.push(`/login?redirect=${this.$route.fullPath}`);
-      }).catch(error => {
+      }).catch(err => {
         this.$message.error('Failed to restore Role !');
-        alert("The system is having some problems, you can't log out of your account !");
+        console.error('[App Error] => ', err);
       });
       this.isShowDialog = true;
     },

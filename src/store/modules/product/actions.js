@@ -16,21 +16,21 @@ import {
 
 export default {
 
-  addProduct({ commit }, formData) {
+  addProduct({ dispatch }, formData) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-type': 'multipart/form-data'
       };
       addProduct(headers, formData)
       .then(res => {
-        console.log(res);
+        dispatch('product/fetchListProductByPaginate', { limit: 10, page: 1 }, { root: true });
         resolve(res.data);
       })
       .catch(error => reject(error));
     });
   },
 
-  fetchListProduct({ commit }) {
+  fetchListProduct() {
     return new Promise((resolve, reject) => {
       fetchListProduct()
       .then(res => resolve(res.data))
@@ -126,7 +126,7 @@ export default {
     })
   },
 
-  fetchProductItemById({ commit }, id) {
+  fetchProductItemById({}, id) {
     return new Promise((resolve, reject) => {
       fetchProductItemById(id)
       .then(res => resolve(res.data))
@@ -134,18 +134,21 @@ export default {
     });
   },
 
-  updateProduct({ commit }, { formData, id }) {
+  updateProduct({ dispatch }, { formData, id }) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-type': 'multipart/form-data'
       };
       updateProduct(headers, formData, id)
-      .then(res => resolve(res.data))
+      .then(res => {
+        dispatch('product/fetchListProductByPaginate', { limit: 10, page: 1 }, { root: true });
+        resolve(res.data);
+      })
       .catch(error => reject(error));
     });
   },
 
-  emptyTrashProduct({ commit }) {
+  emptyTrashProduct() {
     return new Promise((resolve, reject) => {
       emptyTrashProduct()
       .then(res => resolve(res.data))

@@ -1,3 +1,6 @@
+import { setToken, removeToken } from '@/utils/auth';
+import { resetRouter } from '@/router';
+
 import {
   login,
   logout,
@@ -19,17 +22,24 @@ export default {
     });
   },
 
-  logout({ commit }) {
+  logout({ dispatch }) {
     return new Promise((resolve, reject) => {
       logout()
       .then(res => {
-        commit('auth/SET_TOKEN_AUTH', '', { root: true });
-        commit('auth/SET_USER_AUTH', {}, { root: true });
-        removeToken();
-        resetRouter();
+        dispatch('resetTokenAuth');
         resolve(res.data);
       })
       .catch(err => reject(err));
+    });
+  },
+
+  resetTokenAuth({ commit }) {
+    return new Promise(resolve => {
+      commit('auth/SET_TOKEN_AUTH', '', { root: true });
+      commit('auth/SET_USER_AUTH', {}, { root: true });
+      removeToken();
+      resetRouter();
+      resolve();
     });
   },
 

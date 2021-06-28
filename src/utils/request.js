@@ -11,7 +11,7 @@ const service = axios.create({
 
 service.interceptors.request.use(
   config => {
-    if (store.getters['user/getToken']) {
+    if (store.getters['auth/getTokenAuth']) {
       config.headers = {
         'accept': 'application/json',
         'Authorization': 'Bearer ' + getToken()
@@ -28,7 +28,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => { return response.data; },
   error => {
-    console.log(error);
+    // console.log(error);
     if (error.response.status === 404) {
       Message({
         message: 'Lỗi 404: Trang không tồn tại !',
@@ -55,7 +55,7 @@ service.interceptors.response.use(
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        store.dispatch('user/resetToken').then(() => {
+        store.dispatch('auth/resetTokenAuth').then(() => {
           location.reload()
         });
       }); return;

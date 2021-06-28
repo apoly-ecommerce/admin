@@ -1,0 +1,86 @@
+.AddressWidget-top {
+  min-height: 90px;
+  background: #fff;
+  width: 100%;
+  box-shadow: rgb(0 0 0 / 10%) 0px 1px 1px;
+  border-radius: 0px;
+  margin-bottom: 15px;
+  display: flex;
+  color: #777;
+}
+
+.AddressWidget-top .thumbnail {
+  height: 126px;
+  width: 90px;
+  overflow: hidden;
+  padding: 5px;
+}
+
+.AddressWidget-top .thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.AddressWidget-top .AddressWidget-right {
+  padding-left: 50px;
+}
+
+.AddressWidget-top .content {
+  padding: 10px;
+}
+
+.AddressWidget-top .content .address-type {
+  color: #333;
+  font-size: 1.1rem;
+  margin-bottom: 3px;
+  text-transform: capitalize;
+}
+
+.AddressWidget-top .content .address-info-text {
+  line-height: 1.4;
+  font-size: .9rem;
+}
+
+.btn-view-detail {
+  font-size: .7rem;
+  margin-top: 5px;
+}
+
+.Addresses-Content {
+  color: #333;
+}
+
+.Addresses-Content .AddressInfo-item {
+  border-bottom: 1px solid #ddd;
+  padding: 15px;
+}
+
+.Addresses-Content .AddressInfo-item:last-child {
+  border: none;
+}
+
+.Addresses-Content .AddressInfo-item .col-item {
+  height: 150px;
+}
+
+.Addresses-Content .AddressInfo-item .col-item:first-child {
+  padding-right: 20px!important;
+}
+
+.Addresses-Content .AddressInfo-item .col-item address {
+  font-size: .9rem;
+  line-height: 1.4;
+}
+
+.Addresses-Content .AddressInfo-item .col-item .type {
+  font-size: .9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-align: right;
+}
+
+.Addresses-Content .el-button-group {
+  display: flex;
+  justify-content: flex-end;
+}
