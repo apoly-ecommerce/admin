@@ -235,7 +235,7 @@ export default {
     },
     handleEditFaqTopic(id) {
       this.$router.push({
-        name: 'update-faq-topic',
+        name: 'edit-faq-topic',
         params: { id },
       });
     },
@@ -268,7 +268,7 @@ export default {
     },
     handleEditFaq(id) {
       this.$router.push({
-        name: 'update-faq',
+        name: 'edit-faq',
         params: { id },
       });
     },
@@ -296,7 +296,7 @@ export default {
       });
     },
     reRenderDataFaqFromFormAction() {
-      if (this.tableData.length === 0) {
+      if (this.faqs.length === 0) {
         this.getListFaq();
       }
     },

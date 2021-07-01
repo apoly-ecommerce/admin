@@ -1,5 +1,5 @@
 import {
-  addUser,
+  storeUser,
   fetchListUser,
   fetchListUserByPaginate,
   fetchListUserTrashedByPaginate,
@@ -17,16 +17,13 @@ import {
 
 export default {
 
-  addUser({ dispatch }, formData) {
+  storeUser({}, formData) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-Type': 'multipart/form-data'
       };
-      addUser(headers, formData)
-      .then(res => {
-        dispatch('user/fetchListUserByPaginate', { limit: 10, page: 1 }, { root: true });
-        resolve(res.data);
-      })
+      storeUser(headers, formData)
+      .then(res => resolve(res.data))
       .catch(err => reject(err));
     });
   },
@@ -135,16 +132,13 @@ export default {
     });
   },
 
-  updateUser({ dispatch }, { formData, id }) {
+  updateUser({}, { formData, id }) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-Type': 'multipart/form-data'
       };
       updateUser(headers, formData, id)
-      .then(res => {
-        dispatch('user/fetchListUserByPaginate', { limit: 10, page: 1 }, { root: true });
-        resolve(res.data);
-      })
+      .then(res => resolve(res.data))
       .catch(err => reject(err));
     });
   },

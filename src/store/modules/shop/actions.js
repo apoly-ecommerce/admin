@@ -44,16 +44,13 @@ export default {
     });
   },
 
-  updateShop({ dispatch }, { formData, id }) {
+  updateShop({}, { formData, id }) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-Type': 'multipart/form-data'
       };
       updateShop(headers, formData, id)
-      .then(res => {
-        dispatch('shop/fetchListShopByPaginate', { limit: 10, page: 1 }, { root: true });
-        resolve(res.data);
-      })
+      .then(res => resolve(res.data))
       .catch(err => reject(err));
     });
   },

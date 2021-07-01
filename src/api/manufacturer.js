@@ -1,8 +1,8 @@
 import request from '@/utils/request';
 
-export function addManufacturer(headers, data) {
+export function storeManufacturer(headers, data) {
   return request({
-    url: 'api/admin/catalog/manufacturer/add',
+    url: 'api/admin/catalog/manufacturer',
     method: 'POST',
     headers,
     data
@@ -11,14 +11,14 @@ export function addManufacturer(headers, data) {
 
 export function fetchListManufacturer() {
   return request({
-    url: 'api/admin/catalog/manufacturer/list',
+    url: 'api/admin/catalog/manufacturer',
     method: 'GET'
   });
 }
 
 export function fetchListManufacturerByPaginate(query) {
   return request({
-    url: 'api/admin/catalog/manufacturer/list/paginate',
+    url: 'api/admin/catalog/manufacturer/paginate',
     method: 'GET',
     params: query
   });
@@ -26,7 +26,7 @@ export function fetchListManufacturerByPaginate(query) {
 
 export function fetchListManufacturerTrashedByPaginate(query) {
   return request({
-    url: 'api/admin/catalog/manufacturer/list/trashed/paginate',
+    url: 'api/admin/catalog/manufacturer/trashed/paginate',
     method: 'GET',
     params: query
   });
@@ -34,7 +34,7 @@ export function fetchListManufacturerTrashedByPaginate(query) {
 
 export function trashManufacturer(id) {
   return request({
-    url: `api/admin/catalog/manufacturer/trash/${id}`,
+    url: `api/admin/catalog/manufacturer/${id}/trash`,
     method: 'DELETE'
   });
 }
@@ -49,7 +49,7 @@ export function massTrashManufacturer(ids) {
 
 export function destroyManufacturer(id) {
   return request({
-    url: `api/admin/catalog/manufacturer/destroy/${id}`,
+    url: `api/admin/catalog/manufacturer/${id}`,
     method: 'DELETE'
   });
 }
@@ -64,7 +64,7 @@ export function massDestroyManufacturer(ids) {
 
 export function restoreManufacturer(id) {
   return request({
-    url: `api/admin/catalog/manufacturer/restore/${id}`,
+    url: `api/admin/catalog/manufacturer/${id}/restore`,
     method: 'PATCH',
   });
 }
@@ -79,7 +79,7 @@ export function massRestoreManufacturer(ids) {
 
 export function fetchManufacturerItemById(id) {
   return request({
-    url: `api/admin/catalog/manufacturer/show/${id}`,
+    url: `api/admin/catalog/manufacturer/${id}`,
     method: 'GET'
   });
 }
@@ -87,7 +87,7 @@ export function fetchManufacturerItemById(id) {
 export function updateManufacturer(headers, data, id) {
   console.log(headers, data, id);
   return request({
-    url: `api/admin/catalog/manufacturer/update/${id}`,
+    url: `api/admin/catalog/manufacturer/${id}`,
     method: 'POST',
     headers,
     params: { _method: 'PUT' },

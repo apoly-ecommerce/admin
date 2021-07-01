@@ -597,7 +597,7 @@ export default {
       'setIsLoading': 'app/handleSetIsLoading',
       'fetchListManufacturer': 'manufacturer/fetchListManufacturer',
       'fetchListCategorySubGroup': 'categorySubGroup/fetchListCategorySubGroup',
-      'addProduct': 'product/addProduct',
+      'storeProduct': 'product/storeProduct',
       'fetchProductItemById': 'product/fetchProductItemById',
       'updateProduct': 'product/updateProduct'
     }),
@@ -637,9 +637,10 @@ export default {
     getFormName() {
       this.formName = this.$route.meta && this.$route.meta.title;
     },
-    back(router = '/catalog/product') {
+    back(router = '/catalog/product', query = {}) {
       this.resetFormData();
-      this.$router.push({ path: router });
+      this.$refs['formData'].resetFields();
+      this.$router.push({ path: router, query });
     },
     handleCloseForm() {
       this.back();
@@ -665,7 +666,8 @@ export default {
               type: 'success',
               duration: 5 * 1000
             });
-            this.back();
+            this.resetFormData();
+            this.back('/catalog/product', { form: 'success' });
           }).catch(error => {
             console.error('[App Error] => ', error);
             if (error.status === 422) {
@@ -681,7 +683,7 @@ export default {
       });
     },
     handleAdd() {
-      return this.addProduct(this.setFormData());
+      return this.storeProduct(this.setFormData());
     },
     handleUpdate() {
       return this.updateProduct({ formData: this.setFormData(), id: this.productId });

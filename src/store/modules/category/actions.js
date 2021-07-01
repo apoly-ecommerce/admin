@@ -1,5 +1,5 @@
 import {
-  addCategory,
+  storeCategory,
   fetchListCategory,
   fetchCategoryByPaginate,
   fetchListCategoryTrashedByPaginate,
@@ -15,16 +15,13 @@ import {
 
 export default {
 
-  addCategory({ dispatch }, formData) {
+  storeCategory({}, formData) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-type': 'multipart/form-data'
       };
-      addCategory(headers, formData)
-      .then(res => {
-        dispatch('category/fetchCategoryByPaginate', { limit: 10, page: 1 }, { root: true });
-        resolve(res.data);
-      })
+      storeCategory(headers, formData)
+      .then(res => resolve(res.data))
       .catch(error => reject(error));
     });
   },
@@ -133,16 +130,13 @@ export default {
     });
   },
 
-  updateCategory({ dispatch }, { formData, id }) {
+  updateCategory({}, { formData, id }) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-type': 'multipart/form-data'
       };
       updateCategory(headers, formData, id)
-      .then(res => {
-        dispatch('category/fetchCategoryByPaginate', { limit: 10, page: 1 }, { root: true });
-        resolve(res.data);
-      })
+      .then(res => resolve(res.data))
       .catch(error => reject(error));
     });
   }

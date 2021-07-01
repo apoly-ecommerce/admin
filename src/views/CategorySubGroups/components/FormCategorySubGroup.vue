@@ -5,7 +5,6 @@
     :isFormLoading="isFormLoading"
     @close="handleCloseForm"
   >
-
     <template v-slot:form-body>
       <el-form
         ref="formData"
@@ -136,7 +135,7 @@
                 ref="meta_title"
                 autocomplete="off"
                 spellcheck="false"
-                id="name"
+                id="meta_title"
                 v-model="formData.meta_title"
               />
             </el-form-item>
@@ -175,9 +174,9 @@
                   <i class="fas fa-question-circle"></i>
                 </el-tooltip>
               </label>
-              <div v-if="checkImageNotEmpty(formData.coverImage.url)" class="ImageThumb_wrap">
+              <div v-if="checkImageNotEmpty(formData.coverImage.src)" class="ImageThumb_wrap">
                 <div class="thumbNail d-block">
-                  <img :src="formData.coverImage.url" alt="" />
+                  <img :src="formData.coverImage.src" alt="" />
                 </div>
                 <div class="confirm">
                   <el-tag type="danger">
@@ -209,7 +208,6 @@
         <span class="PopupForm_SaveLabel">Update</span>
       </el-button>
     </template>
-
   </form-action>
 </template>
 
@@ -278,7 +276,7 @@ export default {
   methods: {
     ...mapActions({
       'fetchListCategoryGroup': 'categoryGroup/fetchListCategoryGroup',
-      'addCategorySubGroup': 'categorySubGroup/addCategorySubGroup',
+      'storeCategorySubGroup': 'categorySubGroup/storeCategorySubGroup',
       'fetchCategorySubGroupItemById': 'categorySubGroup/fetchCategorySubGroupItemById',
       'updateCategorySubGroup': 'categorySubGroup/updateCategorySubGroup'
     }),
@@ -319,9 +317,10 @@ export default {
     getFormName() {
       this.formName = this.$route.meta && this.$route.meta.title;
     },
-    back(router = '/catalog/category-sub-group') {
+    back(router = '/catalog/category-sub-group', query = {}) {
       this.resetFormData();
-      this.$router.push({ path: router });
+      this.$refs['formData'].resetFields();
+      this.$router.push({ path: router, query });
     },
     handleCloseForm() {
       this.back();
@@ -330,8 +329,9 @@ export default {
       this.formData.coverImage.file = file;
     },
     resetFormData() {
-      this.formData = {...defaultFormData};
-      this.formData.coverImage.url   = '';
+      this.formData  = {...defaultFormData};
+      this.formError = {...defaultFormError};
+      this.formData.coverImage.src   = '';
       this.formData.coverImage.file  = null;
       this.formData.coverImage.isDel = false;
     },
@@ -344,7 +344,7 @@ export default {
               type: 'success',
               duration: 5 * 1000
             });
-            this.back();
+            this.back('/catalog/category-sub-group', { form: 'success' });
           }).catch(error => {
             console.error('[App Error] => ', error);
             if (error.status === 422) {
@@ -360,7 +360,7 @@ export default {
       });
     },
     handleAdd() {
-      return this.addCategorySubGroup(this.setFormData());
+      return this.storeCategorySubGroup(this.setFormData());
     },
     handleUpdate() {
       return this.updateCategorySubGroup({ formData: this.setFormData(), id: this.categorySubGroupId });
@@ -389,13 +389,13 @@ export default {
     },
     appendDataToForm(data) {
       this.formData.category_group_id = data.group.id;
-      this.formData.name = data.name;
-      this.formData.slug = data.slug;
-      this.formData.active = data.active.toString();
-      this.formData.order = data.order;
-      this.formData.meta_title = data.meta_title;
-      this.formData.meta_description = data.meta_description;
-      this.formData.coverImage.url = data.cover_image_url;
+      this.formData.name = data.name || '';
+      this.formData.slug = data.slug || '';
+      this.formData.active = data.active ? '1' : '0';
+      this.formData.order = data.order || '';
+      this.formData.meta_title = data.meta_title || '';
+      this.formData.meta_description = data.meta_description || '';
+      this.formData.coverImage.src = data.cover_image || '';
     },
     checkImageNotEmpty(img) {
       if (img && !(img.split('?text=')[1] === 'No_Image_Found')) {

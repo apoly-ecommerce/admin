@@ -1,6 +1,6 @@
 import request from '@/utils/request';
 
-export function addMerchant(headers, data) {
+export function storeMerchant(headers, data) {
   return request({
     url: 'api/admin/vendor/merchant',
     method: 'POST',

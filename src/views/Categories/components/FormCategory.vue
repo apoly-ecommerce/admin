@@ -103,7 +103,7 @@
 
           <el-col :span="6" class="p-1">
             <el-form-item prop="order">
-              <label for="public" class="FormLabel">
+              <label for="order" class="FormLabel">
                 <span class="FormLabel__title">Order</span>
                 <el-tooltip class="item" effect="dark" placement="top" content="is Tooltip !">
                   <i class="fas fa-question-circle"></i>
@@ -153,9 +153,9 @@
                   <i class="fas fa-question-circle"></i>
                 </el-tooltip>
               </label>
-              <div v-if="checkImageNotEmpty(formData.coverImage.url)" class="ImageThumb_wrap">
+              <div v-if="checkImageNotEmpty(formData.coverImage.src)" class="ImageThumb_wrap">
                 <div class="thumbNail d-block">
-                  <img :src="formData.coverImage.url" alt="" />
+                  <img :src="formData.coverImage.src" alt="" />
                 </div>
                 <div class="confirm">
                   <el-tag type="danger">
@@ -182,9 +182,9 @@
                   <i class="fas fa-question-circle"></i>
                 </el-tooltip>
               </label>
-              <div v-if="checkImageNotEmpty(formData.featureImage.url)" class="ImageThumb_wrap">
+              <div v-if="checkImageNotEmpty(formData.featureImage.src)" class="ImageThumb_wrap">
                 <div class="thumbNail d-block">
-                  <img :src="formData.featureImage.url" alt="" />
+                  <img :src="formData.featureImage.src" alt="" />
                 </div>
                 <div class="confirm">
                   <el-tag type="danger">
@@ -240,7 +240,7 @@
               <el-input
                 type="textarea"
                 ref="meta_description"
-                placeholder="Start from here"
+                placeholder="Meta description"
                 v-model="formData.meta_description"
                 maxlength="500"
                 spellcheck="false"
@@ -347,7 +347,7 @@ export default {
   methods: {
     ...mapActions({
       'fetchListCategoryGroup': 'categoryGroup/fetchListCategoryGroup',
-      'addCategory': 'category/addCategory',
+      'storeCategory': 'category/storeCategory',
       'fetchCategoryItemById': 'category/fetchCategoryItemById',
       'updateCategory': 'category/updateCategory'
     }),
@@ -388,9 +388,10 @@ export default {
     getFormName() {
       this.formName = this.$route.meta && this.$route.meta.title;
     },
-    back(router = '/catalog/category') {
+    back(router = '/catalog/category', query = {}) {
       this.resetFormData();
-      this.$router.push({ path: router });
+      this.$refs['formData'].resetFields();
+      this.$router.push({ path: router, query });
     },
     handleCloseForm() {
       this.back();
@@ -403,10 +404,10 @@ export default {
     },
     resetFormData() {
       this.formData = {...defaultFormData};
-      this.formData.coverImage.url   = '';
+      this.formData.coverImage.src   = '';
       this.formData.coverImage.file  = null;
       this.formData.coverImage.isDel = false;
-      this.formData.featureImage.url   = '';
+      this.formData.featureImage.src   = '';
       this.formData.featureImage.file  = null;
       this.formData.featureImage.isDel = false;
     },
@@ -419,7 +420,7 @@ export default {
               type: 'success',
               duration: 5 * 1000
             });
-            this.back();
+            this.back('/catalog/category', { form: 'success' });
           }).catch(error => {
             console.error('[App Error] => ', error);
             if (error.status === 422) {
@@ -435,7 +436,7 @@ export default {
       });
     },
     handleAdd() {
-      return this.addCategory(this.setFormData());
+      return this.storeCategory(this.setFormData());
     },
     handleUpdate() {
       return this.updateCategory({ formData: this.setFormData(), id: this.categoryId });
@@ -476,8 +477,8 @@ export default {
       this.formData.active = data.active.toString();
       this.formData.order = data.order;
       this.formData.description = data.description;
-      this.formData.coverImage.url = data.cover_image_url;
-      this.formData.featureImage.url = data.feature_image_url;
+      this.formData.coverImage.src = data.cover_image;
+      this.formData.featureImage.src = data.feature_image;
       this.formData.meta_title = data.meta_title;
       this.formData.meta_description = data.meta_description;
     },

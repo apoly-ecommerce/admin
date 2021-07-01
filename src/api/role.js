@@ -1,8 +1,8 @@
 import request from '@/utils/request';
 
-export function addRole(formData) {
+export function storeRole(formData) {
   return request({
-    url: 'api/admin/setting/role/add',
+    url: 'api/admin/setting/role',
     method: 'POST',
     data: formData
   });
@@ -10,7 +10,7 @@ export function addRole(formData) {
 
 export function updateRole(data, id) {
   return request ({
-    url: `api/admin/setting/role/update/${id}`,
+    url: `api/admin/setting/role/${id}`,
     method: 'PUT',
     data
   });
@@ -18,14 +18,14 @@ export function updateRole(data, id) {
 
 export function fetchListRole() {
   return request({
-    url: 'api/admin/setting/role/list',
+    url: 'api/admin/setting/role',
     method: 'GET'
   });
 }
 
 export function fetchListRoleByPaginate(query) {
   return request({
-    url: 'api/admin/setting/role/list/paginate',
+    url: 'api/admin/setting/role/paginate',
     method: 'GET',
     params: query
   });
@@ -33,7 +33,7 @@ export function fetchListRoleByPaginate(query) {
 
 export function fetchListRoleTrashedByPaginate(query) {
   return request({
-    url: 'api/admin/setting/role/list/trashed/paginate',
+    url: 'api/admin/setting/role/trashed/paginate',
     method: 'GET',
     params: query
   });
@@ -41,21 +41,21 @@ export function fetchListRoleTrashedByPaginate(query) {
 
 export function trashRole(id) {
   return request({
-    url: `api/admin/setting/role/trash/${id}`,
+    url: `api/admin/setting/role/${id}/trash`,
     method: 'DELETE',
   });
 }
 
 export function restoreRole(id) {
   return request({
-    url: `api/admin/setting/role/restore/${id}`,
+    url: `api/admin/setting/role/${id}/restore`,
     method: 'PATCH',
   });
 }
 
 export function destroyRole(id) {
   return request({
-    url: `api/admin/setting/role/destroy/${id}`,
+    url: `api/admin/setting/role/${id}`,
     method: 'DELETE',
   });
 }
@@ -86,7 +86,7 @@ export function massRestoreRole(ids) {
 
 export function fetchRoleById(id) {
   return request({
-    url: `api/admin/setting/role/show/${id}`,
+    url: `api/admin/setting/role/${id}`,
     method: 'GET',
   });
 }

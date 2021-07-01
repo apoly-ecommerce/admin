@@ -301,7 +301,7 @@ export default {
   methods: {
     ...mapActions({
       'fetchListBannerGroup': 'bannerGroup/fetchListBannerGroup',
-      'addBanner': 'banner/addBanner',
+      'storeBanner': 'banner/storeBanner',
       'fetchBannerItemById': 'banner/fetchBannerItemById',
       'updateBanner': 'banner/updateBanner'
     }),
@@ -338,9 +338,10 @@ export default {
     getFormName() {
       this.formName = this.$route.meta && this.$route.meta.title;
     },
-    back(router = '/appearance/banner') {
+    back(router = '/appearance/banner', query = {}) {
       this.resetFormData();
-      this.$router.push({ path: router });
+      this.$refs['formData'].resetFields();
+      this.$router.push({ path: router, query });
     },
     saveFeatureImage(file) {
       this.formData.featureImage.file = file;
@@ -364,7 +365,7 @@ export default {
               type: 'success',
               duration: 5 * 1000
             });
-            this.back();
+            this.back('/appearance/banner', { form: 'success' });
           }).catch(error => {
             console.error('[App Error] => ', error);
             if (error.status === 422) {
@@ -380,7 +381,7 @@ export default {
       });
     },
     handleAdd() {
-      return this.addBanner(this.setFormData());
+      return this.storeBanner(this.setFormData());
     },
     handleUpdate() {
       return this.updateBanner({ formData: this.setFormData(), id: this.bannerId });

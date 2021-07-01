@@ -15,7 +15,6 @@
             <span>Thùng rác</span>
           </el-button>
         </template>
-
         <router-link class="Table__tools-item" :to="{ name: 'add-role' }">Thêm mới</router-link>
       </template>
 
@@ -158,13 +157,10 @@
                 </el-button-group>
               </template>
             </el-table-column>
-
           </el-table>
         </section>
       </template>
-
     </page-table-content>
-
   </section>
 </template>
 
@@ -199,6 +195,11 @@ export default {
       multipleSelection: [],
       tableAction: ''
     };
+  },
+  watch: {
+    $route() {
+      this.reRenderDataFromUrl();
+    }
   },
   created() {
     this.getList();
@@ -290,7 +291,6 @@ export default {
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        // code logic ...
         this.trashRole(id).then(res => {
           this.$message({
             type: 'success',
@@ -314,7 +314,6 @@ export default {
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        // Code logic
         this.destroyRole(id).then(res => {
           this.$message({
             type: 'success',
@@ -343,7 +342,6 @@ export default {
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        // code logic ...
         this.massDestroyRole(ids).then(res => {
           this.$message({
             type: 'success',
@@ -372,7 +370,6 @@ export default {
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        // code logic ...
         this.massTrashRole(ids).then(res => {
           this.$message({
             type: 'success',
@@ -401,7 +398,6 @@ export default {
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        // code logic ...
         this.massRestoreRole(ids).then(res => {
           this.$message({
             type: 'success',
@@ -421,16 +417,25 @@ export default {
     },
     handleEdit(id) {
       this.$router.push({
-        name: 'update-role',
+        name: 'edit-role',
         params: { id }
       });
     },
     reRenderDataFromFormAction() {
       this.tableAction = '';
       if (this.tableData.length === 0) {
+        this.listQuery.page = 1;
         if (! this.isTabTrashed) { this.getList() }
         else { this.getListTrashed(); }
       }
+    },
+    reRenderDataFromUrl() {
+      if (this.$route.query.form === 'success') {
+        this.getList();
+        let query = Object.assign({}, this.$route.query);
+        delete query.form;
+        this.$router.replace({ query });
+      };
     },
     handleView(id) {
       console.log(id);

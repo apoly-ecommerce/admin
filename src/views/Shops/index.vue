@@ -76,7 +76,6 @@
 
       <template v-slot:main-content>
         <section class="TableBox_Content">
-
           <el-table
             ref="multipleTable"
             :data="dataSearch"
@@ -85,7 +84,6 @@
             v-loading="listLoading"
             @selection-change="handleSelectionChange"
           >
-
             <el-table-column type="expand">
               <template slot-scope="props">
                 <div class="ExpandData_Table">
@@ -241,6 +239,11 @@ export default {
   },
   watch: {
     $route(to, from) {
+      this.reRenderDataFromUrl();
+    }
+  },
+  watch: {
+    $route() {
       this.reRenderDataFromUrl();
     }
   },
@@ -484,7 +487,7 @@ export default {
     },
     handleEdit(id, type) {
       this.$router.push({
-        name: 'update-shop',
+        name: 'edit-shop',
         params: { id },
         query: { update: type }
       });
@@ -504,11 +507,17 @@ export default {
         else { this.getListTrashed(); }
       }
     },
-    reRenderDataFromUrl() {
+    reRenderDataFromFormAction() {
       this.tableAction = '';
-      if (this.$route.query.form === 'success') {
+      if (this.tableData.length === 0) {
+        this.listQuery.page = 1;
         if (! this.isTabTrashed) { this.getList() }
         else { this.getListTrashed(); }
+      }
+    },
+    reRenderDataFromUrl() {
+      if (this.$route.query.form === 'success') {
+        this.getList();
         let query = Object.assign({}, this.$route.query);
         delete query.form;
         this.$router.replace({ query });

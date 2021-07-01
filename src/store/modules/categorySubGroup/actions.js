@@ -1,5 +1,5 @@
 import {
-  addCategorySubGroup,
+  storeCategorySubGroup,
   fetchListCategorySubGroup,
   fetchListCategorySubGroupByPaginate,
   trashCategorySubGroup,
@@ -15,16 +15,13 @@ import {
 
 export default {
 
-  addCategorySubGroup({ dispatch }, formData) {
+  storeCategorySubGroup({}, formData) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-type': 'multipart/form-data'
       };
-      addCategorySubGroup(headers, formData)
-      .then(res => {
-        dispatch('categorySubGroup/fetchListCategorySubGroupByPaginate', { limit: 10, page: 1 }, { root: true });
-        resolve(res.data);
-      })
+      storeCategorySubGroup(headers, formData)
+      .then(res => resolve(res.data))
       .catch(error => reject(error));
     });
   },
@@ -133,16 +130,13 @@ export default {
     });
   },
 
-  updateCategorySubGroup({ dispatch }, { formData, id }) {
+  updateCategorySubGroup({}, { formData, id }) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-type': 'multipart/form-data'
       };
       updateCategorySubGroup(headers, formData, id)
-      .then(res => {
-        dispatch('categorySubGroup/fetchListCategorySubGroupByPaginate', { limit: 10, page: 1 }, { root: true });
-        resolve(res.data);
-      })
+      .then(res => resolve(res.data))
       .catch(error => reject(error));
     });
   }

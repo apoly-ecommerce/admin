@@ -4,7 +4,6 @@
     <router-view :key="key"></router-view>
 
     <page-table-content :tableName="tableName">
-
       <template v-slot:tools>
         <template>
           <el-button v-if="isTabTrashed" size="mini" @click="getList">
@@ -16,7 +15,6 @@
             <span>Thùng rác</span>
           </el-button>
         </template>
-
         <router-link class="Table__tools-item" :to="{ name: 'add-banner' }">Thêm mới</router-link>
       </template>
 
@@ -202,7 +200,6 @@
         </template>
       </template>
     </page-table-content>
-
   </section>
 </template>
 
@@ -239,7 +236,7 @@ export default {
     };
   },
   watch: {
-    $route(to, from) {
+    $route() {
       this.reRenderDataFromUrl();
     }
   },
@@ -483,27 +480,26 @@ export default {
     },
     handleEdit(id) {
       this.$router.push({
-        name: 'update-banner',
+        name: 'edit-banner',
         params: { id },
       });
     },
     reRenderDataFromFormAction() {
       this.tableAction = '';
       if (this.tableData.length === 0) {
+        this.listQuery.page = 1;
         if (! this.isTabTrashed) { this.getList() }
         else { this.getListTrashed(); }
       }
     },
     reRenderDataFromUrl() {
-      this.tableAction = '';
       if (this.$route.query.form === 'success') {
-        if (! this.isTabTrashed) { this.getList() }
-        else { this.getListTrashed(); }
+        this.getList();
         let query = Object.assign({}, this.$route.query);
         delete query.form;
         this.$router.replace({ query });
       };
-    },
+    }
   }
 }
 </script>

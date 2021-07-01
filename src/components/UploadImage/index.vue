@@ -2,7 +2,7 @@
   <div class="UploadImages_wrap">
     <div class="UploadImage__Input">
       <label :for="name" class="uploader_label">
-        <input type="text" :placeholder="placeholer" :value="fileName" disabled class="uploader_input_preview">
+        <input ref="imgFileName" type="text" :placeholder="placeholer" :value="fileName" disabled class="uploader_input_preview">
         <button type="button" class="uploader_button">upload</button>
         <input @change="beforeUploadImage" type="file" :id="name" class="uploader_input_file">
       </label>
@@ -25,6 +25,11 @@ export default {
     return {
       fileName: ''
     };
+  },
+  watch: {
+    $route() {
+      this.$refs['imgFileName'].value = '';
+    }
   },
   methods: {
     beforeUploadImage(e) {

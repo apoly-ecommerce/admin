@@ -154,7 +154,7 @@ export default {
   methods: {
     ...mapActions({
       'fetListFaqTopic': 'faq/fetListFaqTopic',
-      'addFaq': 'faq/addFaq',
+      'storeFaq': 'faq/storeFaq',
       'fetchFaqItemById': 'faq/fetchFaqItemById',
       'updateFaq': 'faq/updateFaq'
     }),
@@ -228,7 +228,7 @@ export default {
       });
     },
     handleAdd() {
-      return this.addFaq(this.formData);
+      return this.storeFaq(this.formData);
     },
     handleUpdate() {
       return this.updateFaq({ formData: this.formData, id: this.faqId });

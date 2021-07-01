@@ -1,5 +1,5 @@
 import {
-  addCustomer,
+  storeCustomer,
   fetchCustomerItemById,
   fetchListCustomer,
   fetchListCustomerByPaginate,
@@ -17,16 +17,13 @@ import {
 
 export default {
 
-  addCustomer({ dispatch }, formData) {
+  storeCustomer({}, formData) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-Type': 'multipart/form-data'
       };
-      addCustomer(headers, formData)
-      .then(res => {
-        dispatch('customer/fetchListCustomerByPaginate', { limit: 10, page: 1 }, { root: true });
-        resolve(res.data)
-      })
+      storeCustomer(headers, formData)
+      .then(res => resolve(res.data))
       .catch(error => reject(error));
     });
   },
@@ -135,16 +132,13 @@ export default {
     });
   },
 
-  updateCustomer({ dispatch }, { formData, id }) {
+  updateCustomer({}, { formData, id }) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-Type': 'multipart/form-data'
       };
       updateCustomer(headers, formData, id)
-      .then(res => {
-        dispatch('customer/fetchListCustomerByPaginate', { limit: 10, page: 1 }, { root: true });
-        resolve(res.data);
-      })
+      .then(res => resolve(res.data))
       .catch(error => reject(error));
     });
   },

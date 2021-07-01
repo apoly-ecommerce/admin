@@ -87,7 +87,7 @@
                         <p v-if="user.primaryAddress.address_line_2">
                           {{ user.primaryAddress.address_line_2 }}
                         </p>
-                        <p v-if="user.primaryAddress.state_id">
+                        <p v-if="user.primaryAddress.state">
                           {{ user.primaryAddress.state.name }}
                         </p>
                         <p v-if="user.primaryAddress.city">

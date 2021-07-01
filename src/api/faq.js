@@ -15,7 +15,7 @@ export function fetListFaqTopic() {
   });
 }
 
-export function addFaqTopic(data) {
+export function storeFaqTopic(data) {
   return request({
     url: 'api/admin/utility/faqTopic',
     method: 'POST',
@@ -55,7 +55,7 @@ export function fetchListFaqByPaginate(query) {
   });
 }
 
-export function addFaq(data) {
+export function storeFaq(data) {
   return request({
     url: 'api/admin/utility/faq',
     method: 'POST',

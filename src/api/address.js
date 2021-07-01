@@ -1,6 +1,6 @@
 import request from '@/utils/request';
 
-export function addAddress(data) {
+export function storeAddress(data) {
   return request({
     url: 'api/address/',
     method: 'POST',

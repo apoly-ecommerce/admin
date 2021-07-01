@@ -4,7 +4,6 @@
     <router-view :key="key"></router-view>
 
     <page-table-content :tableName="tableName">
-
       <template v-slot:tools>
         <template>
           <el-button v-if="isTabTrashed" size="mini" @click="getList">
@@ -16,7 +15,6 @@
             <span>Thùng rác</span>
           </el-button>
         </template>
-
         <router-link class="Table__tools-item" :to="{ name: 'add-category-group' }">Thêm mới</router-link>
       </template>
 
@@ -106,18 +104,18 @@
 
              <el-table-column type="selection" width="55" />
 
-             <el-table-column label="Background image" property="background_image_url" width="170">
+             <el-table-column label="Background image" property="background_image" width="170">
               <template slot-scope="{row}">
                 <div class="TableThumb_ThumbImage normal">
-                  <img :src="row.background_image_url" alt="" class="image medium">
+                  <img :src="row.background_image" alt="" class="image medium">
                 </div>
               </template>
              </el-table-column>
 
-             <el-table-column label="Cover image" property="cover_image_url" width="170">
+             <el-table-column label="Cover image" property="cover_image" width="170">
               <template slot-scope="{row}">
                 <div class="TableThumb_ThumbImage normal">
-                  <img :src="row.cover_image_url" alt="" class="image medium">
+                  <img :src="row.cover_image" alt="" class="image medium">
                 </div>
               </template>
              </el-table-column>
@@ -152,9 +150,6 @@
               <template slot-scope="{row}">
                 <el-button-group>
                   <template v-if="!row.deleted_at">
-                    <el-tooltip content="Thông tin" placement="top">
-                      <el-button @click="handleView(row.id)" size="mini" icon="el-icon-rank" />
-                    </el-tooltip>
                     <el-tooltip content="Chỉnh sửa" placement="top">
                       <el-button @click="handleEdit(row.id)" size="mini" icon="el-icon-edit" />
                     </el-tooltip>
@@ -173,20 +168,15 @@
                 </el-button-group>
               </template>
             </el-table-column>
-
           </el-table>
-
         </section>
 
         <template v-if="tableData && tableData.length">
           <pagination v-if="!isTabTrashed" :total="totalRow" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
           <pagination v-else :total="totalRow" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListTrashed" />
         </template>
-
       </template>
-
     </page-table-content>
-
   </section>
 </template>
 
@@ -224,6 +214,11 @@ export default {
       multipleSelection: [],
       tableAction: '',
     };
+  },
+  watch: {
+    $route() {
+      this.reRenderDataFromUrl();
+    }
   },
   created() {
     this.getList();
@@ -441,20 +436,26 @@ export default {
     },
     handleEdit(id) {
       this.$router.push({
-        name: 'update-category-group',
+        name: 'edit-category-group',
         params: { id }
       });
     },
     reRenderDataFromFormAction() {
       this.tableAction = '';
       if (this.tableData.length === 0) {
+        this.listQuery.page = 1;
         if (! this.isTabTrashed) { this.getList() }
         else { this.getListTrashed(); }
       }
     },
-    handleView(id) {
-      console.log(id);
-    },
+    reRenderDataFromUrl() {
+      if (this.$route.query.form === 'success') {
+        this.getList();
+        let query = Object.assign({}, this.$route.query);
+        delete query.form;
+        this.$router.replace({ query });
+      };
+    }
   }
 }
 </script>

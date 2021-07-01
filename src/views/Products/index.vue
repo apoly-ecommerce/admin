@@ -75,7 +75,6 @@
 
       <template v-slot:main-content>
         <section class="TableBox_Content">
-
           <el-table
             ref="multipleTable"
             :data="dataSearch"
@@ -84,7 +83,6 @@
             v-loading="listLoading"
             @selection-change="handleSelectionChange"
           >
-
             <el-table-column type="expand">
               <template slot-scope="props">
                 <div class="ExpandData_Table">
@@ -180,9 +178,7 @@
                 </el-button-group>
               </template>
             </el-table-column>
-
           </el-table>
-
         </section>
 
         <template v-if="tableData && tableData.length">
@@ -232,6 +228,11 @@ export default {
       productSelected: {},
       isShowDialog: false
     };
+  },
+  watch: {
+    $route() {
+      this.reRenderDataFromUrl();
+    }
   },
   created() {
     this.getList();
@@ -324,7 +325,6 @@ export default {
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        // code logic ...
         this.trashProduct(id).then(res => {
           this.$message({
             type: 'success',
@@ -348,7 +348,6 @@ export default {
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        // Code logic
         this.destroyProduct(id).then(res => {
           this.$message({
             type: 'success',
@@ -377,7 +376,6 @@ export default {
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        // code logic ...
         this.massDestroyProduct(ids).then(res => {
           this.$message({
             type: 'success',
@@ -406,7 +404,6 @@ export default {
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        // code logic ...
         this.massTrashProduct(ids).then(res => {
           this.$message({
             type: 'success',
@@ -430,7 +427,6 @@ export default {
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        // code logic ...
         this.emptyTrashProduct().then(res => {
           this.$message({
             type: 'success',
@@ -459,7 +455,6 @@ export default {
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        // code logic ...
         this.massRestoreProduct(ids).then(res => {
           this.$message({
             type: 'success',
@@ -479,16 +474,25 @@ export default {
     },
     handleEdit(id) {
       this.$router.push({
-        name: 'update-product',
+        name: 'edit-product',
         params: { id }
       });
     },
     reRenderDataFromFormAction() {
       this.tableAction = '';
       if (this.tableData.length === 0) {
+        this.listQuery.page = 1;
         if (! this.isTabTrashed) { this.getList() }
         else { this.getListTrashed(); }
       }
+    },
+    reRenderDataFromUrl() {
+      if (this.$route.query.form === 'success') {
+        this.getList();
+        let query = Object.assign({}, this.$route.query);
+        delete query.form;
+        this.$router.replace({ query });
+      };
     },
     handleView(id) {
       this.isShowDialog = true;

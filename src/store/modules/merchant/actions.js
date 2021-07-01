@@ -1,5 +1,5 @@
 import {
-  addMerchant,
+  storeMerchant,
   fetchMerchantItemById,
   updateMerchant,
   updatePasswordMerchant,
@@ -16,32 +16,24 @@ import {
 
 export default {
 
-  addMerchant({ dispatch }, formData) {
+  storeMerchant({}, formData) {
     return  new Promise((resolve, reject) => {
       const headers = {
         'Content-Type': 'multipart/form-data'
       };
-      addMerchant(headers, formData)
-      .then(res => {
-        resolve(res.data);
-        dispatch('merchant/fetchListMerchantByPaginate', { limit: 10, page: 1 }, { root: true });
-        dispatch('shop/fetchListShopByPaginate', { limit: 10, page: 1 }, { root: true });
-      })
+      storeMerchant(headers, formData)
+      .then(res => resolve(res.data))
       .catch(err => reject(err));
     });
   },
 
-  updateMerchant({ dispatch }, { formData, id }) {
+  updateMerchant({}, { formData, id }) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-Type': 'multipart/form-data'
       };
       updateMerchant(headers, formData, id)
-      .then(res => {
-        dispatch('merchant/fetchListMerchantByPaginate', { limit: 10, page: 1 }, { root: true });
-        dispatch('shop/fetchListShopByPaginate', { limit: 10, page: 1 }, { root: true });
-        resolve(res.data);
-      })
+      .then(res => resolve(res.data))
       .catch(err => reject(err));
     });
   },

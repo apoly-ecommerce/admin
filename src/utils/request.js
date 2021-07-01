@@ -28,7 +28,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => { return response.data; },
   error => {
-    // console.log(error);
+    console.log(error.response);
     if (error.response.status === 404) {
       Message({
         message: 'Lỗi 404: Trang không tồn tại !',

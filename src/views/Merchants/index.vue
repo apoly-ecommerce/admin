@@ -112,7 +112,6 @@
 
             <el-table-column type="selection" width="50" />
 
-            <!-- data table -->
             <el-table-column label="Avatar" prop="image" width="100">
               <template slot-scope="{row}">
                 <div class="TableThumb_ThumbImage CircleThumb avatar">
@@ -195,7 +194,6 @@
                 </el-button-group>
               </template>
             </el-table-column>
-            <!-- data table -->
           </el-table>
         </section>
 
@@ -207,7 +205,6 @@
     </page-table-content>
 
     <view-user :isShow="isShowDialog" :user="userSelected" @close="handleCloseDialog"/>
-
   </section>
 </template>
 
@@ -249,6 +246,11 @@ export default {
       userSelected: {},
       isShowDialog: false
     };
+  },
+  watch: {
+    $route() {
+      this.reRenderDataFromUrl();
+    }
   },
   created() {
     this.getList();
@@ -490,7 +492,7 @@ export default {
     },
     handleEdit(id, type) {
       this.$router.push({
-        name: 'update-merchant',
+        name: 'edit-merchant',
         params: { id },
         query: { update: type }
       });
@@ -498,9 +500,18 @@ export default {
     reRenderDataFromFormAction() {
       this.tableAction = '';
       if (this.tableData.length === 0) {
+        this.listQuery.page = 1;
         if (! this.isTabTrashed) { this.getList() }
         else { this.getListTrashed(); }
       }
+    },
+    reRenderDataFromUrl() {
+      if (this.$route.query.form === 'success') {
+        this.getList();
+        let query = Object.assign({}, this.$route.query);
+        delete query.form;
+        this.$router.replace({ query });
+      };
     },
     handleView(id) {
       this.isShowDialog = true;

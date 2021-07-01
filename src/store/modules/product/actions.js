@@ -1,5 +1,5 @@
 import {
-  addProduct,
+  storeProduct,
   fetchListProduct,
   fetchListProductByPaginate,
   fetchListProductTrashedByPaginate,
@@ -16,16 +16,13 @@ import {
 
 export default {
 
-  addProduct({ dispatch }, formData) {
+  storeProduct({}, formData) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-type': 'multipart/form-data'
       };
-      addProduct(headers, formData)
-      .then(res => {
-        dispatch('product/fetchListProductByPaginate', { limit: 10, page: 1 }, { root: true });
-        resolve(res.data);
-      })
+      storeProduct(headers, formData)
+      .then(res => resolve(res.data))
       .catch(error => reject(error));
     });
   },
@@ -134,16 +131,13 @@ export default {
     });
   },
 
-  updateProduct({ dispatch }, { formData, id }) {
+  updateProduct({}, { formData, id }) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-type': 'multipart/form-data'
       };
       updateProduct(headers, formData, id)
-      .then(res => {
-        dispatch('product/fetchListProductByPaginate', { limit: 10, page: 1 }, { root: true });
-        resolve(res.data);
-      })
+      .then(res => resolve(res.data))
       .catch(error => reject(error));
     });
   },

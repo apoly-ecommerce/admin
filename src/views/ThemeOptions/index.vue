@@ -106,12 +106,12 @@ export default {
     handleEdit(id) {
       if (id === 1) {
         this.$router.push({
-          name: 'update-featured-brands',
+          name: 'edit-featured-brands',
         });
       }
       else {
         this.$router.push({
-          name: 'update-trending-now-categories',
+          name: 'edit-trending-now-categories',
         });
       }
     },

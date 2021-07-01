@@ -1,5 +1,5 @@
 import {
-  addSlider,
+  storeSlider,
   fetchSliderItemById,
   updateSlider,
   fetchListSliderByPaginate,
@@ -15,30 +15,24 @@ import {
 
 export default {
 
-  addSlider({ dispatch }, formData) {
+  storeSlider({}, formData) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-Type': 'multipart/form-data'
       }
-      addSlider(headers, formData)
-      .then(res => {
-        dispatch('slider/fetchListSliderByPaginate', { limit: 10, page: 1 }, { root: true });
-        resolve(res.data);
-      })
+      storeSlider(headers, formData)
+      .then(res => resolve(res.data))
       .catch(err => reject(err));
     });
   },
 
-  updateSlider({ dispatch }, { formData, id }) {
+  updateSlider({}, { formData, id }) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-Type': 'multipart/form-data'
       };
       updateSlider(headers, formData, id)
-      .then(res => {
-        dispatch('slider/fetchListSliderByPaginate', { limit: 10, page: 1 }, { root: true });
-        resolve(res.data);
-      })
+      .then(res => resolve(res.data))
       .catch(err => reject(err));
     });
   },

@@ -331,7 +331,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      'addSlider': 'slider/addSlider',
+      'storeSlider': 'slider/storeSlider',
       'fetchSliderItemById': 'slider/fetchSliderItemById',
       'updateSlider': 'slider/updateSlider'
     }),
@@ -366,9 +366,10 @@ export default {
     getFormName() {
       this.formName = this.$route.meta && this.$route.meta.title;
     },
-    back(router = '/appearance/slider') {
+    back(router = '/appearance/slider', query = {}) {
       this.resetFormData();
-      this.$router.push({ path: router });
+      this.$refs['formData'].resetFields();
+      this.$router.push({ path: router, query });
     },
     saveFeatureImage(file) {
       this.formData.featureImage.file = file;
@@ -402,7 +403,7 @@ export default {
               type: 'success',
               duration: 5 * 1000
             });
-            this.back();
+            this.back('/appearance/slider', { form: 'success' });
           }).catch(error => {
             console.error('[App Error] => ', error);
             if (error.status === 422) {
@@ -418,7 +419,7 @@ export default {
       });
     },
     handleAdd() {
-      return this.addSlider(this.setFormData());
+      return this.storeSlider(this.setFormData());
     },
     handleUpdate() {
       return this.updateSlider({ formData: this.setFormData(), id: this.sliderId });

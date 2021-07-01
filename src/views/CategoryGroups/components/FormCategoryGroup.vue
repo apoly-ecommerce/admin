@@ -5,7 +5,6 @@
     :isFormLoading="isFormLoading"
     @close="handleCloseForm"
   >
-
     <template v-slot:form-body>
       <el-form
         ref="formData"
@@ -148,9 +147,9 @@
                   <i class="fas fa-question-circle"></i>
                 </el-tooltip>
               </label>
-              <div v-if="checkImageNotEmpty(formData.backgroundImage.url)" class="ImageThumb_wrap">
+              <div v-if="checkImageNotEmpty(formData.backgroundImage.src)" class="ImageThumb_wrap">
                 <div class="thumbNail d-block">
-                  <img :src="formData.backgroundImage.url" alt="" />
+                  <img :src="formData.backgroundImage.src" alt="" />
                 </div>
                 <div class="confirm">
                   <el-tag type="danger">
@@ -176,9 +175,9 @@
                   <i class="fas fa-question-circle"></i>
                 </el-tooltip>
               </label>
-              <div v-if="checkImageNotEmpty(formData.coverImage.url)" class="ImageThumb_wrap">
+              <div v-if="checkImageNotEmpty(formData.coverImage.src)" class="ImageThumb_wrap">
                 <div class="thumbNail d-block">
-                  <img :src="formData.coverImage.url" alt="" />
+                  <img :src="formData.coverImage.src" alt="" />
                 </div>
                 <div class="confirm">
                   <el-tag type="danger">
@@ -267,7 +266,6 @@ import UploadImage from '@/components/UploadImage';
 import { categoryGroupRules } from '@/validations';
 import { mapActions } from 'vuex';
 import { changeToSlug } from '@/helpers';
-
 import { Message } from 'element-ui';
 
 const defaultFormData = {
@@ -331,7 +329,7 @@ export default {
   methods: {
     ...mapActions({
       'setIsLoading': 'app/handleSetIsLoading',
-      'addCategoryGroup': 'categoryGroup/addCategoryGroup',
+      'storeCategoryGroup': 'categoryGroup/storeCategoryGroup',
       'fetchCategoryGroupItemById': 'categoryGroup/fetchCategoryGroupItemById',
       'updateCategoryGroup': 'categoryGroup/updateCategoryGroup'
     }),
@@ -369,9 +367,10 @@ export default {
     getFormName() {
       this.formName = this.$route.meta && this.$route.meta.title;
     },
-    back(router = '/catalog/category-group') {
+    back(router = '/catalog/category-group', query = {}) {
       this.resetFormData();
-      this.$router.push({ path: router });
+      this.$refs['formData'].resetFields();
+      this.$router.push({ path: router, query });
     },
     handleCloseForm() {
       this.back();
@@ -383,12 +382,13 @@ export default {
       this.formData.coverImage.file = file;
     },
     resetFormData() {
-      this.formData = {...defaultFormData};
-      this.formData.backgroundImage.url   = '';
-      this.formData.backgroundImage.file  = null;
+      this.formData  = {...defaultFormData};
+      this.formError = {...defaultFormError};
+      this.formData.backgroundImage.src   = '';
+      this.formData.backgroundImage.file  = '';
       this.formData.backgroundImage.isDel = false;
-      this.formData.coverImage.url   = '';
-      this.formData.coverImage.file  = null;
+      this.formData.coverImage.src   = '';
+      this.formData.coverImage.file  = '';
       this.formData.coverImage.isDel = false;
     },
     handleActionForm(callback) {
@@ -400,7 +400,7 @@ export default {
               type: 'success',
               duration: 5 * 1000
             });
-            this.back();
+            this.back('/catalog/category-group', { form: 'success' });
           }).catch(error => {
             console.error('[App Error] => ', error);
             if (error.status === 422) {
@@ -416,7 +416,7 @@ export default {
       });
     },
     handleAdd() {
-      return this.addCategoryGroup(this.setFormData());
+      return this.storeCategoryGroup(this.setFormData());
     },
     handleUpdate() {
       return this.updateCategoryGroup({ data: this.setFormData(), id: this.categoryGroupId });
@@ -451,16 +451,16 @@ export default {
       }
     },
     appendDataToForm(data) {
-      this.formData.name  = data.name;
-      this.formData.order = data.order;
-      this.formData.slug  = data.slug;
-      this.formData.icon  = data.icon;
-      this.formData.active = data.active.toString();
-      this.formData.description = data.description;
-      this.formData.backgroundImage.url = data.background_image_url;
-      this.formData.coverImage.url = data.cover_image_url;
-      this.formData.meta_title = data.meta_title;
-      this.formData.meta_description = data.meta_description;
+      this.formData.name = data.name || '';
+      this.formData.order = data.order || '';
+      this.formData.slug = data.slug || '';
+      this.formData.icon = data.icon || '';
+      this.formData.active = data.active ? '1' : '0';
+      this.formData.description = data.description || '';
+      this.formData.backgroundImage.src = data.background_image || '';
+      this.formData.coverImage.src = data.cover_image || '';
+      this.formData.meta_title = data.meta_title || '';
+      this.formData.meta_description = data.meta_description || '';
     },
     checkImageNotEmpty(img) {
       if (img && !(img.split('?text=')[1] === 'No_Image_Found')) {

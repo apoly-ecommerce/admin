@@ -25,6 +25,7 @@ import slider from './modules/slider';
 import theme from './modules/theme';
 import system from './modules/system';
 import faq from './modules/faq';
+import inventory from './modules/inventory';
 
 const store = new Vuex.Store({
   modules: {
@@ -49,7 +50,8 @@ const store = new Vuex.Store({
     slider,
     theme,
     system,
-    faq
+    faq,
+    inventory
   }
 });
 

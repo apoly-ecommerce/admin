@@ -58,6 +58,19 @@ const mapSidebarMenu = [
     ]
   },
   {
+    name: 'Stock',
+    icon: 'user-secret',
+    roles: true,
+    children: [
+      {
+        name: 'Inventories',
+        link: '/stock/inventory',
+        icon: 'angle-double-right',
+        roles: true,
+      }
+,    ]
+  },
+  {
     name: 'Admin',
     icon: 'user-secret',
     roles: true,

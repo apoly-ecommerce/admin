@@ -257,7 +257,7 @@ export default {
     ...mapActions({
       'fetchListModule' : 'module/fetchListModule',
       'fetchRolePermissionsByUser': 'role/fetchRolePermissionsByUser',
-      'addRole': 'role/addRole',
+      'storeRole': 'role/storeRole',
       'fetchRoleById': 'role/fetchRoleById',
       'updateRole': 'role/updateRole'
     }),
@@ -374,6 +374,7 @@ export default {
     },
     back(router = '/setting/role', query = {}) {
       this.resetFormData();
+      this.$refs['formData'].resetFields();
       this.$router.push({ path: router, query });
     },
     handleCloseForm() {
@@ -399,7 +400,7 @@ export default {
                 type: 'success',
                 duration: 5 * 1000
               });
-              this.back();
+              this.back('/setting/role', { form: 'success' });
             }).catch(error => {
               console.error('[App Error] => ', error);
               if (error.status === 422) {
@@ -416,7 +417,7 @@ export default {
       });
     },
     handleAdd() {
-      return this.addRole(this.formData);
+      return this.storeRole(this.formData);
     },
     handleUpdate() {
       return this.updateRole({ formData: this.formData, id: this.roleId });

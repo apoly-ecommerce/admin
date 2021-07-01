@@ -226,3 +226,13 @@ export const faqRules = {
   faq_topic_id: [{ required: true, message: 'Vui lòng điền trường này.', trigger: 'blur' }],
   answer: [{ required: true, message: 'Vui lòng điền trường này.', trigger: 'blur' }]
 };
+
+/**
+ * Check Inventory rule
+ */
+export const inventoryRules = {
+  title: [{ required: true, message: 'Vui lòng điền trường này.', trigger: 'blur' }],
+  sku: [{ required: true, message: 'Vui lòng điền trường này.', trigger: 'blur' }],
+  sale_price: [{ required: true, message: 'Vui lòng điền trường này.', trigger: 'blur' }],
+  slug: [{ required: true, message: 'Vui lòng điền trường này.', trigger: 'blur' }],
+};

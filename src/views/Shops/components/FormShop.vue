@@ -360,7 +360,6 @@ import UploadImage from '@/components/UploadImage';
 import { shopRules } from '@/validations';
 import { mapActions } from 'vuex';
 import { Message } from 'element-ui';
-import moment from 'moment';
 
 const defaultFormData = {
   name: '',
@@ -474,6 +473,7 @@ export default {
     },
     back(router = '/vendor/shop', query = {}) {
       this.resetFormData();
+      this.$refs['formData'].resetFields();
       this.$router.push({ path: router, query });
     },
     saveLogoImage(file) {
@@ -508,7 +508,7 @@ export default {
               type: 'success',
               duration: 5 * 1000
             });
-            this.back();
+            this.back('/vendor/shop', { form: 'success' });
           }).catch(error => {
             console.error('[App Error] => ', error);
             if (error.status === 422) {
@@ -528,8 +528,6 @@ export default {
         return this.updateShop({ formData: this.setFormData(), id: this.shopId });
       }
       if (this.$route.query.update === 'address') {
-        // const { address_line_1, address_line_2, city, zip_code, phone, country_id, state_id } = ;
-        // const formData = { address_line_1, address_line_2, city, zip_code, phone, country_id, state_id };
         return this.updateAddress({ formData: this.formData, id: this.addressId });
       }
     },

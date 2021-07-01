@@ -1,8 +1,8 @@
 import request from '@/utils/request';
 
-export function addCategorySubGroup(headers, data) {
+export function storeCategorySubGroup(headers, data) {
   return request({
-    url: 'api/admin/catalog/categorySubGroup/add',
+    url: 'api/admin/catalog/categorySubGroup',
     method: 'POST',
     headers,
     data
@@ -11,14 +11,14 @@ export function addCategorySubGroup(headers, data) {
 
 export function fetchListCategorySubGroup() {
   return request({
-    url: 'api/admin/catalog/categorySubGroup/list',
+    url: 'api/admin/catalog/categorySubGroup',
     method: 'GET'
   });
 }
 
 export function fetchListCategorySubGroupByPaginate(query) {
   return request({
-    url: 'api/admin/catalog/categorySubGroup/list/paginate',
+    url: 'api/admin/catalog/categorySubGroup/paginate',
     method: 'GET',
     params: query
   });
@@ -26,7 +26,7 @@ export function fetchListCategorySubGroupByPaginate(query) {
 
 export function fetchListCategorySubGroupTrashedByPaginate(query) {
   return request({
-    url: 'api/admin/catalog/categorySubGroup/list/trashed/paginate',
+    url: 'api/admin/catalog/categorySubGroup/trashed/paginate',
     method: 'GET',
     params: query
   });
@@ -34,7 +34,7 @@ export function fetchListCategorySubGroupTrashedByPaginate(query) {
 
 export function trashCategorySubGroup(id) {
   return request({
-    url: `api/admin/catalog/categorySubGroup/trash/${id}`,
+    url: `api/admin/catalog/categorySubGroup/${id}/trash`,
     method: 'DELETE'
   });
 }
@@ -49,7 +49,7 @@ export function massTrashCategorySubGroup(ids) {
 
 export function destroyCategorySubGroup(id) {
   return request({
-    url: `api/admin/catalog/categorySubGroup/destroy/${id}`,
+    url: `api/admin/catalog/categorySubGroup/${id}`,
     method: 'DELETE'
   });
 }
@@ -64,7 +64,7 @@ export function massDestroyCategorySubGroup(ids) {
 
 export function restoreCategorySubGroup(id) {
   return request({
-    url: `api/admin/catalog/categorySubGroup/restore/${id}`,
+    url: `api/admin/catalog/categorySubGroup/${id}/restore`,
     method: 'PATCH',
   });
 }
@@ -79,14 +79,14 @@ export function massRestoreCategorySubGroup(ids) {
 
 export function fetchCategorySubGroupItemById(id) {
   return request({
-    url: `api/admin/catalog/categorySubGroup/show/${id}`,
+    url: `api/admin/catalog/categorySubGroup/${id}`,
     method: 'GET'
   });
 }
 
 export function updateCategorySubGroup(headers, data, id) {
   return request({
-    url: `api/admin/catalog/categorySubGroup/update/${id}`,
+    url: `api/admin/catalog/categorySubGroup/${id}`,
     method: 'POST',
     headers,
     params: { _method: 'PUT' },

@@ -1,5 +1,5 @@
 import {
-  addRole,
+  storeRole,
   fetchListRoleByPaginate,
   trashRole,
   fetchListRoleTrashedByPaginate,
@@ -24,24 +24,18 @@ export default {
     });
   },
 
-  addRole({ dispatch }, formData) {
+  storeRole({}, formData) {
     return new Promise((resolve, reject) => {
-      addRole(formData)
-      .then(res => {
-        dispatch('role/fetchListRoleByPaginate', { limit: 10, page: 1 }, { root: true });
-        resolve(res.data);
-      })
+      storeRole(formData)
+      .then(res => resolve(res.data))
       .catch(error => reject(error));
     });
   },
 
-  updateRole({ dispatch }, { formData, id }) {
+  updateRole({}, { formData, id }) {
     return new Promise((resolve, reject) => {
       updateRole(formData, id)
-      .then(res => {
-        dispatch('role/fetchListRoleByPaginate', { limit: 10, page: 1 }, { root: true });
-        resolve(res.data);
-      })
+      .then(res => resolve(res.data))
       .catch(error => reject(error));
     });
   },

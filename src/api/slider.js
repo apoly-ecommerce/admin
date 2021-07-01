@@ -1,6 +1,6 @@
 import request from '@/utils/request';
 
-export function addSlider(headers, data) {
+export function storeSlider(headers, data) {
   return request({
     url: 'api/admin/appearance/slider',
     method: 'POST',

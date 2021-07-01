@@ -1,8 +1,8 @@
 import request from '@/utils/request';
 
-export function addUser(headers, data) {
+export function storeUser(headers, data) {
   return request({
-    url: 'api/admin/admin/user/add',
+    url: 'api/admin/admin/user',
     method: 'POST',
     headers,
     data
@@ -11,14 +11,14 @@ export function addUser(headers, data) {
 
 export function fetchListUser() {
   return request({
-    url: 'api/admin/admin/user/list',
+    url: 'api/admin/admin/user',
     method: 'GET'
   });
 }
 
 export function fetchListUserByPaginate(query) {
   return request({
-    url: 'api/admin/admin/user/list/paginate',
+    url: 'api/admin/admin/user/paginate',
     method: 'GET',
     params: query
   });
@@ -26,7 +26,7 @@ export function fetchListUserByPaginate(query) {
 
 export function fetchListUserTrashedByPaginate(query) {
   return request({
-    url: 'api/admin/admin/user/list/trashed/paginate',
+    url: 'api/admin/admin/user/trashed/paginate',
     method: 'GET',
     params: query
   });
@@ -34,7 +34,7 @@ export function fetchListUserTrashedByPaginate(query) {
 
 export function trashUser(id) {
   return request({
-    url: `api/admin/admin/user/trash/${id}`,
+    url: `api/admin/admin/user/${id}/trash`,
     method: 'DELETE'
   });
 }
@@ -49,7 +49,7 @@ export function massTrashUser(ids) {
 
 export function destroyUser(id) {
   return request({
-    url: `api/admin/admin/user/destroy/${id}`,
+    url: `api/admin/admin/user/${id}`,
     method: 'DELETE'
   });
 }
@@ -64,7 +64,7 @@ export function massDestroyUser(ids) {
 
 export function restoreUser(id) {
   return request({
-    url: `api/admin/admin/user/restore/${id}`,
+    url: `api/admin/admin/user/${id}/restore`,
     method: 'PATCH',
   });
 }
@@ -79,14 +79,14 @@ export function massRestoreUser(ids) {
 
 export function fetchUserItemById(id) {
   return request({
-    url: `api/admin/admin/user/show/${id}`,
+    url: `api/admin/admin/user/${id}`,
     method: 'GET'
   });
 }
 
 export function updateUser(headers, data, id) {
   return request({
-    url: `api/admin/admin/user/update/${id}`,
+    url: `api/admin/admin/user/${id}`,
     method: 'POST',
     headers,
     params: { _method: 'PUT' },

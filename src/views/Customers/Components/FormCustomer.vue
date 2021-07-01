@@ -156,7 +156,7 @@
             <el-col :span="12" class="p-1">
               <el-form-item prop="dob">
                 <label for="dob" class="FormLabel">
-                  <span class="FormLabel__title">Date of birth *</span>
+                  <span class="FormLabel__title">Date of birth</span>
                 </label>
                 <el-date-picker
                   v-model="formData.dob"
@@ -173,7 +173,7 @@
             <el-col :span="12" class="p-1">
               <el-form-item prop="sex">
                 <label for="gender" class="FormLabel">
-                  <span class="FormLabel__title">Gender *</span>
+                  <span class="FormLabel__title">Gender</span>
                 </label>
                 <el-select class="w-100" v-model="formData.sex" placeholder="Gender">
                   <el-option label="Nam" value="male"/>
@@ -460,7 +460,7 @@ export default {
     ...mapActions({
       'fetchListRole': 'role/fetchListRole',
       'fetchListCountries': 'country/fetchListCountries',
-      'addCustomer': 'customer/addCustomer',
+      'storeCustomer': 'customer/storeCustomer',
       'fetchCustomerItemById': 'customer/fetchCustomerItemById',
       'updateCustomer': 'customer/updateCustomer',
       'updatePasswordCustomer': 'customer/updatePasswordCustomer',
@@ -500,9 +500,10 @@ export default {
     getFormName() {
       this.formName = this.$route.meta && this.$route.meta.title;
     },
-    back(router = '/admin/customer') {
+    back(router = '/admin/customer', query = {}) {
       this.resetFormData();
-      this.$router.push({ path: router });
+      this.$refs['formData'].resetFields();
+      this.$router.push({ path: router, query});
     },
     saveAvatarImage(file) {
       this.formData.avatarImage.file = file;
@@ -530,7 +531,7 @@ export default {
               type: 'success',
               duration: 5 * 1000
             });
-            this.back();
+            this.back('/admin/customer', { form: 'success' });
           }).catch(error => {
             console.error('[App Error] => ', error);
             if (error.status === 422) {
@@ -546,7 +547,7 @@ export default {
       });
     },
     handleAdd() {
-      return this.addCustomer(this.setFormData());
+      return this.storeCustomer(this.setFormData());
     },
     handleUpdate() {
       let updateType = this.$route.query.update;

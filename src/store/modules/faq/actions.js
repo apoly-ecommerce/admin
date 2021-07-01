@@ -2,13 +2,13 @@ import {
   // Faq Topic
   fetchFaqTopicItemById,
   fetListFaqTopic,
-  addFaqTopic,
+  storeFaqTopic,
   updateFaqTopic,
   destroyFaqTopic,
   // Faq
   fetchFaqItemById,
   fetchListFaqByPaginate,
-  addFaq,
+  storeFaq,
   updateFaq,
   destroyFaq,
 } from '@/api/faq';
@@ -35,9 +35,9 @@ export default {
     });
   },
 
-  addFaqTopic({}, formData) {
+  storeFaqTopic({}, formData) {
     return new Promise((resolve, reject) => {
-      addFaqTopic(formData)
+      storeFaqTopic(formData)
       .then(res => {
         resolve(res.data);
       })
@@ -84,9 +84,9 @@ export default {
     });
   },
 
-  addFaq({}, formData) {
+  storeFaq({}, formData) {
     return new Promise((resolve, reject) => {
-      addFaq(formData)
+      storeFaq(formData)
       .then(res => resolve(res.data))
       .catch(err => reject(err));
     });

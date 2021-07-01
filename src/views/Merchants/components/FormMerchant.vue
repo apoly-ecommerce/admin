@@ -482,14 +482,13 @@ export default {
   methods: {
     ...mapActions({
       'fetchListCountries': 'country/fetchListCountries',
-      'addMerchant': 'merchant/addMerchant'
+      'storeMerchant': 'merchant/storeMerchant'
     }),
     async formSetup() {
       try {
         this.resetFormData();
         this.getFormName();
         this.isFormLoading = true;
-        //
         if (this.$route.query.update === 'address' ) {
           const [dataCountry] = await Promise.all([this.fetchListCountries()]);
           this.countries = dataCountry.countries;
@@ -520,9 +519,10 @@ export default {
     getFormName() {
       this.formName = this.$route.meta && this.$route.meta.title;
     },
-    back(router = '/vendor/merchant') {
+    back(router = '/vendor/merchant', query = {}) {
       this.resetFormData();
-      this.$router.push({ path: router });
+      this.$refs['formData'].resetFields();
+      this.$router.push({ path: router, query });
     },
     saveAvatarImage(file) {
       this.formData.avatarImage.file = file;
@@ -546,7 +546,7 @@ export default {
               type: 'success',
               duration: 5 * 1000
             });
-            this.back();
+            this.back('/vendor/merchant', { form: 'success' });
           }).catch(error => {
             console.error('[App Error] => ', error);
             if (error.status === 422) {
@@ -562,7 +562,7 @@ export default {
       });
     },
     handleAdd() {
-      return this.addMerchant(this.setFormData());
+      return this.storeMerchant(this.setFormData());
     },
     handleUpdate() {},
     setFormData() {

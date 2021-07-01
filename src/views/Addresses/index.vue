@@ -185,7 +185,7 @@ export default {
     },
     handleEdit(id) {
       this.$router.push({
-        name: 'update-address',
+        name: 'edit-address',
         params: { id }
       });
     },

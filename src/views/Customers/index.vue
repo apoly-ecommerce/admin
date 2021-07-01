@@ -75,7 +75,6 @@
 
       <template v-slot:main-content>
         <section class="TableBox_Content">
-
           <el-table
             ref="multipleTable"
             :data="dataSearch"
@@ -84,7 +83,6 @@
             v-loading="listLoading"
             @selection-change="handleSelectionChange"
           >
-
             <el-table-column type="expand">
               <template slot-scope="props">
                 <div class="ExpandData_Table">
@@ -112,7 +110,6 @@
 
             <el-table-column type="selection" width="50" />
 
-            <!-- data table -->
             <el-table-column label="Avatar" prop="image" width="150">
               <template slot-scope="{row}">
                 <div class="TableThumb_ThumbImage avatar CircleThumb">
@@ -187,7 +184,6 @@
                 </el-button-group>
               </template>
             </el-table-column>
-            <!-- data table -->
           </el-table>
         </section>
 
@@ -241,6 +237,11 @@ export default {
       customerSelected: {},
       isShowDialog: false
     };
+  },
+  watch: {
+    $route() {
+      this.reRenderDataFromUrl();
+    }
   },
   created() {
     this.getList();
@@ -482,7 +483,7 @@ export default {
     },
     handleEdit(id, type) {
       this.$router.push({
-        name: 'update-customer',
+        name: 'edit-customer',
         params: { id },
         query: { update: type }
       });
@@ -490,9 +491,18 @@ export default {
     reRenderDataFromFormAction() {
       this.tableAction = '';
       if (this.tableData.length === 0) {
+        this.listQuery.page = 1;
         if (! this.isTabTrashed) { this.getList() }
         else { this.getListTrashed(); }
       }
+    },
+    reRenderDataFromUrl() {
+      if (this.$route.query.form === 'success') {
+        this.getList();
+        let query = Object.assign({}, this.$route.query);
+        delete query.form;
+        this.$router.replace({ query });
+      };
     },
     handleView(id) {
       this.isShowDialog = true;

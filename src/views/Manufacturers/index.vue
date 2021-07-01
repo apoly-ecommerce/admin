@@ -15,7 +15,6 @@
             <span>Thùng rác</span>
           </el-button>
         </template>
-
         <router-link class="Table__tools-item" :to="{ name: 'add-manufacturer' }">Thêm mới</router-link>
       </template>
 
@@ -111,10 +110,10 @@
 
             <el-table-column type="selection" width="50" />
 
-            <el-table-column label="Logo" prop="logo_image_url" width="100">
+            <el-table-column label="Logo" prop="logo_image" width="100">
               <template slot-scope="{row}">
                 <div class="TableThumb_ThumbImage avatar CircleThumb">
-                  <img :src="row.logo_image_url" alt="" class="image medium">
+                  <img :src="row.logo_image" alt="" class="image medium">
                 </div>
               </template>
             </el-table-column>
@@ -197,12 +196,16 @@
         </template>
       </template>
     </page-table-content>
+
+    <view-manufacturer :isShow="isShowDialog" :manufacturer="manufacturerSelected" @close="handleCloseDialog" />
+
   </section>
 </template>
 
 <script>
 import PageTableContent from '@/components/PageTableContent';
 import Pagination from '@/components/Pagination';
+import ViewManufacturer from './components/ViewManufacturer';
 import { mapGetters, mapActions } from 'vuex';
 import { parseTime } from '@/utils/functions';
 
@@ -210,6 +213,7 @@ export default {
   components: {
     PageTableContent,
     Pagination,
+    ViewManufacturer
   },
   data() {
     return {
@@ -232,8 +236,15 @@ export default {
         optionSelected: 'name'
       },
       multipleSelection: [],
-      tableAction: ''
+      tableAction: '',
+      manufacturerSelected: {},
+      isShowDialog: false
     };
+  },
+  watch: {
+    $route() {
+      this.reRenderDataFromUrl();
+    }
   },
   created() {
     this.getList();
@@ -482,12 +493,26 @@ export default {
     reRenderDataFromFormAction() {
       this.tableAction = '';
       if (this.tableData.length === 0) {
+        this.listQuery.page = 1;
         if (! this.isTabTrashed) { this.getList() }
         else { this.getListTrashed(); }
       }
     },
+    reRenderDataFromUrl() {
+      if (this.$route.query.form === 'success') {
+        this.getList();
+        let query = Object.assign({}, this.$route.query);
+        delete query.form;
+        this.$router.replace({ query });
+      };
+    },
     handleView(id) {
-      console.log(id);
+      this.isShowDialog = true;
+      this.manufacturerSelected = this.tableData.filter(item => item.id === id)[0];
+    },
+    handleCloseDialog() {
+      this.manufacturerSelected = {};
+      this.isShowDialog = false;
     }
   }
 }

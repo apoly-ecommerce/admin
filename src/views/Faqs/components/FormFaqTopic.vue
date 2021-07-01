@@ -112,7 +112,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      'addFaqTopic': 'faq/addFaqTopic',
+      'storeFaqTopic': 'faq/storeFaqTopic',
       'fetchFaqTopicItemById': 'faq/fetchFaqTopicItemById',
       'updateFaqTopic': 'faq/updateFaqTopic'
     }),
@@ -183,7 +183,7 @@ export default {
       });
     },
     handleAdd() {
-      return this.addFaqTopic(this.formData);
+      return this.storeFaqTopic(this.formData);
     },
     handleUpdate() {
       return this.updateFaqTopic({ formData: this.formData, id: this.faqTopicId });

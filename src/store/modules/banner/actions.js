@@ -1,5 +1,5 @@
 import {
-  addBanner,
+  storeBanner,
   fetchBannerItemById,
   updateBanner,
   fetchListBannerByPaginate,
@@ -15,30 +15,24 @@ import {
 
 export default {
 
-  addBanner({ dispatch }, formData) {
+  storeBanner({}, formData) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-Type': 'multipart/form-data'
       }
-      addBanner(headers, formData)
-      .then(res => {
-        dispatch('banner/fetchListBannerByPaginate', { limit: 10, page: 1 }, { root: true });
-        resolve(res.data);
-      })
+      storeBanner(headers, formData)
+      .then(res => resolve(res.data))
       .catch(err => reject(err));
     });
   },
 
-  updateBanner({ dispatch }, { formData, id }) {
+  updateBanner({}, { formData, id }) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-Type': 'multipart/form-data'
       };
       updateBanner(headers, formData, id)
-      .then(res => {
-        dispatch('banner/fetchListBannerByPaginate', { limit: 10, page: 1 }, { root: true });
-        resolve(res.data);
-      })
+      .then(res => resolve(res.data))
       .catch(err => reject(err));
     });
   },

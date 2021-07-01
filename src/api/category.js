@@ -1,8 +1,8 @@
 import request from '@/utils/request';
 
-export function addCategory(headers, data) {
+export function storeCategory(headers, data) {
   return request({
-    url: 'api/admin/catalog/category/add',
+    url: 'api/admin/catalog/category',
     method: 'POST',
     headers,
     data
@@ -11,14 +11,14 @@ export function addCategory(headers, data) {
 
 export function fetchListCategory() {
   return request({
-    url: 'api/admin/catalog/category/list',
+    url: 'api/admin/catalog/category',
     method: 'GET'
   });
 }
 
 export function fetchCategoryByPaginate(query) {
   return request({
-    url: 'api/admin/catalog/category/list/paginate',
+    url: 'api/admin/catalog/category/paginate',
     method: 'GET',
     params: query
   });
@@ -26,7 +26,7 @@ export function fetchCategoryByPaginate(query) {
 
 export function fetchListCategoryTrashedByPaginate(query) {
   return request({
-    url: 'api/admin/catalog/category/list/trashed/paginate',
+    url: 'api/admin/catalog/category/trashed/paginate',
     method: 'GET',
     params: query
   });
@@ -34,7 +34,7 @@ export function fetchListCategoryTrashedByPaginate(query) {
 
 export function trashCategory(id) {
   return request({
-    url: `api/admin/catalog/category/trash/${id}`,
+    url: `api/admin/catalog/category/${id}/trash`,
     method: 'DELETE'
   });
 }
@@ -49,7 +49,7 @@ export function massTrashCategory(ids) {
 
 export function destroyCategory(id) {
   return request({
-    url: `api/admin/catalog/category/destroy/${id}`,
+    url: `api/admin/catalog/category/${id}`,
     method: 'DELETE'
   });
 }
@@ -64,7 +64,7 @@ export function massDestroyCategory(ids) {
 
 export function restoreCategory(id) {
   return request({
-    url: `api/admin/catalog/category/restore/${id}`,
+    url: `api/admin/catalog/category/${id}/restore`,
     method: 'PATCH',
   });
 }
@@ -79,14 +79,14 @@ export function massRestoreCategory(ids) {
 
 export function fetchCategoryItemById(id) {
   return request({
-    url: `api/admin/catalog/category/show/${id}`,
+    url: `api/admin/catalog/category/${id}`,
     method: 'GET'
   });
 }
 
 export function updateCategory(headers, data, id) {
   return request({
-    url: `api/admin/catalog/category/update/${id}`,
+    url: `api/admin/catalog/category/${id}`,
     method: 'POST',
     headers,
     params: { _method: 'PUT' },

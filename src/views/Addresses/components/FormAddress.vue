@@ -281,7 +281,7 @@ export default {
   methods: {
     ...mapActions({
       'fetchListCountries': 'country/fetchListCountries',
-      'addAddress': 'address/addAddress',
+      'storeAddress': 'address/storeAddress',
       'fetchAddressItemById': 'address/fetchAddressItemById',
       'updateAddress': 'address/updateAddress'
     }),
@@ -368,7 +368,7 @@ export default {
     handleAdd() {
       let namespace = 'App\\Models\\';
       if (this.addressable_type === 'user') { namespace = 'App\\' };
-      return this.addAddress({
+      return this.storeAddress({
         ...this.formData,
           addressable_type: `${namespace + strUcFirst(this.addressable_type)}`,
           addressable_id: this.addressable_id

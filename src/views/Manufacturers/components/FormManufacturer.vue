@@ -175,9 +175,9 @@
                 <span class="FormLabel__title">Brand logo</span>
               </label>
               <template>
-                <div v-if="checkImageNotEmpty(formData.logoImage.url)" class="ImageThumb_wrap">
+                <div v-if="checkImageNotEmpty(formData.logoImage.src)" class="ImageThumb_wrap">
                   <div class="thumbNail d-block">
-                    <img :src="formData.logoImage.url" alt="" />
+                    <img :src="formData.logoImage.src" alt="" />
                   </div>
                   <div class="confirm">
                     <el-tag type="danger">
@@ -206,9 +206,9 @@
                 </el-tooltip>
               </label>
               <template>
-                <div v-if="checkImageNotEmpty(formData.coverImage.url)" class="ImageThumb_wrap">
+                <div v-if="checkImageNotEmpty(formData.coverImage.src)" class="ImageThumb_wrap">
                   <div class="thumbNail d-block">
-                    <img :src="formData.coverImage.url" alt="" />
+                    <img :src="formData.coverImage.src" alt="" />
                   </div>
                   <div class="confirm">
                     <el-tag type="danger">
@@ -239,9 +239,9 @@
                 </el-tooltip>
               </label>
               <template>
-                <div v-if="checkImageNotEmpty(formData.featureImage.url)" class="ImageThumb_wrap">
+                <div v-if="checkImageNotEmpty(formData.featureImage.src)" class="ImageThumb_wrap">
                   <div class="thumbNail d-block">
-                    <img :src="formData.featureImage.url" alt="" />
+                    <img :src="formData.featureImage.src" alt="" />
                   </div>
                   <div class="confirm">
                     <el-tag type="danger">
@@ -261,7 +261,6 @@
             </el-form-item>
           </el-col>
         </el-row>
-
       </el-form>
     </template>
 
@@ -352,7 +351,7 @@ export default {
     ...mapActions({
       'setIsLoading': 'app/handleSetIsLoading',
       'fetchListCountries': 'country/fetchListCountries',
-      'addManufacturer': 'manufacturer/addManufacturer',
+      'storeManufacturer': 'manufacturer/storeManufacturer',
       'fetchManufacturerItemById': 'manufacturer/fetchManufacturerItemById',
       'updateManufacturer': 'manufacturer/updateManufacturer'
     }),
@@ -393,9 +392,10 @@ export default {
     getFormName() {
       this.formName = this.$route.meta && this.$route.meta.title;
     },
-    back(router = '/catalog/manufacturer') {
+    back(router = '/catalog/manufacturer', query = {}) {
       this.resetFormData();
-      this.$router.push({ path: router });
+      this.$refs['formData'].resetFields();
+      this.$router.push({ path: router, query });
     },
     handleCloseForm() {
       this.back();
@@ -411,15 +411,15 @@ export default {
     },
     resetFormData() {
       this.formData = {...defaultFormData};
-      this.formData.logoImage.url   = '';
+      this.formData.logoImage.src   = '';
       this.formData.logoImage.file  = null;
       this.formData.logoImage.isDel = false;
 
-      this.formData.coverImage.url   = '';
+      this.formData.coverImage.src   = '';
       this.formData.coverImage.file  = null;
       this.formData.coverImage.isDel = false;
 
-      this.formData.featureImage.url   = '';
+      this.formData.featureImage.src   = '';
       this.formData.featureImage.file  = null;
       this.formData.featureImage.isDel = false;
     },
@@ -432,7 +432,7 @@ export default {
               type: 'success',
               duration: 5 * 1000
             });
-            this.back();
+            this.back('/catalog/manufacturer', { form: 'success' });
           }).catch(error => {
             console.error('[App Error] => ', error);
             if (error.status === 422) {
@@ -448,7 +448,7 @@ export default {
       });
     },
     handleAdd() {
-      return this.addManufacturer(this.setFormData());
+      return this.storeManufacturer(this.setFormData());
     },
     handleUpdate() {
       return this.updateManufacturer({ formData: this.setFormData(), id: this.manufacturerId });
@@ -489,17 +489,17 @@ export default {
       }
     },
     appendDataToForm(data) {
-      this.formData.name = data.name;
-      this.formData.active = data.active.toString();
+      this.formData.name = data.name || '';
+      this.formData.active = data.active ? '1' : '0';
       this.formData.slug = changeToSlug(data.name);
-      this.formData.url = data.url;
-      this.formData.country_id = data.country_id;
-      this.formData.email = data.email;
-      this.formData.phone = data.phone;
-      this.formData.description = data.description;
-      this.formData.logoImage.url = data.logo_image_url;
-      this.formData.coverImage.url = data.cover_image_url;
-      this.formData.featureImage.url = data.feature_image_url;
+      this.formData.url = data.url || '';
+      this.formData.country_id = data.country_id || '';
+      this.formData.email = data.email || '';
+      this.formData.phone = data.phone || '';
+      this.formData.description = data.description || '';
+      this.formData.logoImage.src = data.logo_image || '';
+      this.formData.coverImage.src = data.cover_image || '';
+      this.formData.featureImage.src = data.feature_image || '';
     },
     checkImageNotEmpty(img) {
       if (img && !(img.split('?text=')[1] === 'No_Image_Found')) {

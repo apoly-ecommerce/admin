@@ -1,8 +1,8 @@
 import request from '@/utils/request';
 
-export function addCategoryGroup(headers, data) {
+export function storeCategoryGroup(headers, data) {
   return request({
-    url: 'api/admin/catalog/categoryGroup/add',
+    url: 'api/admin/catalog/categoryGroup',
     method: 'POST',
     headers,
     data
@@ -11,14 +11,14 @@ export function addCategoryGroup(headers, data) {
 
 export function fetchListCategoryGroup() {
   return request({
-    url: 'api/admin/catalog/categoryGroup/list',
+    url: 'api/admin/catalog/categoryGroup',
     method: 'GET',
   });
 }
 
 export function fetchListCategoryGroupByPaginate(query) {
   return request({
-    url: 'api/admin/catalog/categoryGroup/list/paginate',
+    url: 'api/admin/catalog/categoryGroup/paginate',
     method: 'GET',
     params: query
   });
@@ -26,7 +26,7 @@ export function fetchListCategoryGroupByPaginate(query) {
 
 export function fetchListCategoryGroupTrashedByPaginate(query) {
   return request({
-    url: 'api/admin/catalog/categoryGroup/list/trashed/paginate',
+    url: 'api/admin/catalog/categoryGroup/trashed/paginate',
     method: 'GET',
     params: query
   });
@@ -34,7 +34,7 @@ export function fetchListCategoryGroupTrashedByPaginate(query) {
 
 export function trashCategoryGroup(id) {
   return request({
-    url: `api/admin/catalog/categoryGroup/trash/${id}`,
+    url: `api/admin/catalog/categoryGroup/${id}/trash`,
     method: 'DELETE'
   });
 }
@@ -49,7 +49,7 @@ export function massTrashCategoryGroup(ids) {
 
 export function destroyCategoryGroup(id) {
   return request({
-    url: `api/admin/catalog/categoryGroup/destroy/${id}`,
+    url: `api/admin/catalog/categoryGroup/${id}`,
     method: 'DELETE',
   });
 }
@@ -64,7 +64,7 @@ export function massDestroyCategoryGroup(ids) {
 
 export function restoreCategoryGroup(id) {
   return request({
-    url: `api/admin/catalog/categoryGroup/restore/${id}`,
+    url: `api/admin/catalog/categoryGroup/${id}/restore`,
     method: 'PATCH'
   });
 }
@@ -79,14 +79,14 @@ export function massRestoreCategoryGroup(ids) {
 
 export function fetchCategoryGroupItemById(id) {
   return request({
-    url: `api/admin/catalog/categoryGroup/show/${id}`,
+    url: `api/admin/catalog/categoryGroup/${id}`,
     method: 'GET'
   });
 }
 
 export function updateCategoryGroup(headers, data, id) {
   return request({
-    url: `api/admin/catalog/categoryGroup/update/${id}`,
+    url: `api/admin/catalog/categoryGroup/${id}`,
     method: 'POST',
     headers,
     params: { _method: 'PUT' },

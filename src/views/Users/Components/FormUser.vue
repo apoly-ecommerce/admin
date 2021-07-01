@@ -485,7 +485,7 @@ export default {
     ...mapActions({
       'fetchListRole': 'role/fetchListRole',
       'fetchListCountries': 'country/fetchListCountries',
-      'addUser': 'user/addUser',
+      'storeUser': 'user/storeUser',
       'fetchUserItemById': 'user/fetchUserItemById',
       'updateUser': 'user/updateUser',
       'updatePasswordUser': 'user/updatePasswordUser',
@@ -526,9 +526,10 @@ export default {
     getFormName() {
       this.formName = this.$route.meta && this.$route.meta.title;
     },
-    back(router = '/admin/user') {
+    back(router = '/admin/user', query = {}) {
       this.resetFormData();
-      this.$router.push({ path: router });
+      this.$refs['formData'].resetFields();
+      this.$router.push({ path: router, query });
     },
     saveAvatarImage(file) {
       this.formData.avatarImage.file = file;
@@ -537,7 +538,8 @@ export default {
       this.back();
     },
     resetFormData() {
-      this.formData = {...defaultFormData};
+      this.formData  = {...defaultFormData};
+      this.formError = {...defaultFormError};
       this.formData.avatarImage.url   = '';
       this.formData.avatarImage.file  = null;
       this.formData.avatarImage.isDel = false;
@@ -555,7 +557,7 @@ export default {
               type: 'success',
               duration: 5 * 1000
             });
-            this.back();
+            this.back('/admin/user', { form: 'success' });
           }).catch(error => {
             console.error('[App Error] => ', error);
             if (error.status === 422) {
@@ -571,7 +573,7 @@ export default {
       });
     },
     handleAdd() {
-      return this.addUser(this.setFormData());
+      return this.storeUser(this.setFormData());
     },
     handleUpdate() {
       if (this.$route.query.update === 'origin') {

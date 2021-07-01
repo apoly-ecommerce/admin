@@ -1,5 +1,5 @@
 import {
-  addManufacturer,
+  storeManufacturer,
   fetchListManufacturer,
   fetchListManufacturerByPaginate,
   fetchListManufacturerTrashedByPaginate,
@@ -16,16 +16,13 @@ import {
 
 export default {
 
-  addManufacturer({ dispatch }, formData) {
+  storeManufacturer({}, formData) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-type': 'multipart/form-data'
       };
-      addManufacturer(headers, formData)
-      .then(res => {
-        dispatch('manufacturer/fetchListManufacturerByPaginate', { limit: 10, page: 1 }, { root: true });
-        resolve(res.data);
-      })
+      storeManufacturer(headers, formData)
+      .then(res => resolve(res.data))
       .catch(error => reject(error));
     });
   },
@@ -134,16 +131,13 @@ export default {
     });
   },
 
-  updateManufacturer({ dispatch }, { formData, id }) {
+  updateManufacturer({}, { formData, id }) {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-type': 'multipart/form-data'
       };
       updateManufacturer(headers, formData, id)
-      .then(res => {
-        dispatch('manufacturer/fetchListManufacturerByPaginate', { limit: 10, page: 1 }, { root: true });
-        resolve(res.data);
-      })
+      .then(res => resolve(res.data))
       .catch(error => reject(error));
     });
   },

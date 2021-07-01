@@ -1,6 +1,6 @@
 import request from '@/utils/request';
 
-export function addBanner(headers, data) {
+export function storeBanner(headers, data) {
   return request({
     url: 'api/admin/appearance/banner',
     method: 'POST',

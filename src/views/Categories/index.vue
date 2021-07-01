@@ -15,7 +15,6 @@
             <span>Thùng rác</span>
           </el-button>
         </template>
-
         <router-link class="Table__tools-item" :to="{ name: 'add-category' }">Thêm mới</router-link>
       </template>
 
@@ -105,18 +104,18 @@
 
             <el-table-column type="selection" width="50" />
 
-            <el-table-column label="Cover image" prop="cover_image_url" width="120">
+            <el-table-column label="Cover image" prop="cover_image" width="120">
               <template slot-scope="{row}">
                 <div class="TableThumb_ThumbImage normal">
-                  <img :src="row.cover_image_url" alt="" class="image medium">
+                  <img :src="row.cover_image" alt="" class="image medium">
                 </div>
               </template>
             </el-table-column>
 
-            <el-table-column label="Feature image" prop="feature_image_url" width="120">
+            <el-table-column label="Feature image" prop="feature_image" width="120">
               <template slot-scope="{row}">
                 <div class="TableThumb_ThumbImage normal">
-                  <img :src="row.feature_image_url" alt="" class="image medium">
+                  <img :src="row.feature_image" alt="" class="image medium">
                 </div>
               </template>
             </el-table-column>
@@ -161,9 +160,6 @@
               <template slot-scope="{row}">
                 <el-button-group>
                   <template v-if="!row.deleted_at">
-                    <el-tooltip content="Thông tin" placement="top">
-                      <el-button @click="handleView(row.id)" size="mini" icon="el-icon-rank" />
-                    </el-tooltip>
                     <el-tooltip content="Chỉnh sửa" placement="top">
                       <el-button @click="handleEdit(row.id)" size="mini" icon="el-icon-edit" />
                     </el-tooltip>
@@ -225,6 +221,11 @@ export default {
       multipleSelection: [],
       tableAction: ''
     };
+  },
+  watch: {
+    $route() {
+      this.reRenderDataFromUrl();
+    }
   },
   created() {
     this.getList();
@@ -316,7 +317,6 @@ export default {
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        // code logic ...
         this.trashCategory(id).then(res => {
           this.$message({
             type: 'success',
@@ -340,7 +340,6 @@ export default {
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        // Code logic
         this.destroyCategory(id).then(res => {
           this.$message({
             type: 'success',
@@ -369,7 +368,6 @@ export default {
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        // code logic ...
         this.massDestroyCategory(ids).then(res => {
           this.$message({
             type: 'success',
@@ -398,7 +396,6 @@ export default {
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        // code logic ...
         this.massTrashCategory(ids).then(res => {
           this.$message({
             type: 'success',
@@ -427,7 +424,6 @@ export default {
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        // code logic ...
         this.massRestoreCategory(ids).then(res => {
           this.$message({
             type: 'success',
@@ -447,20 +443,26 @@ export default {
     },
     handleEdit(id) {
       this.$router.push({
-        name: 'update-category',
+        name: 'edit-category',
         params: { id }
       });
     },
     reRenderDataFromFormAction() {
       this.tableAction = '';
       if (this.tableData.length === 0) {
+        this.listQuery.page = 1;
         if (! this.isTabTrashed) { this.getList() }
         else { this.getListTrashed(); }
       }
     },
-    handleView(id) {
-      console.log(id);
-    },
+    reRenderDataFromUrl() {
+      if (this.$route.query.form === 'success') {
+        this.getList();
+        let query = Object.assign({}, this.$route.query);
+        delete query.form;
+        this.$router.replace({ query });
+      };
+    }
   }
 }
 </script>

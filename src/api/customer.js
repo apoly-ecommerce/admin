@@ -1,6 +1,6 @@
 import request from '@/utils/request';
 
-export function addCustomer(headers, data) {
+export function storeCustomer(headers, data) {
   return request({
     url: 'api/admin/admin/customer',
     method: 'POST',
@@ -56,7 +56,7 @@ export function massTrashCustomer(ids) {
 
 export function destroyCustomer(id) {
   return request({
-    url: `api/admin/admin/customer/${id}/destroy`,
+    url: `api/admin/admin/customer/${id}`,
     method: 'DELETE'
   });
 }
