@@ -1,4 +1,7 @@
+import { recursiveSidebarMenu } from '@/helpers';
+
 export default {
+
   /**
    * @param {string} name
    */
@@ -12,4 +15,16 @@ export default {
   SET_IS_LOADING: (state, isLoading) => {
     state.isLoading = isLoading;
   },
+
+
+  SET_SIDEBAR_MAP: (state, { permissions, mapSidebarMenu }) => {
+    console.log(permissions);
+    if (!state.mapSidebarMenu.length) {
+      state.mapSidebarMenu = recursiveSidebarMenu(permissions, mapSidebarMenu);
+    }
+  },
+
+  RESET_SIDEBAR_MENU: (state) => {
+    state.mapSidebarMenu = [];
+  }
 };

@@ -5,14 +5,14 @@
         v-for="(menuItem, index) in children"
         :key="index"
       >
-        <template v-if="menuItem.roles && !menuItem.children">
+        <template v-if="menuItem.isShow && !menuItem.children">
           <menu-link :to="menuItem.link">
             <i class="AppSidebar_Wrap__MenuIcon" :class="menuItem.icon"></i>
             <span class="AppSidebar_Wrap__MenuLabel">{{ menuItem.name }}</span>
           </menu-link>
         </template>
 
-        <template v-if="menuItem.roles && menuItem.children">
+        <template v-if="menuItem.isShow && menuItem.children">
           <menu-link :VBToggle="menuItem.name">
             <i class="AppSidebar_Wrap__MenuIcon" :class="menuItem.icon"></i>
             <span class="AppSidebar_Wrap__MenuLabel">{{ menuItem.name }}</span>
@@ -25,7 +25,7 @@
                 v-for="(childMenuItem, _index) in menuItem.children"
                 :key="_index"
               >
-                <menu-link :to="childMenuItem.link">
+                <menu-link v-if="childMenuItem.isShow" :to="childMenuItem.link">
                   <i class="AppSidebar_Wrap__MenuIcon" :class="menuItem.icon"></i>
                   <span class="AppSidebar_Wrap__MenuLabel">{{ childMenuItem.name }}</span>
                 </menu-link>
@@ -39,7 +39,6 @@
 </template>
 
 <script>
-// Components
 import MenuLink from './MenuLink';
 
 export default {

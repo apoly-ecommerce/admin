@@ -46,12 +46,12 @@ export default {
   },
   computed: {
     isMenuChildless() {
-      if (this.menuItem.roles && !this.menuItem.children) {
+      if (this.menuItem.isShow && !this.menuItem.children) {
         return true;
       } return false;
     },
     isMenuHasChildren() {
-      if (this.menuItem.roles && this.menuItem.children) {
+      if (this.menuItem.isShow && this.menuItem.children) {
         return true;
       } return false;
     }

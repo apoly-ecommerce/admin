@@ -30,8 +30,7 @@ router.beforeEach(async(to, from, next) => {
       } else {
         try {
 
-          const userAuthPromise = store.dispatch('auth/fetchUserAuth');
-          console.log(userAuthPromise);
+          const userAuthPromise = await store.dispatch('auth/fetchUserAuth');
 
         } catch (error) {
           console.log(error);

@@ -1,3 +1,5 @@
+import store from '@/store';
+
 const changeToSlug = (str) => {
   str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
   str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
@@ -24,6 +26,35 @@ const changeToSlug = (str) => {
 
 const getCurrentYear = () => {
   return new Date().getFullYear();
+}
+
+const checkActionExists = (actions, permissions) => {
+  let countTrue = 0;
+  actions.forEach(action => {
+    if (permissions.indexOf(action) !== -1) {
+      countTrue ++;
+    }
+  });
+  return countTrue;
+}
+
+const recursiveSidebarMenu = (permissions, mapMenuSidebar) => {
+  if (!permissions.length && store.getters['auth/getUserAuth'].role.name === 'Super Admin') {
+    permissions = ['super_admin'];
+  }
+  mapMenuSidebar.forEach(item => {
+    if (item.roles) {
+      if (checkActionExists(item.roles, permissions) || (!item.roles.length)) {
+        item.isShow = true;
+      } else {
+        item.isShow = false;
+      }
+    }
+    if (item.children && item.children.length) {
+      recursiveSidebarMenu(permissions, item.children);
+    }
+  });
+  return mapMenuSidebar;
 }
 
 const formatModuleAccess = (moduleAccess) => {
@@ -85,5 +116,6 @@ export {
   checkAddressExists,
   toGeocodeString,
   formatCurrency,
-  strUcFirst
+  strUcFirst,
+  recursiveSidebarMenu
 };

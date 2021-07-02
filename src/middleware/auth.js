@@ -1,3 +1,5 @@
+import store from '@/store';
+
 const userRolesConfig = [
   'admin', 'editor'
 ];
@@ -11,6 +13,14 @@ const handleCheckRoleToShow = (rolesAllow = []) => {
   });
 }
 
+const checkPermissions = (slug) => {
+  // console.log(store.getters['auth/getUserAuth']);
+  // const permissions = ;
+  // console.log(permissions);
+  return true;
+}
+
 export {
+  checkPermissions,
   handleCheckRoleToShow
 };

@@ -7,7 +7,9 @@ import store from './store';
 
 
 // ApiAuthenticate
-import '@/middleware/apiAuth';
+import '@/middleware';
+// Sidebar tree
+// import '@/layouts';
 
 // Plugins
 import './plugins';

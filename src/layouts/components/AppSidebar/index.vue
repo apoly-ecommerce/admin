@@ -5,7 +5,6 @@
 </template>
 
 <script>
-// Components
 import { SidebarMenu } from './components';
 
 export default {

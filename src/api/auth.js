@@ -1,5 +1,6 @@
 import request from '@/utils/request';
 
+
 export function login(data) {
   return request({
     url: 'api/admin/auth/login',
@@ -18,7 +19,7 @@ export function logout() {
 
 export function fetchUserAuth() {
   return request({
-    url: 'api/admin/admin/user/auth',
+    url: 'api/admin/auth/user',
     method: 'GET',
   });
 }

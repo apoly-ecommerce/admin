@@ -1,7 +1,7 @@
 /**
  * @description This is it will handle authentication to get sidebar menu allow for user
  */
-import { handleCheckRoleToShow } from '@/middleware/auth';
+import { handleCheckRoleToShow, checkPermissions } from '@/middleware/auth';
 
 /**
  * @description All menu app
@@ -11,7 +11,7 @@ const mapSidebarMenu = [
     name: 'Dashboard',
     link: '/',
     icon: 'tachometer-alt',
-    roles: true
+    roles: true,
   },
   {
     name: 'Catalog',
@@ -21,25 +21,25 @@ const mapSidebarMenu = [
       {
         name: 'Categories',
         icon: 'angle-double-right',
-        roles: true,
+        roles: checkPermissions(['view_category_group', 'view_category_sub_group', 'view_category']),
         children: [
           {
             name: 'Group',
             link: '/catalog/category-group',
             icon: 'angle-right',
-            roles: true,
+            roles: checkPermissions(['view_category_group']),
           },
           {
             name: 'Sub-group',
             link: '/catalog/category-sub-group',
             icon: 'angle-right',
-            roles: true
+            roles: checkPermissions(['view_category_sub_group']),
           },
           {
             name: 'Categories',
             link: '/catalog/category',
             icon: 'angle-right',
-            roles: true
+            roles: checkPermissions(['view_category']),
           }
         ]
       },
@@ -47,13 +47,13 @@ const mapSidebarMenu = [
         name: 'Products',
         link: '/catalog/product',
         icon: 'angle-double-right',
-        roles: true
+        roles: checkPermissions(['view_product']),
       },
       {
         name: 'Manufacturers',
         link: '/catalog/manufacturer',
         icon: 'angle-double-right',
-        roles: true
+        roles: checkPermissions(['view_manufacturer']),
       },
     ]
   },
@@ -66,7 +66,7 @@ const mapSidebarMenu = [
         name: 'Inventories',
         link: '/stock/inventory',
         icon: 'angle-double-right',
-        roles: true,
+        roles: checkPermissions(['view_inventory']),
       }
 ,    ]
   },
@@ -79,13 +79,13 @@ const mapSidebarMenu = [
         name: 'User',
         link: '/admin/user',
         icon: 'angle-double-right',
-        roles: true,
+        roles: checkPermissions(['view_user', 'super_admin']),
       },
       {
         name: 'Customers',
         link: '/admin/customer',
         icon: 'angle-double-right',
-        roles: true,
+        roles: checkPermissions(['view_customer', 'super_admin']),
       },
     ]
   },
@@ -98,13 +98,13 @@ const mapSidebarMenu = [
         name: 'Merchants',
         link: '/vendor/merchant',
         icon: 'angle-double-right',
-        roles: true,
+        roles: checkPermissions(['view_merchant', 'super_admin']),
       },
       {
         name: 'Shops',
         link: '/vendor/shop',
         icon: 'angle-double-right',
-        roles: true,
+        roles: checkPermissions(['view_shop', 'super_admin']),
       },
     ]
   },
@@ -117,19 +117,19 @@ const mapSidebarMenu = [
         name: 'Banners',
         link: '/appearance/banner',
         icon: 'angle-double-right',
-        roles: true,
+        roles: checkPermissions(['view_banner', 'super_admin']),
       },
       {
         name: 'Sliders',
         link: '/appearance/slider',
         icon: 'angle-double-right',
-        roles: true,
+        roles: checkPermissions(['view_slider', 'super_admin']),
       },
       {
         name: 'Theme Options',
         link: '/appearance/theme/option',
         icon: 'angle-double-right',
-        roles: true,
+        roles: checkPermissions(['view_theme', 'super_admin']),
       },
     ]
   },
@@ -142,7 +142,7 @@ const mapSidebarMenu = [
         name: 'Faqs',
         link: '/utility/faq',
         icon: 'angle-double-right',
-        roles: true,
+        roles: checkPermissions(['view_faq', 'super_admin']),
       }
     ]
   },
@@ -155,13 +155,13 @@ const mapSidebarMenu = [
         name: 'User roles',
         link: '/setting/role',
         icon: 'angle-double-right',
-        roles: true,
+        roles: checkPermissions(['view_role', 'super_admin']),
       },
       {
         name: 'System settings',
         link: '/setting/system/general',
         icon: 'angle-double-right',
-        roles: true,
+        roles: checkPermissions(['view_system', 'super_admin']),
       }
     ]
   }
