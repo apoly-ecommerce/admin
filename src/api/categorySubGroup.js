@@ -1,5 +1,12 @@
 import request from '@/utils/request';
 
+export function setupCategorySubGroup() {
+  return request({
+    url: 'api/admin/catalog/categorySubGroup/setup',
+    method: 'GET',
+  });
+}
+
 export function storeCategorySubGroup(headers, data) {
   return request({
     url: 'api/admin/catalog/categorySubGroup',

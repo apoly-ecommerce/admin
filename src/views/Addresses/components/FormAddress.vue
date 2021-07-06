@@ -280,7 +280,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      'fetchListCountries': 'country/fetchListCountries',
+      'setupFormAddress': 'address/setupFormAddress',
       'storeAddress': 'address/storeAddress',
       'fetchAddressItemById': 'address/fetchAddressItemById',
       'updateAddress': 'address/updateAddress'
@@ -294,8 +294,8 @@ export default {
           let dataAddress = await this.fetchAddressItemById(this.addressId);
           this.appendDataToForm(dataAddress.address);
         }
-        const [dataCountry] = await Promise.all([this.fetchListCountries()]);
-        this.countries = dataCountry.countries;
+        const dataSetup = await this.setupFormAddress();
+        this.countries = dataSetup.countries;
         this.isFormLoading = false;
       } catch (error) {
         console.error('[App Error] => ', error);
@@ -344,7 +344,7 @@ export default {
               duration: 5 * 1000
             });
             if (this.$route.query.back_to) {
-              this.back(this.$route.query.back_to, { form: 'success' });
+              this.back(this.$route.query.back_to);
             }
             else {
               this.back(`/address/addresses/${this.addressable_type}/${this.addressable_id}`, { form: 'success' });

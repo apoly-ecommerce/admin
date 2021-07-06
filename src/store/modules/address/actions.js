@@ -1,4 +1,5 @@
 import {
+  setupFormAddress,
   storeAddress,
   fetchAddressItemById,
   updateAddress,
@@ -7,6 +8,14 @@ import {
 } from '@/api/address';
 
 export default {
+
+  setupFormAddress() {
+    return new Promise(function(resolve, reject) {
+      setupFormAddress()
+      .then(res => resolve(res.data))
+      .catch(err => reject(err));
+    });
+  },
 
   storeAddress({ commit }, formData) {
     return new Promise((resolve, reject) => {

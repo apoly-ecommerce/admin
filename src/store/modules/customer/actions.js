@@ -1,4 +1,5 @@
 import {
+  setupFormCustomer,
   storeCustomer,
   fetchCustomerItemById,
   fetchListCustomer,
@@ -16,6 +17,14 @@ import {
 } from '@/api/customer';
 
 export default {
+
+  setupFormCustomer() {
+    return new Promise((resolve, reject) => {
+      setupFormCustomer()
+      .then(res => resolve(res.data))
+      .catch(err => reject(err));
+    });
+  },
 
   storeCustomer({}, formData) {
     return new Promise((resolve, reject) => {

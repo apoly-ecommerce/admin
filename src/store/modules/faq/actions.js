@@ -6,6 +6,7 @@ import {
   updateFaqTopic,
   destroyFaqTopic,
   // Faq
+  setupFaq,
   fetchFaqItemById,
   fetchListFaqByPaginate,
   storeFaq,
@@ -65,6 +66,14 @@ export default {
   },
 
   // Faq
+  setupFaq() {
+    return new Promise((resolve, reject) => {
+      setupFaq()
+      .then(res => resolve(res.data))
+      .catch(err => reject(err));
+    });
+  },
+
   fetchFaqItemById({}, id) {
     return new Promise((resolve, reject) => {
       fetchFaqItemById(id)

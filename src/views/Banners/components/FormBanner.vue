@@ -300,7 +300,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      'fetchListBannerGroup': 'bannerGroup/fetchListBannerGroup',
+      'setupFormBanner': 'banner/setupFormBanner',
       'storeBanner': 'banner/storeBanner',
       'fetchBannerItemById': 'banner/fetchBannerItemById',
       'updateBanner': 'banner/updateBanner'
@@ -314,8 +314,8 @@ export default {
           const dataBanner = await this.fetchBannerItemById(this.bannerId);
           this.appendDataToForm(dataBanner.banner);
         }
-        const dataBannerGroup =  await this.fetchListBannerGroup();
-        this.bannerGroups = dataBannerGroup.bannerGroups;
+        const dataSetup = await this.setupFormBanner();
+        this.bannerGroups = dataSetup.bannerGroups;
         this.isFormLoading = false;
       } catch (err) {
         console.error('[App Error] => ', err);

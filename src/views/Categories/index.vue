@@ -67,7 +67,6 @@
 
       <template v-slot:main-content>
         <section class="TableBox_Content">
-
           <el-table
             ref="multipleTable"
             :data="dataSearch"
@@ -76,7 +75,6 @@
             v-loading="listLoading"
             @selection-change="handleSelectionChange"
           >
-
             <el-table-column type="expand">
               <template slot-scope="props">
                 <div class="ExpandData_Table">
@@ -194,7 +192,7 @@
 import PageTableContent from '@/components/PageTableContent';
 import Pagination from '@/components/Pagination';
 import { mapGetters, mapActions } from 'vuex';
-import { parseTime } from '@/utils/functions';
+import { formatTime } from '@/helpers';
 
 export default {
   components: {
@@ -261,7 +259,7 @@ export default {
         'massRestoreCategory': 'category/massRestoreCategory'
     }),
     formatTime(time) {
-      return parseTime(time);
+      return formatTime(time);
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;

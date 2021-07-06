@@ -1,5 +1,12 @@
 import request from '@/utils/request';
 
+export function setupFormProduct() {
+  return request({
+    url: 'api/admin/catalog/product/setup',
+    method: 'GET',
+  });
+}
+
 export function storeProduct(headers, data) {
   return request({
     url: 'api/admin/catalog/product',

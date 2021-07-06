@@ -1,4 +1,5 @@
 import {
+  setupCategorySubGroup,
   storeCategorySubGroup,
   fetchListCategorySubGroup,
   fetchListCategorySubGroupByPaginate,
@@ -14,6 +15,14 @@ import {
 } from '@/api/categorySubGroup';
 
 export default {
+
+  setupCategorySubGroup() {
+    return new Promise((resolve, reject) => {
+      setupCategorySubGroup()
+      .then(res => resolve(res.data))
+      .catch(err => reject(err));
+    });
+  },
 
   storeCategorySubGroup({}, formData) {
     return new Promise((resolve, reject) => {

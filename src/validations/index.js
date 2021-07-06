@@ -232,7 +232,47 @@ export const faqRules = {
  */
 export const inventoryRules = {
   title: [{ required: true, message: 'Vui lòng điền trường này.', trigger: 'blur' }],
+  condition: [{ required: true, message: 'Vui lòng điền trường này.', trigger: 'blur' }],
+  active: [{ required: true, message: 'Vui lòng điền trường này.', trigger: 'blur' }],
   sku: [{ required: true, message: 'Vui lòng điền trường này.', trigger: 'blur' }],
   sale_price: [{ required: true, message: 'Vui lòng điền trường này.', trigger: 'blur' }],
   slug: [{ required: true, message: 'Vui lòng điền trường này.', trigger: 'blur' }],
+};
+
+/**
+ * Check SettingGeneral Rules.
+ */
+export const settingGeneralRules = {
+  name: [{ required: true, message: 'Vui lòng điền trường này.', trigger: 'blur' }],
+  legal_name: [{ required: true, message: 'Vui lòng điền trường này.', trigger: 'blur' }],
+  email: [
+    { required: true, message: 'Vui lòng điền trường này', trigger: 'blur' },
+    { required: true, trigger: 'blur', validator: validateEmail },
+  ],
+};
+
+/**
+ * Check Setting Config Support Rules.
+ */
+export const settingConfigSupportRule = {
+  support_email: [
+    { required: true, message: 'Vui lòng điền trường này', trigger: 'blur' },
+    { required: true, trigger: 'blur', validator: validateEmail },
+  ],
+  default_sender_email_address: [
+    { required: true, message: 'Vui lòng điền trường này', trigger: 'blur' },
+    { required: true, trigger: 'blur', validator: validateEmail },
+  ],
+  default_email_sender_name: [{ required: true, message: 'Vui lòng điền trường này.', trigger: 'blur' }],
+};
+
+/**
+ * Check profile rules.
+ */
+export const profileRules = {
+  name: [{ required: true, message: 'Vui lòng điền trường này.', trigger: 'blur' }],
+  email: [
+    { required: true, message: 'Vui lòng điền trường này', trigger: 'blur' },
+    { required: true, trigger: 'blur', validator: validateEmail },
+  ],
 };

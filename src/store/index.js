@@ -20,12 +20,13 @@ import customer from './modules/customer';
 import shop from './modules/shop';
 import merchant from './modules/merchant';
 import banner from './modules/banner';
-import bannerGroup from './modules/bannerGroup';
 import slider from './modules/slider';
 import theme from './modules/theme';
 import system from './modules/system';
 import faq from './modules/faq';
 import inventory from './modules/inventory';
+import config from './modules/config';
+import account from './modules/account';
 
 const store = new Vuex.Store({
   modules: {
@@ -46,12 +47,13 @@ const store = new Vuex.Store({
     shop,
     merchant,
     banner,
-    bannerGroup,
     slider,
     theme,
     system,
     faq,
-    inventory
+    inventory,
+    config,
+    account
   }
 });
 

@@ -20,7 +20,13 @@ const stockRoutes = [
         meta: { title: 'Tìm kiếm' }
       },
       {
-        path: 'edit/:id',
+        path: 'add/:productId',
+        name: 'add-inventory',
+        component: () => import('@/views/Inventories/components/FormInventory'),
+        meta: { title: 'Thêm mới' }
+      },
+      {
+        path: 'edit/:inventoryId',
         name: 'edit-inventory',
         component: () => import('@/views/Inventories/components/FormInventory'),
         meta: { title: 'Cập nhật' }

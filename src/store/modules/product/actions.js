@@ -1,4 +1,5 @@
 import {
+  setupFormProduct,
   storeProduct,
   fetchListProduct,
   fetchListProductByPaginate,
@@ -16,6 +17,26 @@ import {
 
 export default {
 
+  /**
+   * Return response creating or updating resource.
+   *
+   * @returns response
+   */
+  setupFormProduct() {
+    return new Promise((resolve, reject) => {
+      setupFormProduct()
+      .then(res => resolve(res.data))
+      .catch(error => reject(error));
+    });
+  },
+
+  /**
+   * Store a newly created resource in storage.
+   *
+   * @param {vuex} param0
+   * @param {FormData} formData
+   * @returns
+   */
   storeProduct({}, formData) {
     return new Promise((resolve, reject) => {
       const headers = {

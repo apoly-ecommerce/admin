@@ -1,4 +1,5 @@
 import store from '@/store';
+import moment from 'moment';
 
 const changeToSlug = (str) => {
   str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
@@ -109,6 +110,11 @@ const strUcFirst = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+const formatTime = (time) => {
+  moment.locale('vi');
+  return moment(time).format('DD-MM-YYYY HH:mm');
+}
+
 export {
   changeToSlug,
   getCurrentYear,
@@ -117,5 +123,6 @@ export {
   toGeocodeString,
   formatCurrency,
   strUcFirst,
-  recursiveSidebarMenu
+  recursiveSidebarMenu,
+  formatTime
 };

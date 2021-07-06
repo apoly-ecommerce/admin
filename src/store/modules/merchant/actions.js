@@ -1,4 +1,5 @@
 import {
+  setupFormUserMerchant,
   storeMerchant,
   fetchMerchantItemById,
   updateMerchant,
@@ -15,6 +16,14 @@ import {
 } from '@/api/merchant'
 
 export default {
+
+  setupFormUserMerchant() {
+    return new Promise((resolve, reject) => {
+      setupFormUserMerchant()
+      .then(res => resolve(res.data))
+      .catch(err => reject(err));
+    });
+  },
 
   storeMerchant({}, formData) {
     return  new Promise((resolve, reject) => {

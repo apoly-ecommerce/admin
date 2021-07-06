@@ -1,4 +1,5 @@
 import {
+  setupFormCategory,
   storeCategory,
   fetchListCategory,
   fetchCategoryByPaginate,
@@ -14,6 +15,14 @@ import {
 } from '@/api/category';
 
 export default {
+
+  setupFormCategory() {
+    return new Promise((resolve, reject) => {
+      setupFormCategory()
+      .then(res => resolve(res.data))
+      .catch(error => reject(error));
+    });
+  },
 
   storeCategory({}, formData) {
     return new Promise((resolve, reject) => {

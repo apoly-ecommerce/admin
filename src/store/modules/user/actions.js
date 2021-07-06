@@ -1,4 +1,5 @@
 import {
+  setupFormUser,
   storeUser,
   fetchListUser,
   fetchListUserByPaginate,
@@ -16,6 +17,14 @@ import {
 } from '@/api/user';
 
 export default {
+
+  setupFormUser() {
+    return new Promise((resolve, reject) => {
+      setupFormUser()
+      .then(res => resolve(res.data))
+      .catch(err => reject(err));
+    })
+  },
 
   storeUser({}, formData) {
     return new Promise((resolve, reject) => {

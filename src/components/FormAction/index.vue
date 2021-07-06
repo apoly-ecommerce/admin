@@ -6,7 +6,7 @@
         <span>Đang tải dữ liệu ...</span>
       </div>
       <section v-show="!isFormLoading" class="PopupForm_Content">
-        <section class="PopupForm_FormBody" :key="key">
+        <section class="PopupForm_FormBody">
           <section class="PopupForm__header">
             <div class="PopupForm__name">{{ name }}</div>
             <button type="button" class="PopupForm__Btn PopupForm__Btn--close" @click="$emit('close')">
@@ -26,8 +26,6 @@
 </template>
 
 <script>
-// Helpers
-import { changeToSlug } from '@/helpers';
 
 export default {
   name: 'form-action',
@@ -46,7 +44,9 @@ export default {
     }
   },
   computed: {
-    key() { return changeToSlug(this.name); }
+    key() {
+      return this.$route.path;
+    }
   }
 }
 </script>

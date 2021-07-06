@@ -18,7 +18,7 @@ export default {
 
 
   SET_SIDEBAR_MAP: (state, { permissions, mapSidebarMenu }) => {
-    console.log(permissions);
+    // console.log(permissions);
     if (!state.mapSidebarMenu.length) {
       state.mapSidebarMenu = recursiveSidebarMenu(permissions, mapSidebarMenu);
     }

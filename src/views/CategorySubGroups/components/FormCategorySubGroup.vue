@@ -275,7 +275,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      'fetchListCategoryGroup': 'categoryGroup/fetchListCategoryGroup',
+      'setupCategorySubGroup': 'categorySubGroup/setupCategorySubGroup',
       'storeCategorySubGroup': 'categorySubGroup/storeCategorySubGroup',
       'fetchCategorySubGroupItemById': 'categorySubGroup/fetchCategorySubGroupItemById',
       'updateCategorySubGroup': 'categorySubGroup/updateCategorySubGroup'
@@ -289,8 +289,8 @@ export default {
           let dataCategorySubGroup = await this.fetchCategorySubGroupItemById(this.categorySubGroupId);
           this.appendDataToForm(dataCategorySubGroup.categorySubGroup);
         }
-        let dataCategoryGroups = await this.fetchListCategoryGroup();
-        this.categoryGroups = dataCategoryGroups.categoryGroups;
+        let dataSetup = await this.setupCategorySubGroup();
+        this.categoryGroups = dataSetup.categoryGroups;
         this.isFormLoading = false;
       } catch (error) {
         if (error.status === 404) {

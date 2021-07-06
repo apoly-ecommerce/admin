@@ -1,5 +1,12 @@
 import request from '@/utils/request';
 
+export function setupFormShop() {
+  return request({
+    url: 'api/admin/vendor/shop/setup',
+    method: 'GET',
+  });
+}
+
 export function fetchShopItemById(id) {
   return request({
     url: `api/admin/vendor/shop/${id}`,

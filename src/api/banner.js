@@ -1,5 +1,12 @@
 import request from '@/utils/request';
 
+export function setupFormBanner() {
+  return request({
+    url: 'api/admin/appearance/banner/setup',
+    method: 'GET',
+  });
+}
+
 export function storeBanner(headers, data) {
   return request({
     url: 'api/admin/appearance/banner',
@@ -59,10 +66,10 @@ export function massTrashBanner(ids) {
 }
 
 export function restoreBanner(id) {
-return request({
-  url: `api/admin/appearance/banner/${id}/restore`,
-  method: 'PATCH',
-});
+  return request({
+    url: `api/admin/appearance/banner/${id}/restore`,
+    method: 'PATCH',
+  });
 }
 
 export function massRestoreBanner(ids) {

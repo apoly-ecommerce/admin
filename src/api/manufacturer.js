@@ -1,5 +1,12 @@
 import request from '@/utils/request';
 
+export function setupFormManufacturer() {
+  return request({
+    url: 'api/admin/catalog/manufacturer/setup',
+    method: 'GET'
+  });
+}
+
 export function storeManufacturer(headers, data) {
   return request({
     url: 'api/admin/catalog/manufacturer',

@@ -203,7 +203,7 @@ import PageTableContent from '@/components/PageTableContent';
 import Pagination from '@/components/Pagination';
 import ViewUser from './Components/ViewUser';
 import { mapGetters, mapActions } from 'vuex';
-import { parseTime } from '@/utils/functions';
+import { formatTime } from '@/helpers';
 
 export default {
   components: {
@@ -277,7 +277,7 @@ export default {
         'emptyTrashUser': 'user/emptyTrashUser'
     }),
     formatTime(time) {
-      return parseTime(time);
+      return formatTime(time);
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;

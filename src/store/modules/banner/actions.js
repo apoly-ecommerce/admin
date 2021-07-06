@@ -1,4 +1,5 @@
 import {
+  setupFormBanner,
   storeBanner,
   fetchBannerItemById,
   updateBanner,
@@ -14,6 +15,14 @@ import {
 } from '@/api/banner';
 
 export default {
+
+  setupFormBanner() {
+    return new Promise((resolve, reject) => {
+      setupFormBanner()
+      .then(res => resolve(res.data))
+      .catch(err => reject(err));
+    });
+  },
 
   storeBanner({}, formData) {
     return new Promise((resolve, reject) => {

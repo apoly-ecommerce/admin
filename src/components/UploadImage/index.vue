@@ -3,7 +3,8 @@
     <div class="UploadImage__Input">
       <label :for="name" class="uploader_label">
         <input ref="imgFileName" type="text" :placeholder="placeholer" :value="fileName" disabled class="uploader_input_preview">
-        <button type="button" class="uploader_button">upload</button>
+        <el-button v-if="!fileName" size="mini" type="primary" class="el-icon-upload2 btn-control"/>
+        <el-button v-else size="mini" type="danger" @click="handleClearFile" class="el-icon-close btn-control"/>
         <input @change="beforeUploadImage" type="file" :id="name" class="uploader_input_file">
       </label>
       <small v-if="caption" class="caption">{{ caption }}</small>
@@ -52,6 +53,11 @@ export default {
       }
       return true;
     },
+    handleClearFile() {
+      this.fileName = '';
+      this.$refs['imgFileName'].value = '';
+      this.$emit('upload', null);
+    }
   }
 }
 </script>
@@ -69,14 +75,17 @@ export default {
 }
 
 .UploadImage__Input .uploader_input_preview {
-  width: 77%;
+  width: 100%;
+  margin-right: 5px;
   padding: 0px 10px;
   font-size: .8rem;
   border: 1px solid #DCDFE6;
   border-radius: 3px;
-  height: 30px;
+  height: 29px;
 }
-
+.btn-control {
+  height: 29px;
+}
 .UploadImage__Input .uploader_button {
   width: 22%;
   border: 1px solid #2196f3;
@@ -97,5 +106,9 @@ export default {
 }
 .UploadImages_wrap .caption {
   font-size: .7rem;
+}
+.el-icon-close {
+  position: relative;
+  z-index: 1;
 }
 </style>

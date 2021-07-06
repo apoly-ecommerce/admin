@@ -1,4 +1,5 @@
 import {
+  setupFormManufacturer,
   storeManufacturer,
   fetchListManufacturer,
   fetchListManufacturerByPaginate,
@@ -15,6 +16,14 @@ import {
 } from '@/api/manufacturer';
 
 export default {
+
+  setupFormManufacturer() {
+    return new Promise((resolve, reject) => {
+      setupFormManufacturer()
+      .then(res => resolve(res.data))
+      .catch(error => reject(error));
+    });
+  },
 
   storeManufacturer({}, formData) {
     return new Promise((resolve, reject) => {

@@ -1,5 +1,12 @@
 import request from '@/utils/request';
 
+export function setupFormCustomer() {
+  return request({
+    url: 'api/admin/admin/customer/setup',
+    method: 'GET'
+  });
+}
+
 export function storeCustomer(headers, data) {
   return request({
     url: 'api/admin/admin/customer',

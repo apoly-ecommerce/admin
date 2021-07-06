@@ -1,5 +1,12 @@
 import request from '@/utils/request';
 
+export function setupFormUserMerchant() {
+  return request({
+    url: 'api/admin/vendor/merchant/setup',
+    method: 'GET',
+  });
+}
+
 export function storeMerchant(headers, data) {
   return request({
     url: 'api/admin/vendor/merchant',

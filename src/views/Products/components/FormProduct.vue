@@ -202,26 +202,6 @@
                 </el-row>
 
                 <el-row :gutter="5">
-                  <el-col :span="12" class="p-1 price-append">
-                    <el-form-item prop="promotional_price">
-                      <label for="promotional_price" class="FormLabel">
-                        <span class="FormLabel__title">Giá khuyến mãi*</span>
-                      </label>
-                      <app-currency-input v-model="formData.promotional_price"/>
-                    </el-form-item>
-                  </el-col>
-
-                  <el-col :span="12" class="p-1 price-append">
-                    <el-form-item prop="original_price">
-                      <label for="original_price" class="FormLabel">
-                        <span class="FormLabel__title">Giá gốc*</span>
-                      </label>
-                      <app-currency-input v-model="formData.original_price"/>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-
-                <el-row :gutter="5">
                   <el-col :span="24">
                     <el-form-item prop="requires_shipping">
                       <label for="image_desc" class="FormLabel">
@@ -520,8 +500,6 @@ const defaultFormData = {
   tag_list: [],
   category_list: [],
   media_list: [],
-  promotional_price: 0,
-  original_price: 0,
   featureImage: {
     url: '',
     file: null,
@@ -597,6 +575,7 @@ export default {
       'setIsLoading': 'app/handleSetIsLoading',
       'fetchListManufacturer': 'manufacturer/fetchListManufacturer',
       'fetchListCategorySubGroup': 'categorySubGroup/fetchListCategorySubGroup',
+      'setupFormProduct': 'product/setupFormProduct',
       'storeProduct': 'product/storeProduct',
       'fetchProductItemById': 'product/fetchProductItemById',
       'updateProduct': 'product/updateProduct'
@@ -610,11 +589,9 @@ export default {
           let dataProduct = await this.fetchProductItemById(this.productId);
           this.appendDataToForm(dataProduct.product);
         }
-        const [ dataManufacturers,
-              categorieySubGroup ] = await Promise.all([ this.fetchListManufacturer(),
-                                                           this.fetchListCategorySubGroup() ]);
-        this.manufacturers = dataManufacturers.manufacturers;
-        this.categorySubGroups = categorieySubGroup.categorySubGroups
+        const dataSetup = await this.setupFormProduct();
+        this.manufacturers = dataSetup.manufacturers;
+        this.categorySubGroups = dataSetup.categorySubGroups
         this.isFormLoading = false;
       } catch (error) {
         console.error('[App Error] => ', error);
@@ -695,8 +672,6 @@ export default {
       formData.append('mpn', this.formData.mpn);
       formData.append('description', this.formData.description);
       formData.append('detail_information', this.formData.detail_information);
-      formData.append('promotional_price', this.formData.promotional_price);
-      formData.append('original_price', this.formData.original_price);
       formData.append('brand', this.formData.brand);
       formData.append('model_number', this.formData.model_number);
       formData.append('manufacturer_id', this.formData.manufacturer_id);

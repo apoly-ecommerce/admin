@@ -458,7 +458,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      'fetchListCountries': 'country/fetchListCountries',
+      'setupFormUserMerchant': 'merchant/setupFormUserMerchant',
       'fetchMerchantItemById': 'merchant/fetchMerchantItemById',
       'updateMerchant': 'merchant/updateMerchant',
       'updatePasswordMerchant': 'merchant/updatePasswordMerchant',
@@ -474,8 +474,8 @@ export default {
           this.appendDataToForm(dataMerchant.merchant);
         }
         if (this.$route.query.update === 'address') {
-          const [dataCountry] = await Promise.all([this.fetchListCountries()]);
-          this.countries = dataCountry.countries;
+          const dataSetup = await this.setupFormUserMerchant();
+          this.countries = dataSetup.countries;
         }
         this.isFormLoading = false;
       } catch (error) {

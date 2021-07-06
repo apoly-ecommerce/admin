@@ -41,6 +41,34 @@ const settingRoutes = [
       }
     ]
   },
+  {
+    path: '/setting/general',
+    component: Layout,
+    redirect: '/general/',
+    meta: { title: 'Cấu hình' },
+    children: [
+      {
+        path: '',
+        name: 'edit-general',
+        component: () => import('@/views/SettingGenerals/index'),
+        meta: { title: 'Cập nhật' }
+      }
+    ]
+  },
+  {
+    path: '/setting/shopConfig',
+    component: Layout,
+    redirect: '/shopConfig/',
+    meta: { title: 'Cấu hình' },
+    children: [
+      {
+        path: '',
+        name: 'edit-config',
+        component: () => import('@/views/ShopConfigurationSettings/index'),
+        meta: { title: 'Cập nhật' }
+      }
+    ]
+  }
 ];
 
 export default settingRoutes

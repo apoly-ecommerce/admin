@@ -64,3 +64,23 @@ body {
   font-size: .8rem;
   padding: 7px 10px;
 }
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button
+{
+  -webkit-appearance: none;
+  margin: 0;
+  -moz-appearance: textfield;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.el-form-item__error {
+  position: relative!important;
+  font-size: 11px;
+}

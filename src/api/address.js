@@ -1,5 +1,12 @@
 import request from '@/utils/request';
 
+export function setupFormAddress() {
+  return request({
+    url: 'api/address/setup',
+    method: 'GET',
+  });
+}
+
 export function storeAddress(data) {
   return request({
     url: 'api/address/',

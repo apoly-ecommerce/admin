@@ -181,29 +181,31 @@
                   <span class="FormLabel__title">Gender *</span>
                 </label>
                 <el-select class="w-100" v-model="formData.sex" placeholder="Gender">
-                  <el-option label="Nam" value="male"/>
-                  <el-option label="Nữ" value="female"/>
+                  <el-option label="Male" value="male"/>
+                  <el-option label="Female" value="female"/>
                 </el-select>
               </el-form-item>
             </el-col>
           </el-row>
 
           <el-row :gutter="5">
-            <el-form-item prop="24" class="p-1">
-              <label for="description" class="FormLabel">
-                <span class="FormLabel__title">BIOGRAPHY</span>
-              </label>
-              <el-input
-                type="textarea"
-                ref="description"
-                placeholder="Start from here"
-                v-model="formData.description"
-                maxlength="500"
-                spellcheck="false"
-                id="description"
-                show-word-limit
-              />
-            </el-form-item>
+            <el-col :span="24" class="p-1">
+              <el-form-item prop="24" class="p-1">
+                <label for="description" class="FormLabel">
+                  <span class="FormLabel__title">BIOGRAPHY</span>
+                </label>
+                <el-input
+                  type="textarea"
+                  ref="description"
+                  placeholder="Start from here"
+                  v-model="formData.description"
+                  maxlength="500"
+                  spellcheck="false"
+                  id="description"
+                  show-word-limit
+                />
+              </el-form-item>
+            </el-col>
           </el-row>
         </template>
 
@@ -404,7 +406,7 @@
 import FormAction from '@/components/FormAction';
 import UploadImage from '@/components/UploadImage';
 import { userRules } from '@/validations';
-import { mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import { Message } from 'element-ui';
 import moment from 'moment';
 
@@ -474,6 +476,9 @@ export default {
     this.formSetup();
   },
   computed: {
+    ...mapGetters({
+      'userAuth': 'auth/getUserAuth'
+    }),
     states() {
       if (this.formData.country_id) {
         let countrySelected = this.countries.filter(item => item.id === this.formData.country_id)[0];
@@ -483,8 +488,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      'fetchListRole': 'role/fetchListRole',
-      'fetchListCountries': 'country/fetchListCountries',
+      'setupFormUser': 'user/setupFormUser',
       'storeUser': 'user/storeUser',
       'fetchUserItemById': 'user/fetchUserItemById',
       'updateUser': 'user/updateUser',
@@ -500,10 +504,9 @@ export default {
           const dataUser = await this.fetchUserItemById(this.userId);
           this.appendDataToForm(dataUser.user);
         }
-        const [dataRole, dataCountry] = await Promise.all([this.fetchListRole(), this.fetchListCountries()]);
-        this.roles = dataRole.roles;
-        this.countries = dataCountry.countries;
-
+        const dataSetup = await this.setupFormUser();
+        this.roles = dataSetup.roles;
+        this.countries = dataSetup.countries;
         this.isFormLoading = false;
       } catch (error) {
         console.error('[App Error] => ', error);
@@ -615,6 +618,9 @@ export default {
       formData.append('phone', this.formData.phone);
       formData.append('country_id', this.formData.country_id);
       formData.append('state_id', this.formData.state_id);
+      if (this.userAuth.shop_id) {
+        formData.append('shop_id', this.userAuth.shop_id);
+      }
       if (this.formData.avatarImage.file) {
         formData.append('image', this.formData.avatarImage.file);
       }

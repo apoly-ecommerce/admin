@@ -40,6 +40,13 @@ export function destroyFaqTopic(id) {
 }
 
 // Faq
+export function setupFaq() {
+  return request({
+    url: 'api/admin/utility/faq/setup',
+    method: 'GET',
+  });
+}
+
 export function fetchFaqItemById(id) {
   return request({
     url: `api/admin/utility/faq/${id}`,

@@ -141,7 +141,7 @@
    {
      name: 'Settings',
      icon: 'cogs',
-     roles: ['view_role', 'view_system', 'super_admin'],
+     roles: ['view_role', 'view_system', 'super_admin', 'view_config'],
      children: [
        {
          name: 'User roles',
@@ -154,7 +154,19 @@
          link: '/setting/system/general',
          icon: 'angle-double-right',
          roles: ['view_system', 'super_admin'],
-       }
+       },
+       {
+        name: 'General config',
+        link: '/setting/general',
+        icon: 'angle-double-right',
+        roles: ['view_config'],
+      },
+      {
+        name: 'Configuration',
+        link: '/setting/shopConfig',
+        icon: 'angle-double-right',
+        roles: ['view_config'],
+      }
      ]
    }
  ];

@@ -43,13 +43,12 @@ export const constantRoutes = [
     component: () => import('@/views/Login')
   },
   {
-    path: '/profile',
-    name: 'profile',
+    path: '/account/profile',
     component: Layout,
-    redirect: '/profile/me',
+    redirect: '/profile/',
     children: [
       {
-        path: 'me',
+        path: '',
         component: () => import('@/views/Profile')
       }
     ]

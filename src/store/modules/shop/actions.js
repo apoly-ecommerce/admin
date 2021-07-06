@@ -1,4 +1,5 @@
 import {
+  setupFormShop,
   fetchShopItemById,
   fetchListShopByPaginate,
   fetchListShopTrashedByPaginate,
@@ -13,6 +14,14 @@ import {
 } from '@/api/shop';
 
 export default {
+
+  setupFormShop() {
+    return new Promise((resolve, reject) => {
+      setupFormShop()
+      .then(res => resolve(res.data))
+      .catch(err => reject(err));
+    });
+  },
 
   fetchShopItemById({}, id) {
     return new Promise((resolve, reject) => {

@@ -182,42 +182,12 @@
 
                     <el-col :span="24" class="p-1">
                       <div class="text-center">
-                        <label for="address" class="FormLabel">
-                          <span class="FormLabel__title">ADDRESS</span>
-                          <el-tooltip class="item" effect="dark" content="Vị trí thực tế của thị trường / văn phòng" placement="top">
-                            <i class="fas fa-question-circle"></i>
-                          </el-tooltip>
-                        </label>
-                        <template v-if="formData.primaryAddress">
-                          <address class="address">
-                            <p v-if="formData.primaryAddress.address_line_1">
-                              {{ formData.primaryAddress.address_line_1 }}
-                            </p>
-                            <p v-if="formData.primaryAddress.address_line_2">
-                              {{ formData.primaryAddress.address_line_2 }}
-                            </p>
-                            <p v-if="formData.primaryAddress.state_id">
-                              {{ formData.primaryAddress.state.name }}
-                            </p>
-                            <p v-if="formData.primaryAddress.city">
-                              {{ formData.primaryAddress.city }}
-                            </p>
-                            <p v-if="formData.primaryAddress.country">
-                              {{ formData.primaryAddress.country.name }}
-                            </p>
-                            <p v-if="formData.primaryAddress.phone">
-                              Phone: {{ formData.primaryAddress.phone }}
-                            </p>
-                          </address>
-                          <el-button type="primary" size="mini" @click="handleUpdateAddress">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <small>UPDATE ADDRESS</small>
-                          </el-button>
-                        </template>
-                        <el-button v-else type="primary" size="mini" @click="handleCreateAddress">
-                          <i class="fas fa-map-marker-alt"></i>
-                          <small>ADD ADDRESS</small>
-                        </el-button>
+                        <comp-address
+                          :align="'center'"
+                          :address="formData.primaryAddress"
+                          @create="handleCreateAddress"
+                          @update="handleUpdateAddress"
+                        />
                       </div>
                     </el-col>
 
@@ -267,19 +237,13 @@
             </el-form>
           </div>
         </el-tab-pane>
-
-        <el-tab-pane>
-          <div class="tab-pane-label" slot="label"><i class="fas fa-cog"></i> Environment Config</div>
-          <div class="content">
-
-          </div>
-        </el-tab-pane>
       </el-tabs>
     </section>
   </section>
 </template>
 
 <script>
+import CompAddress from '@/components/CompAddress';
 import UploadImage from '@/components/UploadImage';
 import { mapGetters, mapActions } from 'vuex';
 import { settingSystemGeneralRule } from '@/validations';
@@ -316,7 +280,8 @@ const defaultFormError = {
 
 export default {
   components: {
-    UploadImage
+    UploadImage,
+    'comp-address': CompAddress
   },
   data() {
     return {
@@ -381,7 +346,7 @@ export default {
     handleUpdateAddress() {
       const primaryAddress = this.formData.primaryAddress;
       this.$router.push({
-        path: `/address/addresses/System/${primaryAddress.addressable_id}/update/${primaryAddress.id}`,
+        path: `/address/addresses/System/${primaryAddress.addressable_id}/edit/${primaryAddress.id}`,
         query: {
           back_to: '/setting/system/general'
         }
@@ -490,30 +455,4 @@ export default {
   },
 }
 </script>
-<style>
-.MultipleTabs_Content {
-  color: #333;
-}
-.MultipleTabs_Content .tab-pane-label {
-  text-transform: uppercase;
-  font-weight: 400;
-  color: #333;
-}
-.MultipleTabs_Content .el-tabs--border-card {
-  border: 1px solid #dedcdc;
-  box-shadow: none;
-}
-.uploader_button {
-  height: 31px;
-  line-height: 1;
-}
-.FormLabel__title {
-  font-size: .8rem;
-  padding-right: 10px;
-}
-.address {
-  font-size: .9rem;
-  margin: 10px 0;
-  line-height: 1.4;
-}
-</style>
+<style src="@/styles/app/setting-config.css"></style>

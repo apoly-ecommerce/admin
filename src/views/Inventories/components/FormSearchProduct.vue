@@ -50,7 +50,8 @@
 
             <el-table-column label="Action" align="right">
               <template slot-scope="{row}">
-                <el-button @click="handleAddInventory(row.id)" type="primary" size="mini">Nhập kho</el-button>
+                <el-button @click="handleEditInventory(row.inventories[0].id)" v-if="row.inventories && row.inventories.length" type="primary" size="mini">Cập nhật kho</el-button>
+                <el-button v-else @click="handleAddInventory(row.id)" type="primary" size="mini">Nhập kho</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -128,10 +129,16 @@ export default {
         this.$message.error('Có lỗi trong quá trình tải dữ liệu !');
       });
     },
-    handleAddInventory(id) {
+    handleAddInventory(productId) {
+      this.$router.push({
+        name: 'add-inventory',
+        params: { productId }
+      });
+    },
+    handleEditInventory(inventoryId) {
       this.$router.push({
         name: 'edit-inventory',
-        params: { id }
+        params: { inventoryId }
       });
     },
     handleViewDialogProduct(id) {

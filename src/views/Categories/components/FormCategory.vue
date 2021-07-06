@@ -346,7 +346,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      'fetchListCategoryGroup': 'categoryGroup/fetchListCategoryGroup',
+      'setupFormCategory': 'category/setupFormCategory',
       'storeCategory': 'category/storeCategory',
       'fetchCategoryItemById': 'category/fetchCategoryItemById',
       'updateCategory': 'category/updateCategory'
@@ -360,8 +360,8 @@ export default {
           const dataCategory = await this.fetchCategoryItemById(this.categoryId);
           this.appendDataToForm(dataCategory.category);
         }
-        let dataCategoryGroups = await this.fetchListCategoryGroup();
-        this.categoryGroups = dataCategoryGroups.categoryGroups;
+        let dataSetup = await this.setupFormCategory();
+        this.categoryGroups = dataSetup.categoryGroups;
         this.isFormLoading = false;
       } catch (error) {
         console.error('[App Error] => ', error);
@@ -388,10 +388,10 @@ export default {
     getFormName() {
       this.formName = this.$route.meta && this.$route.meta.title;
     },
-    back(router = '/catalog/category', query = {}) {
+    back(router = '/catalog/category') {
       this.resetFormData();
       this.$refs['formData'].resetFields();
-      this.$router.push({ path: router, query });
+      this.$router.push({ path: router });
     },
     handleCloseForm() {
       this.back();
@@ -420,7 +420,7 @@ export default {
               type: 'success',
               duration: 5 * 1000
             });
-            this.back('/catalog/category', { form: 'success' });
+            this.back();
           }).catch(error => {
             console.error('[App Error] => ', error);
             if (error.status === 422) {

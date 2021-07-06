@@ -1,4 +1,4 @@
-<template>
+]<template>
   <form-action
     :name="formName"
     :size="'90%'"
@@ -101,7 +101,6 @@
                           :label="condition.label"
                         />
                       </el-select>
-                      <div v-if="formError.condition" class="el-form-item__error">{{ formError.condition }}</div>
                     </el-form-item>
                   </el-col>
 
@@ -145,7 +144,6 @@
                         id="condition_note"
                         v-model="formData.condition_note"
                       />
-                      <div v-if="formError.condition_note" class="el-form-item__error">{{ formError.condition_note }}</div>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -223,6 +221,7 @@
                         </el-tooltip>
                       </label>
                       <app-currency-input v-model="formData.sale_price"/>
+                      <div v-if="formError.sale_price" class="el-form-item__error">{{ formError.sale_price }}</div>
                     </el-form-item>
                   </el-col>
 
@@ -235,6 +234,7 @@
                         </el-tooltip>
                       </label>
                       <app-currency-input v-model="formData.offer_price"/>
+                      <div v-if="formError.offer_price" class="el-form-item__error">{{ formError.offer_price }}</div>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -255,6 +255,7 @@
                         format="dd-MM-yyyy"
                         placeholder="Offer start date"
                       />
+                      <div v-if="formError.offer_start" class="el-form-item__error">{{ formError.offer_start }}</div>
                     </el-form-item>
                   </el-col>
 
@@ -273,6 +274,7 @@
                         format="dd-MM-yyyy"
                         placeholder="Offer end date"
                       />
+                      <div v-if="formError.offer_end" class="el-form-item__error">{{ formError.offer_end }}</div>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -327,6 +329,7 @@
                         format="dd-MM-yyyy"
                         placeholder="Available from"
                       />
+                      <div v-if="formError.available_from" class="el-form-item__error">{{ formError.available_from }}</div>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -435,11 +438,11 @@
     </template>
 
     <template v-slot:form-footer>
-      <el-button v-if="formType === 'add'" type="primary" size="mini" @click.prevent="handleActionForm(handleAdd)">
+      <el-button v-if="productId" type="primary" size="mini" @click.prevent="handleActionForm(handleAdd)">
         <i class="PopupForm__SaveIcon fas fa-save"></i>
         <span class="PopupForm_SaveLabel">Save</span>
       </el-button>
-      <el-button v-else type="primary" size="mini" @click.prevent="handleActionForm(handleUpdate)">
+      <el-button v-if="inventoryId" type="primary" size="mini" @click.prevent="handleActionForm(handleUpdate)">
         <i class="PopupForm__SaveIcon fas fa-save"></i>
         <span class="PopupForm_SaveLabel">Update</span>
       </el-button>
@@ -469,15 +472,15 @@ const productInfo = {
 };
 
 const defaultFormData = {
-  title: 'Title inventory',
-  sku: 'sku inventory',
-  condition: 'New',
-  active: '1',
-  condition_note: 'Condition note',
-  description: 'Description',
-  stock_quantity: '12',
-  min_order_quantity: '12',
-  sale_price: 120000,
+  title: '',
+  sku: '',
+  condition: '',
+  active: '',
+  condition_note: '',
+  description: '',
+  stock_quantity: 1,
+  min_order_quantity: 1,
+  sale_price: 0,
   offer_price: 0,
   offer_start: '',
   offer_end: '',
@@ -486,7 +489,7 @@ const defaultFormData = {
   purchase_price: 0,
   slug: '',
   meta_title: '',
-  meta_description: ''
+  meta_description: '',
 }
 
 const defaultFormSelect = {
@@ -499,7 +502,15 @@ const defaultFormSelect = {
 }
 
 const defaultFormError = {
-  name: '',
+  title: '',
+  sku: '',
+  active: '',
+  sale_price: '',
+  offer_price: '',
+  available_from: '',
+  offer_start: '',
+  offer_end: '',
+  slug: ''
 };
 
 export default {
@@ -518,15 +529,16 @@ export default {
       formError: {...defaultFormError},
       formSelect: {...defaultFormSelect},
       formRules: inventoryRules,
-      productId: this.$route.params.id,
+      productId: this.$route.params.productId,
+      inventoryId: this.$route.params.inventoryId,
       isFormLoading: false,
-      formType: 'add',
       linked_list: []
     };
   },
   watch: {
     $route(to, from) {
-      this.productId = to.params.id;
+      this.productId = to.params.productId;
+      this.inventoryId = to.params.inventoryId;
       if (to.name !== 'list-inventory') {
         this.formSetup();
       }
@@ -550,33 +562,27 @@ export default {
     ...mapActions({
       'addInventory': 'inventory/addInventory',
       'storeInventory': 'inventory/storeInventory',
-      'fetchListProduct': 'product/fetchListProduct'
+      'setupFormInventory': 'inventory/setupFormInventory',
+      'editInventory': 'inventory/editInventory',
+      'updateInventory': 'inventory/updateInventory'
     }),
     async formSetup() {
       try {
         this.resetFormData();
         this.getFormName();
         this.isFormLoading = true;
+        if (this.inventoryId) {
+          const dataInventory = await this.editInventory(this.inventoryId);
+          this.appendProductData(dataInventory.product);
+           this.appendInventoryData(dataInventory.inventory);
+        }
         if (this.productId) {
-          // code
+          const dataInventory = await this.addInventory(this.productId);
+          this.appendProductData(dataInventory.product);
         }
-        // code
-        const [dataInventory, dataProduct] = await Promise.all([this.addInventory(this.productId), this.fetchListProduct()]);
-
-        this.formSelect.linked_list = dataProduct.products; // Append products
-
-        this.formType = dataInventory.status;
+        const dataSetup = await this.setupFormInventory();
+        this.formSelect.linked_list = dataSetup.products;
         this.isFormLoading = false;
-
-        if (dataInventory.status === 'add') {
-          this.appendDataToFormAdd(dataInventory.product);
-          return;
-        }
-        if (dataInventory.status === 'edit') {
-          this.appendDataToFormEdit(dataInventory.inventory, dataInventory.product);
-          return;
-        }
-
       } catch (error) {
         console.error('[App Error] => ', error);
         if (error.status === 404) {
@@ -643,36 +649,61 @@ export default {
       });
     },
     handleAdd() {
-      if (this.formData.offer_start) {
-        this.formData.offer_start = moment(this.formData.offer_start).format('YYYY-MM-DD');
-      }
-      if (this.formData.offer_end) {
-        this.formData.offer_end = moment(this.formData.offer_end).format('YYYY-MM-DD');
-      }
-      if (this.formData.available_from) {
-        this.formData.available_from = moment(this.formData.available_from).format('YYYY-MM-DD');
-      }
-      return this.storeInventory(this.formData);
+      this.formData.product_id = this.productId;
+      return this.storeInventory(this.setFormData());
     },
     handleUpdate() {
+      return this.updateInventory({ formData: this.setFormData(), id: this.inventoryId });
     },
     setFormData() {
-
+      if (this.formData.offer_start) {
+        this.formData.offer_start = moment(this.formData.offer_start).format('YYYY-MM-DD HH:mm');
+      }
+      if (this.formData.offer_end) {
+        this.formData.offer_end = moment(this.formData.offer_end).format('YYYY-MM-DD HH:mm');
+      }
+      if (this.formData.available_from) {
+        this.formData.available_from = moment(this.formData.available_from).format('YYYY-MM-DD HH:mm');
+      }
+      if (this.formData.sale_price === 0) {
+        this.formData.sale_price = null;
+      }
+      if (this.formData.offer_price === 0) {
+        this.formData.offer_price = null;
+      }
+      if (this.formData.purchase_price === 0) {
+        this.formData.purchase_price = null;
+      }
+      return this.formData;
     },
     appendErrorToForm(errors) {
       for (const [key, value] of Object.entries(errors)) {
         this.formError[key] = value[0];
       }
     },
-    appendDataToFormAdd(product) {
+    appendProductData(product) {
       this.productInfo = product;
     },
-    appendDataToFormEdit(inventory, product) {
-      console.log(inventory);
-      console.log(product);
+    appendInventoryData(inventory) {
+      this.formData.title = inventory.title;
+      this.formData.sku = inventory.sku;
+      this.formData.condition = inventory.condition;
+      this.formData.active = inventory.active ? '1' : '0';
+      this.formData.condition_note = inventory.condition_note;
+      this.formData.description = inventory.description;
+      this.formData.stock_quantity = inventory.stock_quantity;
+      this.formData.min_order_quantity = inventory.min_order_quantity;
+      this.formData.sale_price = inventory.sale_price ? +inventory.sale_price.split('.')[0] : 0;
+      this.formData.offer_price = inventory.offer_price ? +inventory.offer_price.split('.')[0] : 0;
+      this.formData.offer_start = moment(inventory.offer_start).format('YYYY-MM-DD HH:mm');
+      this.formData.offer_end = moment(inventory.offer_end).format('YYYY-MM-DD HH:mm');
+      this.formData.linked_items = inventory.linked_items;
+      this.formData.available_from = moment(inventory.available_from).format('YYYY-MM-DD HH:mm');
+      this.formData.purchase_price = inventory.purchase_price ? +inventory.purchase_price.split('.')[0] : 0;
+      this.formData.slug = inventory.slug;
+      this.formData.meta_title = inventory.meta_title;
+      this.formData.meta_description = inventory.meta_description;
     },
-    handleClErrorMaxFile() {},
-    handleUploadDescribeImages(images) {}
   }
 }
 </script>

@@ -24,11 +24,3 @@
   --footer-height: 50px;
   --app-content--height: calc(100vh - calc(var(--footer-height) + var(--header-height)));
 }
-
-.text-right {
-  text-align: right;
-}
-
-.text-left {
-  text-align: left;
-}

@@ -350,7 +350,7 @@ export default {
   methods: {
     ...mapActions({
       'setIsLoading': 'app/handleSetIsLoading',
-      'fetchListCountries': 'country/fetchListCountries',
+      'setupFormManufacturer': 'manufacturer/setupFormManufacturer',
       'storeManufacturer': 'manufacturer/storeManufacturer',
       'fetchManufacturerItemById': 'manufacturer/fetchManufacturerItemById',
       'updateManufacturer': 'manufacturer/updateManufacturer'
@@ -364,8 +364,8 @@ export default {
           let dataManufacturer = await this.fetchManufacturerItemById(this.manufacturerId);
           this.appendDataToForm(dataManufacturer.manufacturer);
         }
-        const [dataCountries] = await Promise.all([this.fetchListCountries()]);
-        this.countries = dataCountries.countries;
+        const dataSetup = await this.setupFormManufacturer();
+        this.countries = dataSetup.countries;
         this.isFormLoading = false;
       } catch (error) {
         if (error.status === 404) {

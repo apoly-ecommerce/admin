@@ -1,5 +1,12 @@
 import request from '@/utils/request';
 
+export function setupFormCategory() {
+  return request({
+    url: 'api/admin/catalog/category/setup',
+    method: 'GET'
+  });
+}
+
 export function storeCategory(headers, data) {
   return request({
     url: 'api/admin/catalog/category',

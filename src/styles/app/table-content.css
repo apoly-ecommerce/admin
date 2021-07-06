@@ -171,8 +171,8 @@
 .TableThumb_ThumbImage {
   display: block;
   overflow: hidden;
-  width: 80px;
-  height: 80px;
+  width: 50px;
+  height: 50px;
 }
 .TableThumb_ThumbImage .image {
   width: 100%;

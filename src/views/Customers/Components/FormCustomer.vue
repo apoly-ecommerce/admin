@@ -433,7 +433,6 @@ export default {
       customerId: this.$route.params.id,
       addressId: null,
       isFormLoading: false,
-      roles: [],
       countries: [],
     }
   },
@@ -458,8 +457,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      'fetchListRole': 'role/fetchListRole',
-      'fetchListCountries': 'country/fetchListCountries',
+      'setupFormCustomer': 'customer/setupFormCustomer',
       'storeCustomer': 'customer/storeCustomer',
       'fetchCustomerItemById': 'customer/fetchCustomerItemById',
       'updateCustomer': 'customer/updateCustomer',
@@ -474,9 +472,8 @@ export default {
           const dataCustomer = await this.fetchCustomerItemById(this.customerId);
           this.appendDataToForm(dataCustomer.customer);
         }
-        const [dataRole, dataCountry] = await Promise.all([this.fetchListRole(), this.fetchListCountries()]);
-        this.roles = dataRole.roles;
-        this.countries = dataCountry.countries;
+        const dataSetup = await this.setupFormCustomer();
+        this.countries = dataSetup.countries;
 
         this.isFormLoading = false;
       } catch (error) {

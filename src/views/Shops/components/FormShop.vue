@@ -432,7 +432,7 @@ export default {
   methods: {
     ...mapActions({
       'fetchShopItemById': 'shop/fetchShopItemById',
-      'fetchListCountries': 'country/fetchListCountries',
+      'setupFormShop': 'shop/setupFormShop',
       'updateShop': 'shop/updateShop',
       'updateAddress': 'address/updateAddress'
     }),
@@ -446,8 +446,8 @@ export default {
           this.appendDataToForm(dataShop.shop);
         }
         if (this.$route.query.update === 'address') {
-          const [dataCountry] = await Promise.all([this.fetchListCountries()]);
-          this.countries = dataCountry.countries;
+          const dataSetup = await this.setupFormShop();
+          this.countries = dataSetup.countries;
         }
         this.isFormLoading = false;
       } catch (error) {

@@ -153,7 +153,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      'fetListFaqTopic': 'faq/fetListFaqTopic',
+      'setupFaq': 'faq/setupFaq',
       'storeFaq': 'faq/storeFaq',
       'fetchFaqItemById': 'faq/fetchFaqItemById',
       'updateFaq': 'faq/updateFaq'
@@ -167,8 +167,8 @@ export default {
           const dataFaq = await this.fetchFaqItemById(this.faqId);
           this.formData = dataFaq.faq;
         }
-        const dataFaqTopic = await this.fetListFaqTopic();
-        this.faqTopics = dataFaqTopic.faqTopics;
+        const dataSetup = await this.setupFaq();
+        this.faqTopics = dataSetup.faqTopics;
         this.isFormLoading = false;
       } catch (err) {
         console.error('[App Error] => ', err);
