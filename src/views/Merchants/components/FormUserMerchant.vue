@@ -383,7 +383,6 @@ import FormAction from '@/components/FormAction';
 import UploadImage from '@/components/UploadImage';
 import { userRules } from '@/validations';
 import { mapActions } from 'vuex';
-import { Message } from 'element-ui';
 import moment from 'moment';
 
 const defaultFormData = {
@@ -520,11 +519,10 @@ export default {
       this.$refs['formData'].validate(valid => {
         if (valid) {
           if (this.formData.password !== this.formData.password_confirmation) {
-            this.appendErrorToForm({password_confirmation: ['Nhập lại mật khẩu không chính xác']});
-            return;
+            return this.appendErrorToForm({password_confirmation: ['Nhập lại mật khẩu không chính xác']});
           }
           callback().then(res => {
-            Message({
+            this.$message({
               message: res.success,
               type: 'success',
               duration: 5 * 1000
@@ -533,7 +531,7 @@ export default {
           }).catch(error => {
             console.error('[App Error] => ', error);
             if (error.status === 422) {
-              Message({
+              this.$message({
                 message: 'Dữ liệu không hợp lệ, vui lòng kiễm tra lại !',
                 type: 'error',
                 duration: 5 * 1000
@@ -600,16 +598,15 @@ export default {
       }
     },
     appendDataToForm(data) {
-      this.formData.name = data.name;
-      this.formData.active = data.active.toString();
-      this.formData.nice_name = data.nice_name;
-      this.formData.email = data.email;
-      this.formData.role_id = data.role_id;
-      this.formData.dob = data.dob;
-      this.formData.sex = data.sex;
+      this.formData.name = data.name || '';
+      this.formData.active = data.active ? '1' : '0';
+      this.formData.nice_name = data.nice_name || '';
+      this.formData.email = data.email || '';
+      this.formData.role_id = data.role_id || '';
+      this.formData.dob = data.dob || '';
+      this.formData.sex = data.sex || '';
       this.formData.description = data.description ? data.description : '';
-      this.formData.avatarImage.url = data.image;
-
+      this.formData.avatarImage.url = data.image || '';
       if (this.$route.query.update === 'address') {
         this.formData.address_line_1 = data.primaryAddress ? data.primaryAddress.address_line_1 : '';
         this.formData.address_line_2 = data.primaryAddress ? data.primaryAddress.address_line_2 : '';

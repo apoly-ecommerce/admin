@@ -1,0 +1,89 @@
+.ChatOnboard {
+  height: var(--height-msg);
+}
+.ChatOnboard .ChatHeader {
+  padding: 0 15px;
+  width: 100%;
+  height: var(--height-header-ChatOnboard);
+  background-color: #fff;
+}
+
+/* Chat Container Top */
+.ThreadChat .avatarChat {
+  margin-right: 10px;
+}
+.threadChat__title .user-username {
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+.sub-title-container .last-online-at {
+  font-size: .8rem;
+  color: #72808e;
+}
+.ToolsChat-wrap .ToolSearchMsg .tool-btn {
+  width: 30px;
+  height: 30px;
+  background-color: #fff;
+  border-radius: 3px;
+  line-height: 30px;
+  text-align: center;
+}
+.ToolsChat-wrap .ToolSearchMsg .tool-btn:hover {
+  background-color: var(--hover-color);
+}
+/* Chat Container Bottom */
+.ChatDashboard .scroll-container {
+  height: var(--height-msg-view);
+  background-color: #ccc;
+}
+.MsgToolbar {
+  height: var(--height-msg-toolbar);
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0 5px;
+}
+.MsgToolbar .toolbar-item {
+  padding: 0 10px;
+}
+.MsgToolbar .toolbar-item .toolbar-btn {
+  font-size: 1.3rem;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  border-radius: 3px;
+  color: #535353;
+}
+.MsgToolbar .toolbar-item .toolbar-btn:hover {
+  background-color: var(--hover-color);
+}
+.MsgFormInput {
+  width: 100%;
+}
+.MsgFormInput #message-value {
+  border: none;
+  font-size: .9rem;
+  font-weight: 400;
+  color: #000;
+  resize: none;
+  padding-right: 60px;
+}
+.MsgFormInput #message-value::placeholder {
+  color: rgb(92, 92, 92);
+}
+.MsgFormBtns #SendMsgBtn {
+  font-size: 1.5rem;
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translate(0, -50%);
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  color: #409eff;
+  border-radius: 100%;
+}
+.MsgFormBtns #SendMsgBtn:hover {
+  background-color: var(--hover-color);
+}

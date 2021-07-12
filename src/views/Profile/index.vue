@@ -19,11 +19,11 @@
             <el-row :gutter="5">
               <el-col :span="24" class="p-1">
                 <div style="margin-bottom: 10px">
-                  <comp-address
+                  <comp-address-control
                     :addressableType="'user'"
                     :addressableId="profileId"
                     :redirect="'/account/profile'"
-                    :address="sFormData.primary_address"
+                    :address="primaryAddress"
                   />
                 </div>
               </el-col>
@@ -45,7 +45,7 @@
 import PageTableContent from '@/components/PageTableContent';
 import FormUpdateAvatar from './components/FormUpdateAvatar';
 import FormUpdateProfile from './components/FormUpdateProfile';
-import CompAddress from '@/components/CompAddress';
+import CompAddressControl from '@/components/CompAddressControl';
 import { mapActions } from 'vuex';
 
 const defaultFormData = {
@@ -55,10 +55,6 @@ const defaultFormData = {
   dob: '',
   sex: '',
   description: '',
-};
-
-const secondFormData = {
-  primaryAddress: null
 };
 
 const imageFormData = {
@@ -74,16 +70,21 @@ export default {
     PageTableContent,
     FormUpdateAvatar,
     FormUpdateProfile,
-    'comp-address': CompAddress
+    'comp-address-control': CompAddressControl
   },
   data() {
     return {
       profileId: null,
       tableName: 'Profile',
       formData: {...defaultFormData},
-      sFormData: {...secondFormData},
       imgFormData: {...imageFormData},
+      primaryAddress: null,
       formRules: {}
+    }
+  },
+  watch: {
+    $route() {
+      this.reRenderDataFromUrl();
     }
   },
   created() {
@@ -95,13 +96,23 @@ export default {
       'profile': 'account/profile'
     }),
     async formSetup() {
-      this.setIsLoading(true);
-      const dataProfile = await this.profile();
-      this.appendDataToForm(dataProfile.profile);
-      this.setIsLoading(false);
+      try {
+        this.setIsLoading(true);
+        const dataProfile = await this.profile();
+        this.appendDataToForm(dataProfile.profile);
+        this.setIsLoading(false);
+        return true;
+      } catch (err) {
+        console.error('[App Error] => ', error);
+        this.$message.error('Có lỗi trong quá trình tải dữ liệu !');
+      }
     },
-    handleUpdatePassword() {},
-    appendDataToForm(data) {
+    handleUpdatePassword() {
+      this.$router.push({
+        name: 'profile-update-password',
+      });
+    },
+    async appendDataToForm(data) {
       this.profileId = +data.id;
       this.imgFormData.avatar.src = data.image;
       this.formData.name = data.name;
@@ -111,8 +122,17 @@ export default {
       this.formData.sex = data.sex;
       this.formData.role_name = data.role_name;
       this.formData.description = data.description;
-      this.sFormData.primary_address = data.primary_address;
-    }
+      this.primaryAddress = data.primary_address;
+    },
+    async reRenderDataFromUrl() {
+      if (this.$route.query.form === 'success') {
+        this.formSetup().then(() => {
+          let query = Object.assign({}, this.$route.query);
+          delete query.form;
+          this.$router.replace({ query });
+        });
+      };
+    },
   }
 }
 </script>

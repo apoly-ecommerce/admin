@@ -17,7 +17,7 @@ export function editFeaturedBrands() {
 
 export function updateFeaturedBrands(data) {
   return request({
-    url: 'api/admin/appearance/theme/edit/featuredBrands',
+    url: 'api/admin/appearance/theme/update/featuredBrands',
     method: 'POST',
     params: { _method: 'PUT'},
     data
@@ -34,7 +34,7 @@ export function editTrendingNowCategories() {
 
 export function updateTrendingNowCategories(data) {
   return request({
-    url: 'api/admin/appearance/theme/edit/trendingNowCategories',
+    url: 'api/admin/appearance/theme/update/trendingNowCategories',
     method: 'POST',
     params: { _method: 'PUT'},
     data

@@ -1,5 +1,9 @@
 export default {
-  getListManufacturer(state) {
-    return state.listManufacturer;
+  getManufacturers(state) {
+    return state.manufacturers;
+  },
+
+  getTotal(state) {
+    return state.total;
   }
 };

@@ -266,7 +266,6 @@ import UploadImage from '@/components/UploadImage';
 import { categoryGroupRules } from '@/validations';
 import { mapActions } from 'vuex';
 import { changeToSlug } from '@/helpers';
-import { Message } from 'element-ui';
 
 const defaultFormData = {
   name: '',
@@ -370,7 +369,9 @@ export default {
     back(router = '/catalog/category-group', query = {}) {
       this.resetFormData();
       this.$refs['formData'].resetFields();
-      this.$router.push({ path: router, query });
+      this.$router.push({ path: router, query }).catch((err) => {
+        console.log(err);
+      });
     },
     handleCloseForm() {
       this.back();
@@ -395,7 +396,7 @@ export default {
       this.$refs['formData'].validate(valid => {
         if (valid) {
           callback().then(res => {
-            Message({
+            this.$message({
               message: res.success,
               type: 'success',
               duration: 5 * 1000
@@ -404,7 +405,7 @@ export default {
           }).catch(error => {
             console.error('[App Error] => ', error);
             if (error.status === 422) {
-              Message({
+              this.$message({
                 message: 'Dữ liệu không hợp lệ, vui lòng kiễm tra lại !',
                 type: 'error',
                 duration: 5 * 1000

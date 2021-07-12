@@ -1,13 +1,14 @@
 export default {
-  SET_SHOPS: (state, shops) => {
-    state.listShop = shops;
+  SET_SHOPS: (state, data) => {
+    state.shops = data.shops;
+    state.total = data.total;
   },
 
   REMOVE_SHOP: (state, id) => {
-    state.listShop = state.listShop.filter(item => item.id !== id);
+    state.shops = state.shops.filter(item => item.id !== id);
   },
 
   REMOVE_SHOPS: (state, ids) => {
-    state.listShop = state.listShop.filter(item => !ids.includes(item.id));
+    state.shops = state.shops.filter(item => !ids.includes(item.id));
   },
 };

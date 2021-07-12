@@ -49,7 +49,13 @@ export const constantRoutes = [
     children: [
       {
         path: '',
+        name: 'profile',
         component: () => import('@/views/Profile')
+      },
+      {
+        name: 'profile-update-password',
+        path: 'updatePassword',
+        component: () => import('@/views/Profile/components/FormUpdatePassword')
       }
     ]
   }
@@ -62,6 +68,7 @@ export const constantRoutes = [
  */
 
 // Route module. Admin|Merchant
+import commonRoutes from './modules/common';
 import catalogRoutes from './modules/catalog';
 import adminRoutes from './modules/admin';
 import addressRoutes from './modules/address';
@@ -69,11 +76,13 @@ import vendorRoutes from './modules/vendor';
 import appearanceRoutes from './modules/appearance';
 import utilityRoutes from './modules/utility';
 import settingRoutes from './modules/setting';
+import supportRoutes from './modules/support';
 
 // Route modules. Merchant
 import stockRoutes from './modules/stock';
 
 export const asyncRoutes = [
+  ...commonRoutes,
   ...catalogRoutes,
   ...adminRoutes,
   ...addressRoutes,
@@ -82,13 +91,14 @@ export const asyncRoutes = [
   ...utilityRoutes,
   ...settingRoutes,
   ...stockRoutes,
+  ...supportRoutes,
   { path: '*', redirect: '/404' }
 ];
 
 const routes = [ ...constantRoutes, ...asyncRoutes ];
 
 const createRouter = () => new VueRouter({
-  // mode: 'history',
+  mode: 'history',
   routes
 });
 

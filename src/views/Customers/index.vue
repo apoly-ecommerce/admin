@@ -1,16 +1,16 @@
 <template>
   <section class="PageCustomer">
 
-    <router-view :key="key"></router-view>
+    <router-view :key="key" />
 
     <page-table-content :tableName="tableName">
       <template v-slot:tools>
         <template>
-          <el-button v-if="isTabTrashed" size="mini" @click="getList">
+          <el-button v-if="isTabTrashed" size="mini" @click="getList(list)">
             <i class="fas fa-list"></i>
             <span>Danh sách</span>
           </el-button>
-          <el-button v-else size="mini" @click="getListTrashed">
+          <el-button v-else size="mini" @click="getList(trashed)">
             <i class="fas fa-trash"></i>
             <span>Thùng rác</span>
           </el-button>
@@ -47,7 +47,7 @@
           class="m-1"
           type="danger"
           size="mini"
-          @click="handleEmptyTrash"
+          @click="emptyTrash"
         >Làm sạch thùng rác</el-button>
         <el-button class="m-1" type="primary" size="mini" plain>PDF</el-button>
         <el-button class="m-1" type="primary" size="mini" plain>EXCEL</el-button>
@@ -161,24 +161,24 @@
                       <el-button @click="handleView(row.id)" size="mini" icon="el-icon-rank" />
                     </el-tooltip>
                     <el-tooltip content="Chỉnh sửa" placement="top">
-                      <el-button @click="handleEdit(row.id, 'origin')" size="mini" icon="el-icon-edit" />
+                      <el-button @click="edit(row.id, 'origin')" size="mini" icon="el-icon-edit" />
                     </el-tooltip>
                     <el-tooltip content="Đổi mật khẩu" placement="top">
-                      <el-button @click="handleEdit(row.id, 'password')" size="mini" icon="el-icon-lock" />
+                      <el-button @click="edit(row.id, 'password')" size="mini" icon="el-icon-lock" />
                     </el-tooltip>
                     <el-tooltip content="Sổ địa chỉ" placement="top">
                       <el-button @click="$router.push({ path: `/address/addresses/customer/${row.id}` })" size="mini" icon="el-icon-notebook-2" />
                     </el-tooltip>
                     <el-tooltip content="Chuyển vào thùng rác" placement="top">
-                      <el-button @click="handleTrash(row.id)" size="mini" icon="el-icon-delete" />
+                      <el-button @click="trash(row.id)" size="mini" icon="el-icon-delete" />
                     </el-tooltip>
                   </template>
                   <template v-else>
                     <el-tooltip content="Khôi phục" placement="top">
-                      <el-button @click="handleRestore(row.id)" size="mini" icon="el-icon-refresh-left" />
+                      <el-button @click="restore(row.id)" size="mini" icon="el-icon-refresh-left" />
                     </el-tooltip>
                     <el-tooltip content="Xóa vĩnh viễn" placement="top">
-                      <el-button @click="handleDestroy(row.id)" size="mini" icon="el-icon-close" />
+                      <el-button @click="destroy(row.id)" size="mini" icon="el-icon-close" />
                     </el-tooltip>
                   </template>
                 </el-button-group>
@@ -188,8 +188,8 @@
         </section>
 
         <template v-if="tableData && tableData.length">
-          <pagination v-if="!isTabTrashed" :total="totalRow" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-          <pagination v-else :total="totalRow" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListTrashed" />
+          <pagination v-if="!isTabTrashed" :total="totalRow" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList(list)" />
+          <pagination v-else :total="totalRow" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList(trashed)" />
         </template>
       </template>
     </page-table-content>
@@ -244,11 +244,12 @@ export default {
     }
   },
   created() {
-    this.getList();
+    this.getList(this.list);
   },
   computed: {
     ...mapGetters({
       'tableData': 'customer/getListCustomer',
+      'total': 'customer/getTotal'
     }),
     key() {
       return this.$route.path;
@@ -283,64 +284,68 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-    getList() {
-      this.listLoading = true;
-      this.fetchListCustomerByPaginate(this.listQuery).then(res => {
-        this.listLoading  = false;
-        this.isTabTrashed = false;
-        this.totalRow = res.total;
-      }).catch(error => {
-        this.listLoading = false;
-        console.error('[App Error] => ', error);
-      });
-    },
-    getListTrashed() {
-      this.listLoading = true;
-      this.fetchListCustomerTrashedByPaginate(this.listQuery).then(res => {
-        this.listLoading  = false;
-        this.isTabTrashed = true;
-        this.totalRow = res.total;
-      }).catch(error => {
-        this.listLoading = false;
-        console.error('[App Error] => ', error);
+    edit(id, type) {
+      this.$router.push({
+        name: 'edit-customer',
+        params: { id },
+        query: { update: type }
       });
     },
     handleTableAction() {
-      if (this.tableAction === 'Trash') {
-        this.handleMassTrash(); return;
-      }
-      if (this.tableAction === 'Delete') {
-        this.handleMassDestroy(); return;
-      }
-      if (this.tableAction === 'Restore') {
-        this.handleMassRestore(); return;
+      if (this.tableAction === 'Trash')
+        return this.massTrash();
+      if (this.tableAction === 'Delete')
+         return this.massDestroy();
+      if (this.tableAction === 'Restore')
+         return this.massRestore();
+    },
+    async list() {
+      await this.fetchListCustomerByPaginate(this.listQuery);
+      this.isTabTrashed = false;
+    },
+    async trashed() {
+      await this.fetchListCustomerTrashedByPaginate(this.listQuery);
+      this.isTabTrashed = true;
+    },
+    async getList(callback) {
+      this.listLoading = true;
+      try {
+        await callback();
+        this.listLoading = false;
+      } catch (err) {
+        this.listLoading = false;
+        console.error('[App Error] => ', err);
       }
     },
-    handleRestore(id) {
-      this.restoreCustomer(id).then(res => {
+    restore(id) {
+      this.restoreCustomer(id)
+      .then(res => {
         this.$message({
           type: 'success',
           message: res.success
         });
         this.reRenderDataFromFormAction();
-      }).catch(error => {
+      })
+      .catch(error => {
         this.$message.error('Khôi phục thất bại !');
         console.error('App: ', error);
       });
     },
-    handleTrash(id) {
+    trash(id) {
       this.$confirm('Xác nhận chuyển phần từ này vào thùng rác ?', 'Xác nhận', {
         confirmButtonText: 'Đồng ý',
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        this.trashCustomer(id).then(res => {
+        this.trashCustomer(id)
+        .then(res => {
           this.$message({
             type: 'success',
             message: res.success
           });
           this.reRenderDataFromFormAction();
-        }).catch(error => {
+        })
+        .catch(error => {
           this.$message.error('Không chuyển được vào thùng rác !');
           console.error('[App Error] => ', error);
         });
@@ -351,19 +356,21 @@ export default {
         });
       });
     },
-    handleDestroy(id) {
+    destroy(id) {
       this.$confirm('Xác nhận xóa vĩnh viễn phần tử này ?', 'Xác nhận', {
         confirmButtonText: 'Đồng ý',
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        this.destroyCustomer(id).then(res => {
+        this.destroyCustomer(id)
+        .then(res => {
           this.$message({
             type: 'success',
             message: res.success
           });
           this.reRenderDataFromFormAction();
-        }).catch(error => {
+        })
+        .catch(error => {
           this.$message.error('Xóa vĩnh viễn thất bại !');
           console.error('[App Error] => ', error);
         });
@@ -374,24 +381,25 @@ export default {
         });
       });
     },
-    handleMassDestroy() {
+    massDestroy() {
       let ids = this.multipleSelection.map(item => item.id);
       if (!ids.length) {
-        this.$message.error('Vui lòng chọn ích nhất một một phần tử !');
-        return;
+        return this.$message.error('Vui lòng chọn ích nhất một một phần tử !');
       }
       this.$confirm('Xác nhận xóa vĩnh viễn danh sách này ?', 'Xác nhận', {
         confirmButtonText: 'Đồng ý',
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        this.massDestroyCustomer(ids).then(res => {
+        this.massDestroyCustomer(ids)
+        .then(res => {
           this.$message({
             type: 'success',
             message: res.success
           });
           this.reRenderDataFromFormAction();
-        }).catch(error => {
+        })
+        .catch(error => {
           this.$message.error('Không xóa vĩnh viễn được danh sách này !');
           console.error('[App Error] => ', error);
         });
@@ -402,24 +410,25 @@ export default {
         });
       });
     },
-    handleMassTrash() {
+    massTrash() {
       let ids = this.multipleSelection.map(item => item.id);
       if (!ids.length) {
-        this.$message.error('Vui lòng chọn ích nhất một phần tử !');
-        return;
+        return this.$message.error('Vui lòng chọn ích nhất một phần tử !');
       }
       this.$confirm('Xác nhận chuyển danh sách này vào thùng rác ?', 'Xác nhận', {
         confirmButtonText: 'Đồng ý',
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        this.massTrashCustomer(ids).then(res => {
+        this.massTrashCustomer(ids)
+        .then(res => {
           this.$message({
             type: 'success',
             message: res.success
           });
           this.reRenderDataFromFormAction();
-        }).catch(error => {
+        })
+        .catch(error => {
           this.$message.error('Chuyển vào thùng rác không thành công !');
           console.error('[App Error] => ', error);
         });
@@ -430,26 +439,27 @@ export default {
         });
       });
     },
-    handleMassRestore() {
+    massRestore() {
       let ids = this.multipleSelection.map(item => item.id);
       if (!ids.length) {
-        this.$message.error('Vui lòng chọn ích nhất một phần tử !');
-        return;
+        return this.$message.error('Vui lòng chọn ích nhất một phần tử !');
       }
       this.$confirm('Xác nhận khôi phục danh sách này ?', 'Xác nhận', {
         confirmButtonText: 'Đồng ý',
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        this.massRestoreCustomer(ids).then(res => {
+        this.massRestoreCustomer(ids)
+        .then(res => {
           this.$message({
             type: 'success',
             message: res.success
           });
           this.reRenderDataFromFormAction();
-        }).catch(error => {
+        })
+        .catch(err => {
           this.$message.error('Khôi phục thất bại !');
-          console.error('[App Error] => ', error);
+          console.error('[App Error] => ', err);
         });
       }).catch(() => {
         this.$message({
@@ -458,21 +468,23 @@ export default {
         });
       });
     },
-    handleEmptyTrash() {
+    emptyTrash() {
       this.$confirm('Xác nhận xóa vĩnh viễn toàn bộ dữ liệu trong thùng rác ?', 'Xác nhận', {
         confirmButtonText: 'Đồng ý',
         cancelButtonText: 'Hủy',
         type: 'warning'
       }).then(() => {
-        this.emptyTrashCustomer().then(res => {
+        this.emptyTrashCustomer()
+        .then(res => {
           this.$message({
             type: 'success',
             message: res.success
           });
-          this.getList();
-        }).catch(error => {
+          this.getList(this.list);
+        })
+        .catch(err => {
           this.$message.error('Quá trình xóa vĩnh viễn không thành công !');
-          console.error('[App Error] => ', error);
+          console.error('[App Error] => ', err);
         });
       }).catch(() => {
         this.$message({
@@ -481,27 +493,22 @@ export default {
         });
       });
     },
-    handleEdit(id, type) {
-      this.$router.push({
-        name: 'edit-customer',
-        params: { id },
-        query: { update: type }
-      });
-    },
     reRenderDataFromFormAction() {
       this.tableAction = '';
       if (this.tableData.length === 0) {
-        this.listQuery.page = 1;
-        if (! this.isTabTrashed) { this.getList() }
-        else { this.getListTrashed(); }
+        this.getList(!this.isTabTrashed ? this.list : this.trashed).then(() => {
+          this.listQuery.page = 1;
+        });
       }
     },
     reRenderDataFromUrl() {
       if (this.$route.query.form === 'success') {
-        this.getList();
-        let query = Object.assign({}, this.$route.query);
-        delete query.form;
-        this.$router.replace({ query });
+        this.getList(this.list)
+        .then(() => {
+          let query = Object.assign({}, this.$route.query);
+          delete query.form;
+          this.$router.replace({ query });
+        });
       };
     },
     handleView(id) {

@@ -67,7 +67,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListMerchantByPaginate(query)
       .then(res => {
-        commit('merchant/SET_MERCHANTS', res.data.merchants, { root: true });
+        commit('merchant/SET_MERCHANTS', res.data, { root: true });
         resolve(res.data);
       })
       .catch(err => reject(err));
@@ -78,7 +78,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListMerchantTrashedByPaginate(query)
       .then(res => {
-        commit('merchant/SET_MERCHANTS', res.data.merchants, { root: true });
+        commit('merchant/SET_MERCHANTS', res.data, { root: true });
         resolve(res.data);
       })
       .catch(err => reject(err));

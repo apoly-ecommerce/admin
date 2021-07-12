@@ -1,5 +1,8 @@
 export default {
-  getListInventory(state) {
-    return state.listInventory;
+  getInventories(state) {
+    return state.inventories;
+  },
+  getTotal(state) {
+    return state.total;
   }
 };

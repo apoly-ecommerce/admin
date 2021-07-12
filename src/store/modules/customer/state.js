@@ -1,3 +1,4 @@
 export default {
-  listCustomer: []
+  customers: [],
+  total: 0
 };

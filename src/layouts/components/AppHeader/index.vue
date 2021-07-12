@@ -79,7 +79,20 @@ export default {
 }
 .NavBar_CustomMenu__item .DropdownMenu__table {
   width: 280px;
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
+.NavBar_CustomMenu__item .DropdownMenu__table::-webkit-scrollbar {
+  width: 5px;
+}
+.NavBar_CustomMenu__item .DropdownMenu__table::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.NavBar_CustomMenu__item .DropdownMenu__table::-webkit-scrollbar-thumb {
+  background: #ccc;
+}
+
 .NavBar_CustomMenu__item .NavBar_CustomMenu__link {
   text-align: center;
 }

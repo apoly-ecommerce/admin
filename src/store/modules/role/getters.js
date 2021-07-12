@@ -1,5 +1,9 @@
 export default {
   getRoles(state) {
-    return state.listRole;
+    return state.roles;
+  },
+
+  getTotal(state) {
+    return state.total;
   }
 };

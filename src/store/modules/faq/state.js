@@ -1,4 +1,5 @@
 export default {
   faqTopics: [],
-  faqs: []
+  faqs: [],
+  totalFaq: 0
 };

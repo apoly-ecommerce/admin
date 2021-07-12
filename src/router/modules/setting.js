@@ -31,13 +31,13 @@ const settingRoutes = [
     path: '/setting/system/general',
     component: Layout,
     redirect: '/system/general/',
-    meta: { title: 'Cấu hình' },
+    meta: { title: 'Cấu hình hệ thống' },
     children: [
       {
         path: '',
         name: 'edit-system-general',
         component: () => import('@/views/SettingSystemGenerals/index'),
-        meta: { title: 'Cấu hình chung' }
+        meta: { title: 'Cập nhật' }
       }
     ]
   },
@@ -45,7 +45,7 @@ const settingRoutes = [
     path: '/setting/general',
     component: Layout,
     redirect: '/general/',
-    meta: { title: 'Cấu hình' },
+    meta: { title: 'Cấu hình hệ thống' },
     children: [
       {
         path: '',
@@ -59,12 +59,26 @@ const settingRoutes = [
     path: '/setting/shopConfig',
     component: Layout,
     redirect: '/shopConfig/',
-    meta: { title: 'Cấu hình' },
+    meta: { title: 'Cấu hình shop' },
     children: [
       {
         path: '',
         name: 'edit-config',
         component: () => import('@/views/ShopConfigurationSettings/index'),
+        meta: { title: 'Cập nhật' }
+      }
+    ]
+  },
+  {
+    path: '/setting/systemConfig',
+    component: Layout,
+    redirect: '/systemConfig/',
+    meta: { title: 'Cấu hình hệ thống' },
+    children: [
+      {
+        path: '',
+        name: 'edit-system-config',
+        component: () => import('@/views/SystemConfigurationSettings/index'),
         meta: { title: 'Cập nhật' }
       }
     ]

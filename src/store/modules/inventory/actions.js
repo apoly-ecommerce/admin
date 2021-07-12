@@ -37,10 +37,7 @@ export default {
   storeInventory({}, formData) {
     return new Promise((resolve, reject) => {
       storeInventory(formData)
-      .then(res => {
-        console.log(res.data);
-        resolve(res.data)
-      })
+      .then(res => resolve(res.data))
       .catch(err => reject(err));
     });
   },
@@ -73,7 +70,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListInventoryByPaginate(query)
       .then(res => {
-        commit('inventory/SET_INVENTORIES', res.data.inventories, { root: true });
+        commit('inventory/SET_INVENTORIES', res.data, { root: true });
         resolve(res.data);
       })
       .catch(err => reject(err));
@@ -84,7 +81,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListInventoryTrashedByPaginate(query)
       .then(res => {
-        commit('inventory/SET_INVENTORIES', res.data.inventories, { root: true });
+        commit('inventory/SET_INVENTORIES', res.data, { root: true });
         resolve(res.data);
       })
       .catch(err => reject(err));

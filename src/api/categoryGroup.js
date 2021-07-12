@@ -93,3 +93,10 @@ export function updateCategoryGroup(headers, data, id) {
     data
   });
 }
+
+export function emptyTrashCategoryGroup() {
+  return request({
+    url: 'api/admin/catalog/categoryGroup/emptyTrash',
+    method: 'DELETE'
+  });
+}

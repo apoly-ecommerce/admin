@@ -86,7 +86,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListFaqByPaginate(query)
       .then(res => {
-        commit('faq/SET_FAQS', res.data.faqs, { root: true});
+        commit('faq/SET_FAQS', res.data, { root: true});
         resolve(res.data);
       })
       .catch(err => reject(err));

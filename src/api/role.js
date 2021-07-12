@@ -97,3 +97,10 @@ export function fetchRolePermissionsByUser() {
     method: 'GET'
   });
 }
+
+export function emptyTrashRole() {
+  return request({
+    url: 'api/admin/setting/role/emptyTrash',
+    method: 'DELETE'
+  });
+}

@@ -182,7 +182,7 @@
 
                     <el-col :span="24" class="p-1">
                       <div class="text-center">
-                        <comp-address
+                        <comp-address-control
                           :align="'center'"
                           :address="formData.primaryAddress"
                           @create="handleCreateAddress"
@@ -243,7 +243,7 @@
 </template>
 
 <script>
-import CompAddress from '@/components/CompAddress';
+import CompAddressControl from '@/components/CompAddressControl';
 import UploadImage from '@/components/UploadImage';
 import { mapGetters, mapActions } from 'vuex';
 import { settingSystemGeneralRule } from '@/validations';
@@ -281,7 +281,7 @@ const defaultFormError = {
 export default {
   components: {
     UploadImage,
-    'comp-address': CompAddress
+    'comp-address-control': CompAddressControl
   },
   data() {
     return {

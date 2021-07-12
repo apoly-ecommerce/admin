@@ -23,18 +23,28 @@
   margin: 10px 0;
   line-height: 1.4;
 }
-
+.heading {
+  padding: 20px 0;
+}
 .heading .title {
   text-align: right;
   font-size: .9rem;
   font-weight: 300;
   letter-spacing: 1px;
 }
-
 .heading .divider {
   height: 1px;
   width: 100%;
   background-color: #ccc;
   display: block;
   margin: 5px 0;
+}
+.el-form-item__content {
+  line-height: 30px;
+}
+.el-form-item {
+  margin-bottom: 0;
+}
+.button-submit {
+  margin-top: 10px;
 }

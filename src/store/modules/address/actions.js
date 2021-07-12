@@ -33,7 +33,7 @@ export default {
     });
   },
 
-  updateAddress({ commit }, { formData, id }) {
+  updateAddress({}, { formData, id }) {
     return new Promise((resolve, reject) => {
       updateAddress(formData, id)
       .then((res) => resolve(res.data))

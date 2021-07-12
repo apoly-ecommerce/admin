@@ -68,34 +68,18 @@
             </el-tab-pane>
             <el-tab-pane label="DANH SÁCH ĐỊA CHỈ">
               <div class="AddressesList">
-                <address
+                <div
                   v-for="(address, index) in customer.addresses"
                   :key="index"
                 >
-                  <strong>{{ address.address_type }}</strong>
-                  <p v-if="address.address_line_1">
-                    {{ address.address_line_1 }}
-                  </p>
-                  <p v-if="address.address_line_2">
-                    {{ address.address_line_2 }}
-                  </p>
-                  <p v-if="address.state_id">
-                    {{ address.state.name }}
-                  </p>
-                  <p v-if="address.city">
-                    {{ address.city }}
-                  </p>
-                  <p v-if="address.country">
-                    {{ address.country.name }}
-                  </p>
-                  <p v-if="address.phone">
-                    Phone: {{ address.phone }}
-                  </p>
-                </address>
+                  <comp-address-content
+                    :address="address"
+                  />
+                </div>
               </div>
-              <div v-if="checkAddressExists(customer.primaryAddress)" class="GoogleMap">
-                <iframe width="100%" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" :src="`https://maps.google.it/maps?q=${toGeocodeString(customer.primaryAddress)}&output=embed`"></iframe>
-              </div>
+              <google-map-iframe
+                :address="customer.primaryAddress"
+              />
             </el-tab-pane>
             <el-tab-pane v-if="userAuth.is_from_platform" label="ĐƠN ĐẶT HÀNG MỚI NHẤT">
               <el-table
@@ -136,12 +120,18 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 import moment from 'moment';
-import { checkAddressExists, toGeocodeString, formatCurrency } from '@/helpers';
+import { mapGetters } from 'vuex';
+import { formatCurrency } from '@/helpers';
+import GoogleMapIframe from '@/components/GoogleMapIframe';
+import CompAddressContent from '@/components/CompAddressContent';
 
 export default {
   name: 'view-customer',
+  components: {
+    'google-map-iframe': GoogleMapIframe,
+    'comp-address-content': CompAddressContent
+  },
   props: {
     customer: {
       type: Object,
@@ -166,12 +156,6 @@ export default {
     },
     fromNow(dateStr) {
       return moment(dateStr).locale('vi').fromNow();
-    },
-    toGeocodeString(address) {
-      return toGeocodeString(address);
-    },
-    checkAddressExists(address) {
-      return checkAddressExists(address);
     },
     formatCurrency(number) {
       return formatCurrency(number);
@@ -269,7 +253,8 @@ export default {
 }
 .DialogInfo-middle .middle-content {
   font-size: .8rem;
-  font-weight: bold;
+  font-weight: 500;
+  padding: 5px;
 }
 .AddressesList address {
   font-size: .8rem;

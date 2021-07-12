@@ -100,3 +100,10 @@ export function updateCategory(headers, data, id) {
     data
   });
 }
+
+export function emptyTrashCategory() {
+  return request({
+    url: 'api/admin/catalog/category/emptyTrash',
+    method: 'DELETE'
+  });
+}

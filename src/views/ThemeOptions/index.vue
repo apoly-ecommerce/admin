@@ -1,7 +1,7 @@
 <template>
   <section class="PageThemeOption">
 
-    <router-view :key="key"></router-view>
+    <router-view :key="key" />
 
     <page-table-content :tableName="tableName">
       <template v-slot:main-content>
@@ -38,7 +38,7 @@
             <el-table-column label="Options" align="right">
               <template slot-scope="{row}">
                 <el-tooltip content="Chỉnh sửa" placement="top">
-                  <el-button @click="handleEdit(row.id)" size="mini" icon="el-icon-edit" />
+                  <el-button @click="edit(row.id)" size="mini" icon="el-icon-edit" />
                 </el-tooltip>
               </template>
             </el-table-column>
@@ -95,7 +95,8 @@ export default {
     }),
     getList() {
       this.listLoading = true;
-      this.fetchListThemeOptions(this.listQuery).then(res => {
+      this.fetchListThemeOptions(this.listQuery)
+      .then(res => {
         this.listLoading  = false;
         this.totalRow = res.total;
       }).catch(error => {
@@ -103,7 +104,7 @@ export default {
         console.error('[App Error] => ', error);
       });
     },
-    handleEdit(id) {
+    edit(id) {
       if (id === 1) {
         this.$router.push({
           name: 'edit-featured-brands',

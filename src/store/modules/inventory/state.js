@@ -1,3 +1,4 @@
 export default {
-  listInventory: []
+  inventories: [],
+  total: 0
 }

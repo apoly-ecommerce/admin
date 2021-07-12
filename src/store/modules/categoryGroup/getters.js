@@ -1,5 +1,8 @@
 export default {
   getCategoryGroups(state) {
-    return state.listCategoryGroups;
+    return state.categoryGroups;
+  },
+  getTotal(state) {
+    return state.total;
   }
 };

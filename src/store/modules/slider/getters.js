@@ -1,5 +1,8 @@
 export default {
-  getListSlider(state) {
-    return state.listSlider;
+  getSliders(state) {
+    return state.sliders;
+  },
+  getTotal(state) {
+    return state.total;
   }
 };

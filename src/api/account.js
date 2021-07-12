@@ -32,3 +32,11 @@ export function updateProfile(data) {
     data
   });
 }
+
+export function updatePassword(data) {
+  return request({
+    url: 'api/admin/account/profile/updatePassword',
+    method: 'PATCH',
+    data
+  });
+}

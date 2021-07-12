@@ -20,7 +20,7 @@ const utilityRoutes = [
         meta: { title: 'Thêm mới' }
       },
       {
-        path: 'edit/update/:id',
+        path: 'topic/edit/:id',
         name: 'edit-faq-topic',
         component: () => import('@/views/Faqs/components/FormFaqTopic'),
         meta: { title: 'Cập nhật' }

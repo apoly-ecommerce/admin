@@ -17,11 +17,6 @@ import {
 
 export default {
 
-  /**
-   * Return response creating or updating resource.
-   *
-   * @returns response
-   */
   setupFormProduct() {
     return new Promise((resolve, reject) => {
       setupFormProduct()
@@ -30,13 +25,6 @@ export default {
     });
   },
 
-  /**
-   * Store a newly created resource in storage.
-   *
-   * @param {vuex} param0
-   * @param {FormData} formData
-   * @returns
-   */
   storeProduct({}, formData) {
     return new Promise((resolve, reject) => {
       const headers = {
@@ -60,7 +48,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListProductByPaginate(listQuery)
       .then(res => {
-        commit('product/SET_PRODUCTS', res.data.products, { root: true });
+        commit('product/SET_PRODUCTS', res.data, { root: true });
         resolve(res.data);
       })
       .catch(error => reject(error));
@@ -71,7 +59,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListProductTrashedByPaginate(listQuery)
       .then(res => {
-        commit('product/SET_PRODUCTS', res.data.products, { root: true });
+        commit('product/SET_PRODUCTS', res.data, { root: true });
         resolve(res.data);
       })
       .catch(error => reject(error));

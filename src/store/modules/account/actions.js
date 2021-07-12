@@ -2,7 +2,8 @@ import {
   profile,
   updateAvatar,
   deleteAvatar,
-  updateProfile
+  updateProfile,
+  updatePassword
 } from '@/api/account';
 
 export default {
@@ -47,6 +48,14 @@ export default {
         dispatch('auth/fetchUserAuth', {}, { root: true });
         resolve(res.data);
       })
+      .catch(err => reject(err));
+    });
+  },
+
+  updatePassword({}, formData) {
+    return new Promise((resolve, reject) => {
+      updatePassword(formData)
+      .then(res => resolve(res.data))
       .catch(err => reject(err));
     });
   },

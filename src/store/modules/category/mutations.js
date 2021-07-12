@@ -1,15 +1,16 @@
 export default {
 
-  SET_CATEGORIES: (state, categories) => {
-    state.listCategories = categories;
+  SET_CATEGORIES: (state, data) => {
+    state.categories = data.categories;
+    state.total = data.total;
   },
 
   REMOVE_CATEGORY: (state, id) => {
-    state.listCategories = state.listCategories.filter(item => item.id !== id);
+    state.categories = state.categories.filter(item => item.id !== id);
   },
 
   REMOVE_CATEGORIES: (state, ids) => {
-    state.listCategories = state.listCategories.filter(item => !ids.includes(item.id));
+    state.categories = state.categories.filter(item => !ids.includes(item.id));
   },
 
 };

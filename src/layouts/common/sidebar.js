@@ -101,6 +101,19 @@
      ]
    },
    {
+    name: 'Support Desk',
+    icon: 'user-secret',
+    roles: [],
+    children: [
+      {
+        name: 'Messages',
+        link: '/support/message',
+        icon: 'angle-double-right',
+        roles: [],
+      },
+    ]
+  },
+   {
      name: 'Appearance',
      icon: 'user-secret',
      roles: ['view_banner', 'view_slider', 'view_theme', 'super_admin'],
@@ -166,6 +179,12 @@
         link: '/setting/shopConfig',
         icon: 'angle-double-right',
         roles: ['view_config'],
+      },
+      {
+        name: 'Configuration',
+        link: '/setting/systemConfig',
+        icon: 'angle-double-right',
+        roles: ['super_admin'],
       }
      ]
    }

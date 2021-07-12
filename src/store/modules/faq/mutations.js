@@ -4,8 +4,9 @@ export default {
     state.faqTopics = faqTopics;
   },
 
-  SET_FAQS: (state, faqs) => {
-    state.faqs = faqs;
+  SET_FAQS: (state, data) => {
+    state.faqs = data.faqs;
+    state.totalFaq = data.total;
   },
 
   REMOVE_FAQ_TOPIC: (state, id) => {

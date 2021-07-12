@@ -29,7 +29,9 @@ export default {
   },
   watch: {
     $route() {
+      this.fileName = '';
       this.$refs['imgFileName'].value = '';
+      this.$emit('upload', null);
     }
   },
   methods: {

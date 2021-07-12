@@ -1,16 +1,16 @@
 <template>
   <section class="PageRole">
 
-    <router-view :key="key"></router-view>
+    <router-view :key="key" />
 
     <page-table-content :tableName="tableName">
       <template v-slot:tools>
         <template>
-          <el-button v-if="isTabTrashed" size="mini" @click="getList">
+          <el-button v-if="isTabTrashed" size="mini" @click="getList(list)">
             <i class="fas fa-list"></i>
             <span>Danh sách</span>
           </el-button>
-          <el-button v-else size="mini" @click="getListTrashed">
+          <el-button v-else size="mini" @click="getList(trashed)">
             <i class="fas fa-trash"></i>
             <span>Thùng rác</span>
           </el-button>
@@ -41,6 +41,13 @@
       </template>
 
       <template v-slot:supports>
+        <el-button
+          v-if="isTabTrashed && tableData.length"
+          class="m-1"
+          type="danger"
+          size="mini"
+          @click="emptyTrash"
+        >Làm sạch thùng rác</el-button>
         <el-button class="m-1" type="primary" size="mini" plain>PDF</el-button>
         <el-button class="m-1" type="primary" size="mini" plain>EXCEL</el-button>
         <el-button class="m-1" type="primary" size="mini" plain>PRINT</el-button>
@@ -75,7 +82,6 @@
             v-loading="listLoading"
             @selection-change="handleSelectionChange"
           >
-
              <el-table-column type="expand">
               <template slot-scope="props">
                 <div class="ExpandData_Table">
@@ -140,18 +146,18 @@
                       <el-button @click="handleView(row.id)" size="mini" icon="el-icon-rank" />
                     </el-tooltip>
                     <el-tooltip content="Chỉnh sửa" placement="top">
-                      <el-button @click="handleEdit(row.id)" size="mini" icon="el-icon-edit" />
+                      <el-button @click="edit(row.id)" size="mini" icon="el-icon-edit" />
                     </el-tooltip>
                     <el-tooltip content="Chuyển vào thùng rác" placement="top">
-                      <el-button @click="handleTrash(row.id)" size="mini" icon="el-icon-delete" />
+                      <el-button @click="trash(row.id)" size="mini" icon="el-icon-delete" />
                     </el-tooltip>
                   </template>
                   <template v-else>
                     <el-tooltip content="Khôi phục" placement="top">
-                      <el-button @click="handleRestore(row.id)" size="mini" icon="el-icon-refresh-left" />
+                      <el-button @click="restore(row.id)" size="mini" icon="el-icon-refresh-left" />
                     </el-tooltip>
                     <el-tooltip content="Xóa vĩnh viễn" placement="top">
-                      <el-button @click="handleDestroy(row.id)" size="mini" icon="el-icon-close" />
+                      <el-button @click="destroy(row.id)" size="mini" icon="el-icon-close" />
                     </el-tooltip>
                   </template>
                 </el-button-group>
@@ -159,6 +165,11 @@
             </el-table-column>
           </el-table>
         </section>
+
+        <template v-if="tableData && tableData.length">
+          <pagination v-if="!isTabTrashed" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList(list)" />
+          <pagination v-else :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList(trashed)" />
+        </template>
       </template>
     </page-table-content>
   </section>
@@ -177,10 +188,9 @@ export default {
   },
   data() {
     return {
-      totalRow: 0,
+      tableName: 'Danh sách role',
       listLoading: false,
       isTabTrashed: false,
-      tableName: 'Danh sách role',
       listQuery: {
         limit: 10,
         page: 1
@@ -202,11 +212,12 @@ export default {
     }
   },
   created() {
-    this.getList();
+    this.getList(this.list);
   },
   computed: {
     ...mapGetters({
       'tableData': 'role/getRoles',
+      'total': 'role/getTotal',
     }),
     key() {
       return this.$route.path;
@@ -232,7 +243,8 @@ export default {
       'destroyRole': 'role/destroyRole',
       'massTrashRole': 'role/massTrashRole',
       'massRestoreRole': 'role/massRestoreRole',
-      'massDestroyRole': 'role/massDestroyRole'
+      'massDestroyRole': 'role/massDestroyRole',
+      'emptyTrashRole': 'role/emptyTrashRole'
     }),
     formatTime(time) {
       return formatTime(time);
@@ -240,40 +252,39 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-    getList() {
-      this.listLoading = true;
-      this.fetchListRoleByPaginate(this.listQuery).then(res => {
-        this.listLoading  = false;
-        this.isTabTrashed = false;
-        this.totalRow = res.total;
-      }).catch(error => {
-        this.listLoading = false;
-        console.error('[App Error] => ', error);
-      });
-    },
-    getListTrashed() {
-      this.listLoading = true;
-      this.fetchListRoleTrashedByPaginate(this.listQuery).then(res => {
-        this.listLoading  = false;
-        this.isTabTrashed = true;
-        this.totalRow = res.total;
-      }).catch(error => {
-        this.listLoading = false;
-        console.error('[App Error] => ', error);
+    edit(id) {
+      this.$router.push({
+        name: 'edit-role',
+        params: { id }
       });
     },
     handleTableAction() {
-      if (this.tableAction === 'Trash') {
-        this.handleMassTrash(); return;
-      }
-      if (this.tableAction === 'Delete') {
-        this.handleMassDestroy(); return;
-      }
-      if (this.tableAction === 'Restore') {
-        this.handleMassRestore(); return;
+      if (this.tableAction === 'Trash')
+        return this.massTrash();
+      if (this.tableAction === 'Delete')
+         return this.massDestroy();
+      if (this.tableAction === 'Restore')
+         return this.massRestore();
+    },
+    async list() {
+      await this.fetchListRoleByPaginate(this.listQuery);
+      this.isTabTrashed = false;
+    },
+    async trashed() {
+      await this.fetchListRoleTrashedByPaginate(this.listQuery);
+      this.isTabTrashed = true;
+    },
+    async getList(callback) {
+      this.listLoading = true;
+      try {
+        await callback();
+        this.listLoading = false;
+      } catch (err) {
+        this.listLoading = false;
+        console.error('[App Error] => ', err);
       }
     },
-    handleRestore(id) {
+    restore(id) {
       this.restoreRole(id).then(res => {
         this.$message({
           type: 'success',
@@ -285,7 +296,7 @@ export default {
         console.error('App: ', error);
       });
     },
-    handleTrash(id) {
+    trash(id) {
       this.$confirm('Xác nhận chuyển quyền này vào thùng rác ?', 'Xác nhận', {
         confirmButtonText: 'Đồng ý',
         cancelButtonText: 'Hủy',
@@ -308,7 +319,7 @@ export default {
         });
       });
     },
-    handleDestroy(id) {
+    destroy(id) {
       this.$confirm('Xác nhận xóa vĩnh viễn quyền này ?', 'Xác nhận', {
         confirmButtonText: 'Đồng ý',
         cancelButtonText: 'Hủy',
@@ -331,7 +342,7 @@ export default {
         });
       });
     },
-    handleMassDestroy() {
+    massDestroy() {
       let ids = this.multipleSelection.map(item => item.id);
       if (!ids.length) {
         this.$message.error('Vui lòng chọn ích nhất một một phần tử !');
@@ -359,7 +370,7 @@ export default {
         });
       });
     },
-    handleMassTrash() {
+    massTrash() {
       let ids = this.multipleSelection.map(item => item.id);
       if (!ids.length) {
         this.$message.error('Vui lòng chọn ích nhất một quyền !');
@@ -387,7 +398,7 @@ export default {
         });
       });
     },
-    handleMassRestore() {
+    massRestore() {
       let ids = this.multipleSelection.map(item => item.id);
       if (!ids.length) {
         this.$message.error('Vui lòng chọn ích nhất một phần tử !');
@@ -415,26 +426,47 @@ export default {
         });
       });
     },
-    handleEdit(id) {
-      this.$router.push({
-        name: 'edit-role',
-        params: { id }
+    emptyTrash() {
+      this.$confirm('Xác nhận xóa vĩnh viễn toàn bộ dữ liệu trong thùng rác ?', 'Xác nhận', {
+        confirmButtonText: 'Đồng ý',
+        cancelButtonText: 'Hủy',
+        type: 'warning'
+      }).then(() => {
+        this.emptyTrashRole()
+        .then(res => {
+          this.$message({
+            type: 'success',
+            message: res.success
+          });
+          this.getList(this.list);
+        })
+        .catch(error => {
+          this.$message.error('Quá trình xóa vĩnh viễn không thành công !');
+          console.error('[App Error] => ', error);
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: 'Đã hủy xóa vĩnh viễn toàn bộ dữ liệu !'
+        });
       });
     },
     reRenderDataFromFormAction() {
       this.tableAction = '';
       if (this.tableData.length === 0) {
-        this.listQuery.page = 1;
-        if (! this.isTabTrashed) { this.getList() }
-        else { this.getListTrashed(); }
+        this.getList(!this.isTabTrashed ? this.list : this.trashed).then(() => {
+          this.listQuery.page = 1;
+        });
       }
     },
     reRenderDataFromUrl() {
       if (this.$route.query.form === 'success') {
-        this.getList();
-        let query = Object.assign({}, this.$route.query);
-        delete query.form;
-        this.$router.replace({ query });
+        this.getList(this.list)
+        .then(() => {
+          let query = Object.assign({}, this.$route.query);
+          delete query.form;
+          this.$router.replace({ query });
+        });
       };
     },
     handleView(id) {

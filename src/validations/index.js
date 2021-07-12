@@ -54,10 +54,6 @@ export const userRules = {
   password_confirmation: [{ required: true, message: 'Vui lòng xác nhận lại mật khẩu', trigger: 'blur' }],
   role_id: [{ required: true, message: 'Vui lòng nhập quyền cho user', trigger: 'blur' }],
   sex: [{ required: true, message: 'Vui lòng chọn giới tính', trigger: 'blur' }],
-  phone: [
-    { required: true, message: 'Vui lòng nhập số điện thoại', trigger: 'blur' },
-    { trigger: 'blur', validator: validatePhone }
-  ]
 }
 
 /**
@@ -254,7 +250,7 @@ export const settingGeneralRules = {
 /**
  * Check Setting Config Support Rules.
  */
-export const settingConfigSupportRule = {
+export const shopSettingConfigSupportRule = {
   support_email: [
     { required: true, message: 'Vui lòng điền trường này', trigger: 'blur' },
     { required: true, trigger: 'blur', validator: validateEmail },
@@ -267,7 +263,7 @@ export const settingConfigSupportRule = {
 };
 
 /**
- * Check profile rules.
+ * Check Profile Rules.
  */
 export const profileRules = {
   name: [{ required: true, message: 'Vui lòng điền trường này.', trigger: 'blur' }],
@@ -275,4 +271,37 @@ export const profileRules = {
     { required: true, message: 'Vui lòng điền trường này', trigger: 'blur' },
     { required: true, trigger: 'blur', validator: validateEmail },
   ],
+};
+
+/**
+ * Check Update Password Rules.
+ */
+export const updatePasswordRules = {
+  current_password: [
+    { required: true, message: 'Vui lòng nhập mật khẩu', trigger: 'blur' },
+    { trigger: 'blur', validator: validatePassword, trigger: 'blur' }
+  ],
+  password: [
+    { required: true, message: 'Vui lòng nhập mật khẩu', trigger: 'blur' },
+    { trigger: 'blur', validator: validatePassword, trigger: 'blur' }
+  ],
+  password_confirmation: [
+    { required: true, message: 'Vui lòng nhập mật khẩu', trigger: 'blur' },
+    { trigger: 'blur', validator: validatePassword, trigger: 'blur' }
+  ],
+};
+
+/**
+ * Check System Setting Config Support Rules.
+ */
+export const systemSettingConfigSupportRule = {
+  support_email: [
+    { required: true, message: 'Vui lòng điền trường này', trigger: 'blur' },
+    { required: true, trigger: 'blur', validator: validateEmail },
+  ],
+  default_sender_email_address: [
+    { required: true, message: 'Vui lòng điền trường này', trigger: 'blur' },
+    { required: true, trigger: 'blur', validator: validateEmail },
+  ],
+  default_email_sender_name: [{ required: true, message: 'Vui lòng điền trường này.', trigger: 'blur' }],
 };

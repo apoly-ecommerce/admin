@@ -1,5 +1,9 @@
 export default {
-  getListProduct(state) {
-    return state.listProduct;
+  getProducts(state) {
+    return state.products;
+  },
+
+  getTotal(state) {
+    return state.total;
   }
 };

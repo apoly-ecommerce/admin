@@ -1,5 +1,8 @@
 export default {
-  getListBanner(state) {
-    return state.listBanner;
+  getBanners(state) {
+    return state.banners;
+  },
+  getTotal(state) {
+    return state.total;
   }
 };

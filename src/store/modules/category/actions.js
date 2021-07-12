@@ -12,6 +12,7 @@ import {
   massRestoreCategory,
   fetchCategoryItemById,
   updateCategory,
+  emptyTrashCategory
 } from '@/api/category';
 
 export default {
@@ -47,7 +48,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchCategoryByPaginate(listQuery)
       .then(res => {
-        commit('category/SET_CATEGORIES', res.data.categories, { root: true });
+        commit('category/SET_CATEGORIES', res.data, { root: true });
         resolve(res.data);
       })
       .catch(error => reject(error));
@@ -58,7 +59,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListCategoryTrashedByPaginate(listQuery)
       .then(res => {
-        commit('category/SET_CATEGORIES', res.data.categories, { root: true });
+        commit('category/SET_CATEGORIES', res.data, { root: true });
         resolve(res.data);
       })
       .catch(error => reject(error));
@@ -145,6 +146,14 @@ export default {
         'Content-type': 'multipart/form-data'
       };
       updateCategory(headers, formData, id)
+      .then(res => resolve(res.data))
+      .catch(error => reject(error));
+    });
+  },
+
+  emptyTrashCategory() {
+    return new Promise((resolve, reject) => {
+      emptyTrashCategory()
       .then(res => resolve(res.data))
       .catch(error => reject(error));
     });

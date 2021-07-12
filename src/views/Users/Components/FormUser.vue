@@ -161,7 +161,7 @@
             <el-col :span="8" class="p-1">
               <el-form-item prop="dob">
                 <label for="dob" class="FormLabel">
-                  <span class="FormLabel__title">Date of birth *</span>
+                  <span class="FormLabel__title">Date of birth</span>
                 </label>
                 <el-date-picker
                   v-model="formData.dob"
@@ -331,13 +331,13 @@
             <el-col :span="12" class="p-1">
               <el-form-item prop="state_id">
                 <label for="state_id" class="FormLabel">
-                  <span class="FormLabel__title">State/Province/Region</span>
+                  <span class="FormLabel__title">State/Province</span>
                 </label>
                   <el-select
                   v-model="formData.state_id"
                   filterable
                   ref="state_id"
-                  placeholder="State/Province/Region"
+                  placeholder="State/Province"
                   class="w-100"
                   id="state_id"
                   autocomplete="off"
@@ -403,12 +403,11 @@
 </template>
 
 <script>
-import FormAction from '@/components/FormAction';
-import UploadImage from '@/components/UploadImage';
+import moment from 'moment';
 import { userRules } from '@/validations';
 import { mapGetters, mapActions } from 'vuex';
-import { Message } from 'element-ui';
-import moment from 'moment';
+import FormAction from '@/components/FormAction';
+import UploadImage from '@/components/UploadImage';
 
 const defaultFormData = {
   name: '',
@@ -551,11 +550,10 @@ export default {
       this.$refs['formData'].validate(valid => {
         if (valid) {
           if (this.formData.password !== this.formData.password_confirmation) {
-            this.appendErrorToForm({password_confirmation: ['Nhập lại mật khẩu không chính xác']});
-            return;
+            return this.appendErrorToForm({password_confirmation: ['Nhập lại mật khẩu không chính xác']});
           }
           callback().then(res => {
-            Message({
+            this.$message({
               message: res.success,
               type: 'success',
               duration: 5 * 1000
@@ -564,7 +562,7 @@ export default {
           }).catch(error => {
             console.error('[App Error] => ', error);
             if (error.status === 422) {
-              Message({
+              this.$message({
                 message: 'Dữ liệu không hợp lệ, vui lòng kiễm tra lại !',
                 type: 'error',
                 duration: 5 * 1000

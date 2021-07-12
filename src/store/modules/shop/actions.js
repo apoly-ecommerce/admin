@@ -35,7 +35,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListShopByPaginate(query)
       .then(res => {
-        commit('shop/SET_SHOPS', res.data.shops, { root: true });
+        commit('shop/SET_SHOPS', res.data, { root: true });
         resolve(res.data);
       })
       .catch(err => reject(err));
@@ -46,7 +46,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListShopTrashedByPaginate(query)
       .then(res => {
-        commit('shop/SET_SHOPS', res.data.shops, { root: true });
+        commit('shop/SET_SHOPS', res.data, { root: true });
         resolve(res.data);
       })
       .catch(err => reject(err));

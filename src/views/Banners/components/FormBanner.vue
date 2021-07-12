@@ -200,7 +200,7 @@
                     :placeholer="'Banner image'"
                     @upload="saveFeatureImage"
                   />
-                  <div v-if="formError.banner_image" class="el-form-item__error">{{ formError.banner_image }}</div>
+                  <div v-if="formError.feature_image" class="el-form-item__error">{{ formError.feature_image }}</div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -246,7 +246,6 @@ import FormAction from '@/components/FormAction';
 import UploadImage from '@/components/UploadImage';
 import { bannerRules } from '@/validations';
 import { mapActions } from 'vuex';
-import { Message } from 'element-ui';
 
 const defaultFormData = {
   title: '',
@@ -265,7 +264,7 @@ const defaultFormData = {
 };
 
 const defaultFormError = {
-  banner_image: '',
+  feature_image: '',
   title: '',
   description: '',
 };
@@ -359,8 +358,11 @@ export default {
     handleActionForm(callback) {
       this.$refs['formData'].validate(valid => {
         if (valid) {
+          if (!this.formData.featureImage.file && !this.formData.featureImage.src) {
+            return this.appendErrorToForm({feature_image: ['Vui lòng chọn ảnh banner']});
+          }
           callback().then(res => {
-            Message({
+            this.$message({
               message: res.success,
               type: 'success',
               duration: 5 * 1000
@@ -369,7 +371,7 @@ export default {
           }).catch(error => {
             console.error('[App Error] => ', error);
             if (error.status === 422) {
-              Message({
+              this.$message({
                 message: 'Dữ liệu không hợp lệ, vui lòng kiễm tra lại !',
                 type: 'error',
                 duration: 5 * 1000

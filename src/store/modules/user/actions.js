@@ -49,7 +49,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListUserByPaginate(listQuery)
       .then(res => {
-        commit('user/SET_USERS', res.data.users, { root: true });
+        commit('user/SET_USERS', res.data, { root: true });
         resolve(res.data);
       })
       .catch(err => reject(err));
@@ -60,7 +60,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListUserTrashedByPaginate(listQuery)
       .then(res => {
-        commit('user/SET_USERS', res.data.users, { root: true });
+        commit('user/SET_USERS', res.data, { root: true });
         resolve(res.data);
       })
       .catch(err => reject(err));

@@ -1,3 +1,4 @@
 export default {
-  listBanner: []
+  banners: [],
+  total: 0
 };

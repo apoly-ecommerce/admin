@@ -1,3 +1,4 @@
 export default {
-  listManufacturer: []
+  manufacturers: [],
+  total: 0
 };

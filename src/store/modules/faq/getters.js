@@ -6,6 +6,10 @@ export default {
 
   getFaqs(state) {
     return state.faqs;
+  },
+
+  getTotalFaq(state) {
+    return state.totalFaq;
   }
 
 };

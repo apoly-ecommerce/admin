@@ -49,7 +49,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListSliderByPaginate(query)
       .then(res => {
-        commit('slider/SET_SLIDERS', res.data.sliders, { root: true });
+        commit('slider/SET_SLIDERS', res.data, { root: true });
         resolve(res.data);
       })
       .catch(err => reject(err));
@@ -60,7 +60,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListSliderTrashedByPaginate(query)
       .then(res => {
-        commit('slider/SET_SLIDERS', res.data.sliders, { root: true });
+        commit('slider/SET_SLIDERS', res.data, { root: true });
         resolve(res.data);
       })
       .catch(err => reject(err));

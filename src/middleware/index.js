@@ -1,4 +1,4 @@
-import router from '@/router';
+import router, { resetRouter } from '@/router';
 import store from '@/store';
 import { checkTokenExists } from '@/utils/auth';
 import { getPageTitle } from '@/utils/functions';
@@ -7,7 +7,11 @@ import 'nprogress/nprogress.css'; // style progress bar
 
 const whiteList = ['/login'];
 
-router.beforeEach(async(to, from, next) => {
+router.beforeEach( async (to, from, next) => {
+
+  if (to.name === from.name) {
+    return;
+  }
 
   // Start progress bar
   NProgress.start();

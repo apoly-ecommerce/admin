@@ -48,7 +48,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListManufacturerByPaginate(listQuery)
       .then(res => {
-        commit('manufacturer/SET_MANUFACTURERS', res.data.manufacturers, { root: true });
+        commit('manufacturer/SET_MANUFACTURERS', res.data, { root: true });
         resolve(res.data);
       })
       .catch(error => reject(error));
@@ -59,7 +59,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListManufacturerTrashedByPaginate(listQuery)
       .then(res => {
-        commit('manufacturer/SET_MANUFACTURERS', res.data.manufacturers, { root: true });
+        commit('manufacturer/SET_MANUFACTURERS', res.data, { root: true });
         resolve(res.data);
       })
       .catch(error => reject(error));

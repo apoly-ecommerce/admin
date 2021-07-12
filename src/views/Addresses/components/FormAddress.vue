@@ -217,7 +217,6 @@
 import FormAction from '@/components/FormAction';
 import { addressRules } from '@/validations';
 import { mapActions } from 'vuex';
-import { Message } from 'element-ui';
 import { strUcFirst } from '@/helpers';
 
 const defaultFormData = {
@@ -242,7 +241,7 @@ const defaultFormError = {
 
 export default {
   components: {
-    FormAction
+    FormAction,
   },
   data() {
     return {
@@ -338,13 +337,13 @@ export default {
       this.$refs['formData'].validate(valid => {
         if (valid) {
           callback().then(res => {
-            Message({
+            this.$message({
               message: res.success,
               type: 'success',
               duration: 5 * 1000
             });
             if (this.$route.query.back_to) {
-              this.back(this.$route.query.back_to);
+              this.back(this.$route.query.back_to, { form: 'success' });
             }
             else {
               this.back(`/address/addresses/${this.addressable_type}/${this.addressable_id}`, { form: 'success' });
@@ -353,7 +352,7 @@ export default {
             if (error.data) {
               console.error('[App Error] => ', error);
               if (error.status === 422) {
-                Message({
+                this.$message({
                   message: 'Dữ liệu không hợp lệ, vui lòng kiễm tra lại !',
                   type: 'error',
                   duration: 5 * 1000

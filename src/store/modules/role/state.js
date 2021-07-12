@@ -1,3 +1,4 @@
 export default {
-  listRole: []
+  roles: [],
+  total: 0
 };

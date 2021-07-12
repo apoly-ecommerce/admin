@@ -1,3 +1,4 @@
 export default {
-  listCategoryGroups: [],
+  categoryGroups: [],
+  total: 0
 };

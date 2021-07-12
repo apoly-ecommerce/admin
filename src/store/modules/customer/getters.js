@@ -1,7 +1,11 @@
 export default {
 
   getListCustomer(state) {
-    return state.listCustomer;
+    return state.customers;
+  },
+
+  getTotal(state) {
+    return state.total;
   }
 
 };

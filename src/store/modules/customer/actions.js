@@ -57,7 +57,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListCustomerByPaginate(query)
       .then(res => {
-        commit('customer/SET_CUSTOMERS', res.data.customers, { root: true });
+        commit('customer/SET_CUSTOMERS', res.data, { root: true });
         resolve(res.data);
       })
       .catch(error => reject(error));
@@ -68,7 +68,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListCustomerTrashedByPaginate(query)
       .then(res => {
-        commit('customer/SET_CUSTOMERS', res.data.customers, { root: true });
+        commit('customer/SET_CUSTOMERS', res.data, { root: true });
         resolve(res.data);
       })
       .catch(error => reject(error));

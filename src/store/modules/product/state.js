@@ -1,3 +1,4 @@
 export default {
-  listProduct: []
+  products: [],
+  total: 0
 };

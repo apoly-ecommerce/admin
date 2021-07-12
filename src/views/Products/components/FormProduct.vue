@@ -481,15 +481,14 @@
 </template>
 
 <script>
+import { tinymceConfig, tinymceApiKey } from '@/config/tinymce';
+import AppCurrencyInput from '@/components/AppCurrencyInput';
+import CloudinaryUpload from '@/components/CloudinaryUpload';
 import FormAction from '@/components/FormAction';
 import UploadImage from '@/components/UploadImage';
-import AppCurrencyInput from '@/components/AppCurrencyInput';
 import { productRules } from '@/validations';
-import { mapActions } from 'vuex';
 import Editor from '@tinymce/tinymce-vue';
-import { tinymceConfig, tinymceApiKey } from '@/config/tinymce';
-import { Message } from 'element-ui';
-import CloudinaryUpload from '@/components/CloudinaryUpload';
+import { mapActions } from 'vuex';
 
 const defaultFormData = {
   name: '',
@@ -638,7 +637,7 @@ export default {
       this.$refs['formData'].validate(valid => {
         if (valid) {
           callback().then(res => {
-            Message({
+            this.$message({
               message: res.success,
               type: 'success',
               duration: 5 * 1000
@@ -648,7 +647,7 @@ export default {
           }).catch(error => {
             console.error('[App Error] => ', error);
             if (error.status === 422) {
-              Message({
+              this.$message({
                 message: 'Dữ liệu không hợp lệ, vui lòng kiễm tra lại !',
                 type: 'error',
                 duration: 5 * 1000

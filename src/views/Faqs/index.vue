@@ -1,49 +1,13 @@
 <template>
   <section class="PageFaq">
-    <router-view :key="key"></router-view>
+    <router-view :key="key" />
 
     <el-row :gutter="5">
       <el-col :span="7" class="p-1">
-        <page-table-content :tableName="'TOPICS'">
-          <template v-slot:tools>
-            <router-link class="Table__tools-item" :to="{ name: 'add-faq-topic' }">Add Topic</router-link>
-          </template>
-          <template v-slot:main-content>
-            <section class="TableBox_Content">
-              <el-table
-                :data="faqTopics"
-                style="width: 100%"
-                emptyText="Empty data !"
-                v-loading="listFaqTopicLoading"
-              >
-                <el-table-column label="Name" prop="name" width="150">
-                  <template slot-scope="{row}">
-                    <div class="line-txt-top">{{ row.name }}</div>
-                  </template>
-                </el-table-column>
-
-                <el-table-column label="For" prop="for">
-                  <template slot-scope="{row}">
-                    <div class="line-txt-top">{{ row.for }}</div>
-                  </template>
-                </el-table-column>
-
-                <el-table-column label="Options" align="right">
-                  <template slot-scope="{row}">
-                    <el-button-group>
-                      <el-tooltip content="Chỉnh sửa" placement="top">
-                        <el-button @click="handleEditFaqTopic(row.id)" size="mini" icon="el-icon-edit" />
-                      </el-tooltip>
-                      <el-tooltip content="Xóa vĩnh viễn" placement="top">
-                        <el-button @click="handleDestroyFaqTopic(row.id)" size="mini" icon="el-icon-delete" />
-                      </el-tooltip>
-                    </el-button-group>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </section>
-          </template>
-        </page-table-content>
+        <table-faq-topic
+          :formData="formDataFaqTopics"
+          :isLoading="listFaqTopicLoading"
+        />
       </el-col>
       <el-col :span="17" class="p-1">
         <page-table-content :tableName="'FAQS'">
@@ -133,8 +97,8 @@
               </el-table>
             </section>
 
-            <template v-if="faqs && faqs.length">
-              <pagination :total="totalRowFaq" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListFaq" />
+            <template v-if="formDataFaqs && formDataFaqs.length">
+              <pagination :total="totalFaq" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList(faqs)" />
             </template>
           </template>
         </page-table-content>
@@ -146,12 +110,14 @@
 <script>
 import PageTableContent from '@/components/PageTableContent';
 import Pagination from '@/components/Pagination';
+import TableFaqTopic from './components/TableFaqTopic';
 import { mapGetters, mapActions } from 'vuex';
 import { formatTime } from '@/helpers';
 
 export default {
   components: {
     PageTableContent,
+    TableFaqTopic,
     Pagination,
   },
   data() {
@@ -159,7 +125,6 @@ export default {
       listFaqTopicLoading: false,
       listFaqLoading: false,
       isTabFaqTrashed: false,
-      totalRowFaq: 0,
       listQuery: {
         limit: 10,
         page: 1
@@ -175,18 +140,19 @@ export default {
     };
   },
   watch: {
-    $route(to, from) {
+    $route() {
       this.reRenderDataFromUrl();
     }
   },
   created() {
-    this.getListFaq();
-    this.getListFaqTopic();
+    this.getList(this.faqs);
+    this.getList(this.faqTopics);
   },
   computed: {
     ...mapGetters({
-      'faqTopics': 'faq/getFaqTopics',
-      'faqs': 'faq/getFaqs'
+      'formDataFaqTopics': 'faq/getFaqTopics',
+      'formDataFaqs': 'faq/getFaqs',
+      'totalFaq': 'faq/getTotalFaq'
     }),
     key() {
       return this.$route.path;
@@ -197,7 +163,7 @@ export default {
     },
     dataSearchFaq() {
       const { value, optionSelected } = this.tableSearch;
-      let searchResult = this.faqs.filter(item => {
+      let searchResult = this.formDataFaqs.filter(item => {
         return !value || !item[optionSelected] || (item[optionSelected].toString().toLowerCase()).includes(value.toLowerCase());
       });
       return searchResult;
@@ -207,64 +173,27 @@ export default {
     ...mapActions({
       'fetListFaqTopic': 'faq/fetListFaqTopic',
       'fetchListFaqByPaginate': 'faq/fetchListFaqByPaginate',
-      'destroyFaqTopic': 'faq/destroyFaqTopic',
       'destroyFaq': 'faq/destroyFaq'
     }),
     formatTime(time) {
       return formatTime(time);
     },
-    getListFaq() {
+    async faqs() {
       this.listFaqLoading = true;
-      this.fetchListFaqByPaginate(this.listQuery).then(res => {
-        this.listFaqLoading  = false;
-        this.isTabFaqTrashed = false;
-        this.totalRowFaq     = res.total;
-      }).catch(error => {
-        this.listFaqLoading = false;
-        console.error('[App Error] => ', error);
-      });
+      await this.fetchListFaqByPaginate(this.listQuery)
+      this.listFaqLoading  = false;
     },
-    getListFaqTopic() {
+    async faqTopics() {
       this.listFaqTopicLoading = true;
-      this.fetListFaqTopic().then(res => {
-        this.listFaqTopicLoading  = false;
-      }).catch(error => {
-        this.listFaqTopicLoading = false;
-        console.error('[App Error] => ', error);
-      });
+      await this.fetListFaqTopic();
+      this.listFaqTopicLoading = false;
     },
-    handleEditFaqTopic(id) {
-      this.$router.push({
-        name: 'edit-faq-topic',
-        params: { id },
-      });
-    },
-    handleDestroyFaqTopic(id) {
-      this.$confirm('Xác nhận xóa vĩnh viễn phần tử này ?', 'Xác nhận', {
-        confirmButtonText: 'Đồng ý',
-        cancelButtonText: 'Hủy',
-        type: 'warning'
-      }).then(() => {
-        this.destroyFaqTopic(id).then(res => {
-          this.$message({
-            type: 'success',
-            message: res.success
-          });
-        }).catch(error => {
-          if (error.status === 422) {
-            this.$message.error(error.data.data.error);
-          }
-          else {
-            this.$message.error('Xóa vĩnh viễn thất bại !');
-            console.error('[App Error] => ', error);
-          }
-        });
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: 'Đã hủy xóa vĩnh viễn !'
-        });
-      });
+    async getList(callback) {
+      try {
+        await callback();
+      } catch (err) {
+        console.error('[App Error] => ', err);
+      }
     },
     handleEditFaq(id) {
       this.$router.push({
@@ -296,14 +225,15 @@ export default {
       });
     },
     reRenderDataFaqFromFormAction() {
-      if (this.faqs.length === 0) {
-        this.getListFaq();
+      if (!this.formDataFaqs.length) {
+        this.getList(this.faqs).then(() => {
+          this.listQuery.page = 1;
+        });
       }
     },
-    reRenderDataFromUrl() {
+    async reRenderDataFromUrl() {
       if (this.$route.query.form === 'success') {
-        this.getListFaq();
-        this.getListFaqTopic();
+        await Promise.all([ this.getList(this.faqs), this.getList(this.faqTopics) ]);
         let query = Object.assign({}, this.$route.query);
         delete query.form;
         this.$router.replace({ query });

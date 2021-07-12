@@ -208,7 +208,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { settingConfigSupportRule } from '@/validations';
+import { shopSettingConfigSupportRule } from '@/validations';
 
 const defaultFormData = {
   support_phone: '',
@@ -229,7 +229,7 @@ export default {
     return {
       formData: {...defaultFormData},
       sFormData: {...secondDefaultFormData},
-      formRules: settingConfigSupportRule,
+      formRules: shopSettingConfigSupportRule,
     };
   },
   created() {

@@ -1,14 +1,15 @@
 export default {
 
-  SET_INVENTORIES: (state, inventories) => {
-    state.listInventory = inventories;
+  SET_INVENTORIES: (state, data) => {
+    state.inventories = data.inventories;
+    state.total = data.total;
   },
 
   REMOVE_INVENTORY: (state, id) => {
-    state.listInventory = state.listInventory.filter(item => item.id !== id);
+    state.inventories = state.inventories.filter(item => item.id !== id);
   },
 
   REMOVE_INVENTORIES: (state, ids) => {
-    state.listInventory = state.listInventory.filter(item => !ids.includes(item.id));
+    state.inventories = state.inventories.filter(item => !ids.includes(item.id));
   },
 };

@@ -1,14 +1,15 @@
 export default {
 
-  SET_CATEGORY_SUB_GROUPS: (state, categorySubGroups) => {
-    state.listCategorySubGroups = categorySubGroups;
+  SET_CATEGORY_SUB_GROUPS: (state, data) => {
+    state.categorySubGroups = data.categorySubGroups;
+    state.total = data.total;
   },
 
   REMOVE_CATEGORY_SUB_GROUP: (state, id) => {
-    state.listCategorySubGroups = state.listCategorySubGroups.filter(item => item.id !== id);
+    state.categorySubGroups = state.categorySubGroups.filter(item => item.id !== id);
   },
 
   REMOVE_CATEGORY_SUB_GROUPS: (state, ids) => {
-    state.listCategorySubGroups = state.listCategorySubGroups.filter(item => !ids.includes(item.id));
+    state.categorySubGroups = state.categorySubGroups.filter(item => !ids.includes(item.id));
   },
 };

@@ -382,7 +382,6 @@ import FormAction from '@/components/FormAction';
 import UploadImage from '@/components/UploadImage';
 import { customerRules } from '@/validations';
 import { mapActions } from 'vuex';
-import { Message } from 'element-ui';
 import moment from 'moment';
 
 const defaultFormData = {
@@ -476,9 +475,9 @@ export default {
         this.countries = dataSetup.countries;
 
         this.isFormLoading = false;
-      } catch (error) {
-        console.error('[App Error] => ', error);
-        if (error.status === 404) {
+      } catch (err) {
+        console.error('[App Error] => ', err);
+        if (err.status === 404) {
           this.$confirm('Khách hàng này không tồn tại, hoặc đã bị xóa trước đó !', 'Thông báo lỗi', {
             confirmButtonText: 'Quay về',
             cancelButtonText: 'Thêm mới',
@@ -523,22 +522,22 @@ export default {
             return;
           }
           callback().then(res => {
-            Message({
+            this.$message({
               message: res.success,
               type: 'success',
               duration: 5 * 1000
             });
             this.back('/admin/customer', { form: 'success' });
-          }).catch(error => {
-            console.error('[App Error] => ', error);
-            if (error.status === 422) {
-              Message({
+          }).catch(err => {
+            console.error('[App Error] => ', err);
+            if (err.status === 422) {
+              this.$message({
                 message: 'Dữ liệu không hợp lệ, vui lòng kiễm tra lại !',
                 type: 'error',
                 duration: 5 * 1000
               });
             }
-            this.appendErrorToForm(error.data.errors);
+            this.appendErrorToForm(err.data.errors);
           });
         }
       });

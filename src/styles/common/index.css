@@ -24,16 +24,22 @@ body {
 .DropdownMenu {
   position: relative;
 }
-
-.DropdownMenu__table .DropdownMenu__btn--close {
+.NavBar_CustomMenu .DropdownMenu__btn--close {
   color: var(--second-color);
   position: absolute;
   right: 2%;
-  top: 2%;
+  top: 3px;
   font-size: .7rem;
   cursor: pointer;
   padding: 3px;
   box-sizing: content-box;
+  background: #ffffff;
+  width: 13px;
+  height: 13px;
+  box-shadow: 0 0 8px rgb(0 0 0 / 12%);
+  border-radius: 100%;
+  text-align: center;
+  line-height: 14px;
 }
 
 .DropdownMenu .DropdownMenu__table {
@@ -54,8 +60,12 @@ body {
 
 .DropdownMenu__table .DropdownMenu__title {
   padding: 7px 10px;
-  font-size: .9rem;
+  font-size: .8rem;
   border-bottom: 1px solid #f4f4f4;
+}
+
+.DropdownMenu__table .DropdownMenu__title a {
+  color: #636161;
 }
 
 .DropdownMenu__table .DropdownMenu__footer .DropdownMenu__link {

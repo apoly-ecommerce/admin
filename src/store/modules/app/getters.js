@@ -22,6 +22,10 @@ export default {
 
   getMapSidebarMenu(state) {
     return state.mapSidebarMenu;
+  },
+
+  getUnreadNotifications(state) {
+    return state.unreadNotifications;
   }
 
 };

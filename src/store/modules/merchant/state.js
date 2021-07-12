@@ -1,3 +1,4 @@
 export default {
-  listMerchant: []
+  merchants: [],
+  total: 0
 }

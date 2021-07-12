@@ -58,7 +58,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListBannerByPaginate(query)
       .then(res => {
-        commit('banner/SET_BANNERS', res.data.banners, { root: true });
+        commit('banner/SET_BANNERS', res.data, { root: true });
         resolve(res.data);
       })
       .catch(err => reject(err));
@@ -69,7 +69,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListBannerTrashedByPaginate(query)
       .then(res => {
-        commit('banner/SET_BANNERS', res.data.banners, { root: true });
+        commit('banner/SET_BANNERS', res.data, { root: true });
         resolve(res.data);
       })
       .catch(err => reject(err));

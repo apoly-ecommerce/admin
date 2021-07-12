@@ -10,7 +10,8 @@ import {
   restoreCategoryGroup,
   massRestoreCategoryGroup,
   fetchCategoryGroupItemById,
-  updateCategoryGroup
+  updateCategoryGroup,
+  emptyTrashCategoryGroup
 } from '@/api/categoryGroup';
 
 export default {
@@ -22,7 +23,7 @@ export default {
       };
       storeCategoryGroup(headers, formData)
       .then(res => resolve(res.data))
-      .catch(error => reject(error));
+      .catch(err => reject(err));
     });
   },
 
@@ -30,7 +31,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListCategoryGroup()
       .then(res => resolve(res.data))
-      .catch(error => reject(error));
+      .catch(err => reject(err));
     });
   },
 
@@ -38,10 +39,10 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListCategoryGroupByPaginate(listQuery)
       .then(res => {
-        commit('categoryGroup/SET_CATEGORY_GROUPS', res.data.categoryGroups, { root: true });
+        commit('categoryGroup/SET_CATEGORY_GROUPS', res.data, { root: true });
         resolve(res.data);
       })
-      .catch(error => reject(error));
+      .catch(err => reject(err));
     });
   },
 
@@ -49,10 +50,10 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListCategoryGroupTrashedByPaginate(listQuery)
       .then(res => {
-        commit('categoryGroup/SET_CATEGORY_GROUPS', res.data.categoryGroups, { root: true });
+        commit('categoryGroup/SET_CATEGORY_GROUPS', res.data, { root: true });
         resolve(res.data);
       })
-      .catch(error => reject(error));
+      .catch(err => reject(err));
     });
   },
 
@@ -63,7 +64,7 @@ export default {
         commit('categoryGroup/REMOVE_CATEGORY_GROUP', id, { root: true });
         resolve(res.data);
       })
-      .catch(error => reject(error));
+      .catch(err => reject(err));
     });
   },
 
@@ -74,7 +75,7 @@ export default {
         commit('categoryGroup/REMOVE_CATEGORY_GROUPS', ids, { root: true });
         resolve(res.data);
       })
-      .catch(error => reject(error));
+      .catch(err => reject(err));
     });
   },
 
@@ -85,7 +86,7 @@ export default {
         commit('categoryGroup/REMOVE_CATEGORY_GROUP', id, { root: true });
         resolve(res.data);
       })
-      .catch(error => reject(error));
+      .catch(err => reject(err));
     });
   },
 
@@ -96,7 +97,7 @@ export default {
         commit('categoryGroup/REMOVE_CATEGORY_GROUPS', ids, { root: true });
         resolve(res.data);
       })
-      .catch(error => reject(error));
+      .catch(err => reject(err));
     });
   },
 
@@ -107,7 +108,7 @@ export default {
         commit('categoryGroup/REMOVE_CATEGORY_GROUP', id, { root: true });
         resolve(res.data);
       })
-      .catch(error => reject(error));
+      .catch(err => reject(err));
     });
   },
 
@@ -118,7 +119,7 @@ export default {
         commit('categoryGroup/REMOVE_CATEGORY_GROUPS', ids, { root: true });
         resolve(res.data);
       })
-      .catch(error => reject(error));
+      .catch(err => reject(err));
     });
   },
 
@@ -126,7 +127,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchCategoryGroupItemById(id)
       .then(res => resolve(res.data))
-      .catch(error => reject(error));
+      .catch(err => reject(err));
     });
   },
 
@@ -137,7 +138,15 @@ export default {
       };
       updateCategoryGroup(headers, data, id)
       .then(res => resolve(res.data))
-      .catch(error => reject(error));
+      .catch(err => reject(err));
+    });
+  },
+
+  emptyTrashCategoryGroup() {
+    return new Promise((resolve, reject) => {
+      emptyTrashCategoryGroup()
+      .then(res => resolve(res.data))
+      .catch(err => reject(err));
     });
   }
 

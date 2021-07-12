@@ -1,5 +1,9 @@
 export default {
   getCategories(state) {
-    return state.listCategories;
+    return state.categories;
+  },
+
+  getTotal(state) {
+    return state.total;
   }
 };

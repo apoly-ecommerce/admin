@@ -51,7 +51,6 @@
 <script>
 import FormAction from '@/components/FormAction';
 import { mapActions } from 'vuex';
-import { Message } from 'element-ui';
 
 const defaultFormData = {
   featured_brands: []
@@ -121,7 +120,7 @@ export default {
       this.$refs['formData'].validate(valid => {
         if (valid) {
           callback().then(res => {
-            Message({
+            this.$message({
               message: res.success,
               type: 'success',
               duration: 5 * 1000
@@ -130,7 +129,7 @@ export default {
           }).catch(error => {
             console.error('[App Error] => ', error);
             if (error.status === 422) {
-              Message({
+              this.$message({
                 message: 'Dữ liệu không hợp lệ, vui lòng kiễm tra lại !',
                 type: 'error',
                 duration: 5 * 1000

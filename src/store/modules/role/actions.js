@@ -11,7 +11,8 @@ import {
   fetchRoleById,
   fetchRolePermissionsByUser,
   updateRole,
-  fetchListRole
+  fetchListRole,
+  emptyTrashRole
 } from '@/api/role';
 
 export default {
@@ -52,7 +53,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListRoleByPaginate(listQuery)
       .then(res => {
-        commit('role/SET_ROLES', res.data.roles, { root: true });
+        commit('role/SET_ROLES', res.data, { root: true });
         resolve(res.data);
       })
       .catch(error => reject(error));
@@ -63,7 +64,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListRoleTrashedByPaginate(listQuery)
       .then(res => {
-        commit('role/SET_ROLES', res.data.roles, { root: true });
+        commit('role/SET_ROLES', res.data, { root: true });
         resolve(res.data);
       })
       .catch(error => reject(error));
@@ -143,5 +144,13 @@ export default {
       .catch(error => reject(error));
     });
   },
+
+  emptyTrashRole() {
+    return new Promise((resolve, reject) => {
+      emptyTrashRole()
+      .then(res => resolve(res.data))
+      .catch(error => reject(error));
+    });
+  }
 
 };

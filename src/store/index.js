@@ -27,6 +27,9 @@ import faq from './modules/faq';
 import inventory from './modules/inventory';
 import config from './modules/config';
 import account from './modules/account';
+import systemConfig from './modules/systemConfig';
+import notification from './modules/notification';
+import message from './modules/message';
 
 const store = new Vuex.Store({
   modules: {
@@ -53,7 +56,10 @@ const store = new Vuex.Store({
     faq,
     inventory,
     config,
-    account
+    account,
+    systemConfig,
+    notification,
+    message
   }
 });
 

@@ -71,7 +71,7 @@ export function massDestroyProduct(ids) {
 
 export function restoreProduct(id) {
   return request({
-    url: `api/admin/catalog/product/${id/restore}`,
+    url: `api/admin/catalog/product/${id}/restore`,
     method: 'PATCH',
   });
 }

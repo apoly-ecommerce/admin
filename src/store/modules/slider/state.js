@@ -1,3 +1,4 @@
 export default {
-  listSlider: []
+  sliders: [],
+  total: 0
 };

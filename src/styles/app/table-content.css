@@ -229,3 +229,12 @@
 .raw-content ul {
   list-style: inside;
 }
+
+.TableBox_Content .text {
+  color: #666;
+  font-size: .9rem;
+}
+.TableBox_Content .icon  {
+  color: #00c0ef;
+  margin-right: 3px;
+}

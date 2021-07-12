@@ -1,5 +1,8 @@
 export default {
-  getListMerchant(state) {
-    return state.listMerchant;
+  getMerchants(state) {
+    return state.merchants;
+  },
+  getTotal(state) {
+    return state.total;
   }
 };

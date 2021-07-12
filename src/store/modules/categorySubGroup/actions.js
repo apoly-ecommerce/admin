@@ -11,7 +11,8 @@ import {
   restoreCategorySubGroup,
   massRestoreCategorySubGroup,
   fetchCategorySubGroupItemById,
-  updateCategorySubGroup
+  updateCategorySubGroup,
+  emptyTrashCategorySubGroup
 } from '@/api/categorySubGroup';
 
 export default {
@@ -47,7 +48,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListCategorySubGroupByPaginate(listQuery)
       .then(res => {
-        commit('categorySubGroup/SET_CATEGORY_SUB_GROUPS', res.data.categorySubGroups, { root: true });
+        commit('categorySubGroup/SET_CATEGORY_SUB_GROUPS', res.data, { root: true });
         resolve(res.data);
       })
       .catch(error => reject(error));
@@ -58,7 +59,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchListCategorySubGroupTrashedByPaginate(listQuery)
       .then(res => {
-        commit('categorySubGroup/SET_CATEGORY_SUB_GROUPS', res.data.categorySubGroups, { root: true });
+        commit('categorySubGroup/SET_CATEGORY_SUB_GROUPS', res.data, { root: true });
         resolve(res.data);
       })
       .catch(error => reject(error));
@@ -145,6 +146,14 @@ export default {
         'Content-type': 'multipart/form-data'
       };
       updateCategorySubGroup(headers, formData, id)
+      .then(res => resolve(res.data))
+      .catch(error => reject(error));
+    });
+  },
+
+  emptyTrashCategorySubGroup() {
+    return new Promise((resolve, reject) => {
+      emptyTrashCategorySubGroup()
       .then(res => resolve(res.data))
       .catch(error => reject(error));
     });

@@ -3,7 +3,6 @@ import { resetRouter } from '@/router';
 import mapSidebarMenu from '@/layouts/common/sidebar.js'
 
 import {
-  userAuth,
   login,
   logout,
   fetchUserAuth
@@ -16,7 +15,7 @@ export default {
     return new Promise((resolve, reject) => {
       login({email: email.trim(), password})
       .then(res => {
-        commit('auth/SET_TOKEN_AUTH', res.data.accessToken, { root: true });
+        commit('SET_TOKEN_AUTH', res.data.accessToken);
         setToken(res.data.accessToken);
         resolve(res.data);
       })
@@ -37,8 +36,8 @@ export default {
 
   resetTokenAuth({ commit }) {
     return new Promise(resolve => {
-      commit('auth/SET_TOKEN_AUTH', '', { root: true });
-      commit('auth/SET_USER_AUTH', {}, { root: true });
+      commit('SET_TOKEN_AUTH', '');
+      commit('SET_USER_AUTH', {});
       commit('app/RESET_SIDEBAR_MENU', {}, { root: true });
       removeToken();
       resetRouter();
@@ -50,7 +49,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetchUserAuth()
       .then(res => {
-        commit('auth/SET_USER_AUTH', res.data.user, { root: true});
+        commit('SET_USER_AUTH', res.data.user);
         commit('app/SET_SIDEBAR_MAP', { permissions: res.data.user.permissions, mapSidebarMenu }, { root: true });
         resolve(res.data);
       })

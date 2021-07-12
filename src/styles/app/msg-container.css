@@ -1,0 +1,47 @@
+:root {
+  --border-color: #e9e9e9;
+  --height-msg: 600px;
+
+  --height-sidebar-header: 100px;
+  --height-sidebar-scroll: 465px;
+
+  --height-header-ChatOnboard: 65px;
+  --height-msg-view: 440px;
+  --height-msg-toolbar: 45px;
+  --height-msg-form: 49px;
+
+  --hover-color: #ededed;
+}
+.PageMessage {
+  background-color: rgb(255 255 255);
+  box-shadow: 0 0 1px rgb(179 179 179 / 12%);
+  border: 1px solid var(--border-color);
+  color: #333;
+  height: var(--height-msg);
+  overflow: hidden;
+}
+.msg-divider {
+  border-right: 1px solid var(--border-color);
+}
+.user-avatar .avatar-thumb {
+  width: 46px;
+  height: 46px;
+  font-size: 23px;
+  line-height: 46px;
+}
+.user-avatar .avatar-thumb .avatar-photo {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+.scroll-container {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.scroll-container::-webkit-scrollbar {
+  width: 5px;
+}
+.scroll-container::-webkit-scrollbar-thumb {
+  background: rgb(168, 168, 168);
+  border-radius: 10px;
+}

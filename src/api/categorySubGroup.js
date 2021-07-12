@@ -100,3 +100,10 @@ export function updateCategorySubGroup(headers, data, id) {
     data
   });
 }
+
+export function emptyTrashCategorySubGroup() {
+  return request({
+    url: 'api/admin/catalog/categorySubGroup/emptyTrash',
+    method: 'DELETE'
+  });
+}

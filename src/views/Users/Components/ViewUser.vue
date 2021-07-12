@@ -64,7 +64,8 @@
               </table>
             </el-tab-pane>
             <el-tab-pane label="MÔ TẢ BẢN THÂN">
-              <article class="description">{{ user.description || 'Không có' }}</article>
+              <article v-if="user.description" class="description">{{ user.description }}</article>
+              <router-link v-else :to="`/admin/user/edit/${user.id}?update=origin`">Thêm tiểu sử ?</router-link>
             </el-tab-pane>
             <el-tab-pane label="THÔNG TIN LIÊN HỆ">
               <table>
@@ -81,33 +82,20 @@
                     <th>Address:</th>
                     <td>
                       <div v-if="user.primaryAddress">
-                        <p v-if="user.primaryAddress.address_line_1">
-                          {{ user.primaryAddress.address_line_1 }}
-                        </p>
-                        <p v-if="user.primaryAddress.address_line_2">
-                          {{ user.primaryAddress.address_line_2 }}
-                        </p>
-                        <p v-if="user.primaryAddress.state">
-                          {{ user.primaryAddress.state.name }}
-                        </p>
-                        <p v-if="user.primaryAddress.city">
-                          {{ user.primaryAddress.city }}
-                        </p>
-                        <p v-if="user.primaryAddress.country">
-                          {{ user.primaryAddress.country.name }}
-                        </p>
-                        <p v-if="user.primaryAddress.phone">
-                          Phone: {{ user.primaryAddress.phone }}
-                        </p>
+                        <comp-address-content
+                          :address="user.primaryAddress"
+                        />
                       </div>
-                      <div v-else>Không có</div>
+                      <div v-else>
+                        <router-link :to="`/admin/user/edit/${user.id}?update=address`">Cập nhật địa chỉ</router-link>
+                      </div>
                     </td>
                   </tr>
                 </tbody>
               </table>
-              <div v-if="checkAddressExists(user.primaryAddress)" class="GoogleMap">
-                <iframe width="100%" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" :src="`https://maps.google.it/maps?q=${toGeocodeString(user.primaryAddress)}&output=embed`"></iframe>
-              </div>
+              <google-map-iframe
+                :address="user.primaryAddress"
+              />
             </el-tab-pane>
           </el-tabs>
         </section>
@@ -118,10 +106,15 @@
 
 <script>
 import moment from 'moment';
-import { checkAddressExists, toGeocodeString } from '@/helpers';
+import GoogleMapIframe from '@/components/GoogleMapIframe';
+import CompAddressContent from '@/components/CompAddressContent';
 
 export default {
   name: 'view-user',
+  components: {
+    'google-map-iframe': GoogleMapIframe,
+    'comp-address-content': CompAddressContent
+  },
   props: {
     user: { type: Object, default: {} },
     isShow: { type: Boolean, default: false }
@@ -136,12 +129,6 @@ export default {
     },
     fromNow(dateStr) {
       return moment(dateStr).locale('vi').fromNow();
-    },
-    toGeocodeString(address) {
-      return toGeocodeString(address);
-    },
-    checkAddressExists(address) {
-      return checkAddressExists(address);
     }
   }
 }

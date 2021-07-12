@@ -273,7 +273,6 @@ import UploadImage from '@/components/UploadImage';
 import { categoryRules } from '@/validations';
 import { mapActions } from 'vuex';
 import { changeToSlug } from '@/helpers';
-import { Message } from 'element-ui';
 
 const defaultFormData = {
   name: '',
@@ -363,9 +362,9 @@ export default {
         let dataSetup = await this.setupFormCategory();
         this.categoryGroups = dataSetup.categoryGroups;
         this.isFormLoading = false;
-      } catch (error) {
-        console.error('[App Error] => ', error);
-        if (error.status === 404) {
+      } catch (err) {
+        console.error('[App Error] => ', err);
+        if (err.status === 404) {
           this.$confirm('Danh mục này không tồn tại, hoặc đã bị xóa trước đó !', 'Thông báo lỗi', {
             confirmButtonText: 'Quay về',
             cancelButtonText: 'Thêm mới',
@@ -388,10 +387,10 @@ export default {
     getFormName() {
       this.formName = this.$route.meta && this.$route.meta.title;
     },
-    back(router = '/catalog/category') {
+    back(router = '/catalog/category', query = {}) {
       this.resetFormData();
       this.$refs['formData'].resetFields();
-      this.$router.push({ path: router });
+      this.$router.push({ path: router, query });
     },
     handleCloseForm() {
       this.back();
@@ -415,22 +414,22 @@ export default {
       this.$refs['formData'].validate(valid => {
         if (valid) {
           callback().then(res => {
-            Message({
+            this.$message({
               message: res.success,
               type: 'success',
               duration: 5 * 1000
             });
-            this.back();
-          }).catch(error => {
-            console.error('[App Error] => ', error);
-            if (error.status === 422) {
-              Message({
+            this.back('/catalog/category', { form: 'success' });
+          }).catch(err => {
+            console.error('[App Error] => ', err);
+            if (err.status === 422) {
+              this.$message({
                 message: 'Dữ liệu không hợp lệ, vui lòng kiễm tra lại !',
                 type: 'error',
                 duration: 5 * 1000
               });
             }
-            this.appendErrorToForm(error.data.errors);
+            this.appendErrorToForm(err.data.errors);
           });
         }
       });
@@ -471,16 +470,16 @@ export default {
       }
     },
     appendDataToForm(data) {
-      this.formData.name = data.name;
-      this.formData.category_sub_group_id = data.category_sub_group_id;
-      this.formData.slug = data.slug;
-      this.formData.active = data.active.toString();
-      this.formData.order = data.order;
-      this.formData.description = data.description;
-      this.formData.coverImage.src = data.cover_image;
-      this.formData.featureImage.src = data.feature_image;
-      this.formData.meta_title = data.meta_title;
-      this.formData.meta_description = data.meta_description;
+      this.formData.name = data.name || '';
+      this.formData.category_sub_group_id = data.category_sub_group_id || '';
+      this.formData.slug = data.slug || '';
+      this.formData.active = data.active ? '1' : '0';
+      this.formData.order = data.order || '';
+      this.formData.description = data.description || '';
+      this.formData.coverImage.src = data.cover_image || '';
+      this.formData.featureImage.src = data.feature_image || '';
+      this.formData.meta_title = data.meta_title || '';
+      this.formData.meta_description = data.meta_description || '';
     },
     checkImageNotEmpty(img) {
       if (img && !(img.split('?text=')[1] === 'No_Image_Found')) {

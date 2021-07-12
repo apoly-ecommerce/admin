@@ -123,7 +123,7 @@ export default {
         this.isFormLoading = true;
         if (this.faqTopicId) {
           const dataFaqTopic = await this.fetchFaqTopicItemById(this.faqTopicId);
-          this.formData = dataFaqTopic.faqTopic;
+          this.appendDataToForm(dataFaqTopic.faqTopic);
         }
         this.isFormLoading = false;
       } catch (err) {
@@ -193,6 +193,10 @@ export default {
         this.formError[key] = value[0];
       }
     },
+    appendDataToForm(data) {
+      this.formData.name = data.name || '';
+      this.formData.for  = data.for  || 'Merchant';
+    }
   }
 }
 </script>
