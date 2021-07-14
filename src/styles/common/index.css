@@ -94,3 +94,14 @@ input[type="number"]::-webkit-inner-spin-button
   position: relative!important;
   font-size: 11px;
 }
+
+.flex-c {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.i-center {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}

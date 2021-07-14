@@ -1,48 +1,49 @@
 <template>
-  <section class="SidebarNav">
-    <section class="nav-MenuChatGroup">
+  <div id="sidebarMsg-component">
+    <div class="sidebar-wrap d-flex">
+      <!-- Nav Tabs Selections -->
+      <nav-tabs-selection />
 
-      <!-- NavSidebarHeading -->
-      <section class="Nav-sbHeading">
-        <section class="Heading-wrap">
+      <!-- Nav Menu -->
+      <div class="msgSidebar-menu d-flex flex-column overflow-hidden">
+        <div class="msgSidebar-header">
           <div class="d-flex justify-content-between align-items-center">
-            <h3 class="title">Chats</h3>
-            <sidebar-tools />
+            <h3 class="sbMsg-heading">Chats</h3>
+            <router-link
+              tag="div"
+              to="/support/message/group/create"
+              class="createMsgGroup-btn"
+              role="button"
+            >
+              <div class="clickable i-center" title="Tạo nhóm chat">
+                <i class="fas fa-users"/>
+                <span class="d-none">Tạo nhóm chat</span>
+              </div>
+            </router-link>
           </div>
-        </section>
-
-        <search-group />
-      </section>
-
-      <!-- NavSidebarBody -->
-      <section class="Nav-sbBody">
-        <section class="Body-wrap">
-
-          <msg-filter-bar />
-
-          <conversation-list />
-
-        </section>
-      </section>
-
-    </section>
-  </section>
+        </div>
+        <msg-contact-search />
+        <div class="msg-divider bottom" style="margin: 0 10px;"></div>
+        <msg-filters-bar />
+        <nav-tabs-panel />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import SidebarTools from './components/SidebarTools';
-import SearchGroup from './components/SearchGroup';
-import MsgFilterBar from './components/MsgFilterBar';
-import ConversationList from './components/ConversationList';
+import NavTabsSelection from './components/NavTabsSelection';
+import MsgContactSearch from './components/MsgContactSearch';
+import MsgFiltersBar from './components/MsgFiltersBar';
+import NavTabsPanel from './components/NavTabsPanel';
 
 export default {
   components: {
-    SidebarTools,
-    SearchGroup,
-    MsgFilterBar,
-    ConversationList
+    NavTabsSelection,
+    MsgContactSearch,
+    MsgFiltersBar,
+    NavTabsPanel
   }
 }
 </script>
-
 <style src="@/styles/app/sidebar-msg.css"></style>

@@ -1,11 +1,11 @@
 <template>
-  <section class="PageMessage">
-    <section class="d-flex">
+  <div class="PageMessage">
+    <div class="d-flex">
       <sidebar-components />
-      <div class="msg-divider"></div>
+      <div class="msg-divider right"></div>
       <chat-onboard-components />
-    </section>
-  </section>
+    </div>
+  </div>
 </template>
 
 <script>

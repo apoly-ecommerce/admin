@@ -305,3 +305,11 @@ export const systemSettingConfigSupportRule = {
   ],
   default_email_sender_name: [{ required: true, message: 'Vui lòng điền trường này.', trigger: 'blur' }],
 };
+
+/**
+ * Check System Setting Config Support Rules.
+ */
+ export const userGroupRules = {
+  name: [{ required: true, message: 'Vui lòng điền trường này', trigger: 'blur' }],
+  user_list: [{ required: true, message: 'Vui lòng chọn', trigger: 'blur' }]
+};

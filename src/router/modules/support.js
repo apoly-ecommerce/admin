@@ -8,8 +8,13 @@ const supportRoutes = [
     children: [
       {
         path: '',
-        name: 'message',
+        name: 'list-message',
         component: () => import('@/views/Messages/index')
+      },
+      {
+        path: 'group/create',
+        name: 'create-group',
+        component: () => import('@/views/Messages/FormComponents/FormCreateChatRoom.vue')
       }
     ]
   }

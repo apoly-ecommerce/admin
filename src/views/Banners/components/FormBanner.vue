@@ -368,7 +368,7 @@ export default {
               duration: 5 * 1000
             });
             this.back('/appearance/banner', { form: 'success' });
-          }).catch(error => {
+          }).catch(err => {
             console.error('[App Error] => ', error);
             if (error.status === 422) {
               this.$message({
@@ -377,7 +377,7 @@ export default {
                 duration: 5 * 1000
               });
             }
-            this.appendErrorToForm(error.data.errors);
+            this.appendErrorToForm(err.data.errors);
           });
         }
       });
