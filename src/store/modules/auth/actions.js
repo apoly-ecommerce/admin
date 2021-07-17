@@ -5,10 +5,21 @@ import mapSidebarMenu from '@/layouts/common/sidebar.js'
 import {
   login,
   logout,
-  fetchUserAuth
+  fetchUserAuth,
+  pusherAuth
 } from '@/api/auth';
 
 export default {
+
+  pusherAuth({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      pusherAuth(data)
+      .then(res => {
+        resolve(res);
+      })
+      .catch(err => reject(err));
+    });
+  },
 
   login({ commit }, formData) {
     const { email, password }  = formData;

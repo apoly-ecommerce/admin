@@ -1,16 +1,17 @@
 <template>
   <div class="ConversationList">
-    <div class="virtualized-scroll">
-      <div class="virtualized__innerScrollContainer">
-        <template v-if="convList && convList.length">
+    <div class="list-group-wrap">
+
+      <template v-if="convList && convList.length">
+        <div class="virtualized-scroll" :style="heightScroll()" id="infinite-list-conv">
           <tab-msg-thrd-chat-item
             v-for="(conv, index) in convList"
             :key="index"
             :conv="conv"
           />
-        </template>
-        <msg-tab-skeleton :count="5" v-else/>
-      </div>
+        </div>
+      </template>
+      <msg-tab-skeleton :count="5" v-else/>
     </div>
   </div>
 </template>
@@ -23,20 +24,26 @@ import { mapGetters, mapActions } from 'vuex';
 export default {
   components: {
     MsgTabSkeleton,
-    TabMsgThrdChatItem
+    TabMsgThrdChatItem,
   },
   created() {
     this.setup();
   },
+  data() {
+    return {
+      loading: false,
+      items: [],
+    };
+  },
   computed: {
     ...mapGetters({
-      'convList': 'message/getConvListSearch'
+      'convList': 'message/getConvListSearch',
     })
   },
   methods: {
     ...mapActions({
       'fetchConvListFriends': 'message/fetchConvListFriends',
-      'fetchChatRooms': 'message/fetchChatRooms'
+      'fetchChatRooms': 'message/fetchChatRooms',
     }),
     async setup() {
       try {
@@ -47,6 +54,13 @@ export default {
       } catch (err) {
         console.error(err);
       }
+    },
+    heightScroll() {
+      let hSbt = +document.querySelector(".SidebarTop").offsetHeight;
+      let hLW  = +document.querySelector(".msgSidebar-menu").offsetHeight;
+      return {
+        height: `${hLW-hSbt-2}px`
+      };
     }
   }
 }

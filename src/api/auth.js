@@ -23,3 +23,11 @@ export function fetchUserAuth() {
     method: 'GET',
   });
 }
+
+export function pusherAuth(data) {
+  return request({
+    url: 'api/admin/pusher/auth',
+    method: 'POST',
+    data
+  });
+}

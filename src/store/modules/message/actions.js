@@ -21,7 +21,6 @@ export default {
     return new Promise((resolve, reject) => {
       fetchChatRooms()
       .then(res => {
-          console.log(res.data.rooms);
         commit('SET_CONV_LIST_ROOMS', res.data.rooms);
         resolve(res.data);
       })
@@ -47,6 +46,10 @@ export default {
   },
 
   handleContactSearch({ commit }, dataSearch) {
-    commit('SET_STRING_CONTACT_SEARCH' ,dataSearch);
+    commit('SET_STRING_CONTACT_SEARCH', dataSearch);
+  },
+
+  unshiftConvItemIntoRoom({ commit }, convItem) {
+    commit('UNSHIFT_CONV_ITEM_INTO_ROOMS', convItem);
   }
 }

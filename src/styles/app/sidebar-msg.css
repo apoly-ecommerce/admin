@@ -2,11 +2,11 @@
 #sidebarMsg-component {
   max-width: var(--width-sidebarNav);
   flex: 0 0 300px;
+
 }
 /* Nav Tabs Selections */
 .navTabs-selection {
   width: var(--width-NavTabsSelection);
-  height: var(--height-msg);
   background: var(--header-bg);
 }
 .navTag-wrap .author {
@@ -77,27 +77,22 @@
 .msg-filters-bar .el-input__suffix .el-input__icon {
   color: #000;
 }
-.virtualized-scroll {
-  height: var(--height-sidebar-scroll);
-}
 .ConversationList .msg-item {
   height: 68px;
   width: 100%;
+  width: 300px;
 }
 .ConversationList .msg-item .conv-item:hover {
   background: #e5efff;
 }
-.ConversationList .msg-item.selected .conv-item {
-
-}
 .ConversationList .conv-item {
-  position: relative;
   height: 68px;
   contain: size style;
   background: #fff;
   transition: all .2s linear;
   display: flex;
   cursor: pointer;
+  padding-right: 10px;
 }
 
 .ConversationList .conv-item__avatar {
@@ -118,24 +113,24 @@
   border-radius: 50%;
   line-height: 48px;
 }
-.conv-item-content .conv-item-title {
-  width: 232px;
-}
-.conv-item-content .conv-item-body {
-  width: 232px;
-}
 .conv-item-content .conv-item-title__name {
   font-weight: 500;
   font-size: .9rem;
   margin-bottom: 2px;
 }
+.conv-item-content .conv-item-title__name.truncate {
+  width: 333px;
+}
 .conv-item-content .conv-item-title__more {
   font-size: .7rem;
   color: #72808e;
   margin-right: 3px;
+  width: 100%;
 }
 .conv-item-body .conv-message {
    color: #72808e;
    font-size: .8rem;
-   padding-right: 40px;
+}
+.conv-item-body .conv-message.truncate {
+  width: 160px;
 }

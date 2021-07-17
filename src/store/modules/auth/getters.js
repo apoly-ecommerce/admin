@@ -1,15 +1,22 @@
 export default {
 
   getUserAuth(state) {
-    return state.userAuth;
+    // return state.userAuth;
+    if (state.userAuth) {
+      return state.userAuth;
+    } return null;
   },
 
   getRoleAuth(state) {
-    return state.userAuth.role;
+    if (state.userAuth) {
+      return state.userAuth.role;
+    } return null;
   },
 
   getTokenAuth(state) {
-    return state.tokenAuth;
+    if (state.tokenAuth) {
+      return state.tokenAuth;
+    } return null;
   }
 
 };

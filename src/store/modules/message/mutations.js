@@ -8,7 +8,6 @@ export default {
   },
 
   SET_CONV_LIST_FRIENDS: (state, convListFriends) => {
-      console.log(convListFriends);
     state.convListFriends = convListFriends.map(friend => {
       return {
         avatar: friend.image,
@@ -29,5 +28,11 @@ export default {
         truncate: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime, voluptas.'
       };
     });
+  },
+
+  UNSHIFT_CONV_ITEM_INTO_ROOMS: (state, convRoom) => {
+    if (convRoom) {
+      state.convListRooms.unshift(convRoom);
+    }
   }
 };

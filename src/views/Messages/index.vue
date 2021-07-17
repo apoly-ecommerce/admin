@@ -1,6 +1,6 @@
 <template>
   <div class="PageMessage">
-    <div class="d-flex">
+    <div class="d-flex h-100">
       <sidebar-components />
       <div class="msg-divider right"></div>
       <chat-onboard-components />

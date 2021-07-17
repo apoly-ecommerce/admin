@@ -26,18 +26,12 @@ Vue.use(VueCurrencyInput);
 import VueFontAwesomePicker from "vfa-picker";
 Vue.use(VueFontAwesomePicker);
 
-// Moment js
-// import moment from 'moment';
-// Vue.use(moment);
-// Vue.prototype.moment = moment;
-
 // Common styles
 import './styles/common/index.css';
 
 Vue.use(Element, {
   locale: enLang
 });
-
 
 Vue.config.productionTip = false;
 

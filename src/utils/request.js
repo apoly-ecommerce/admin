@@ -2,10 +2,11 @@ import axios from 'axios';
 import store from '@/store';
 import { getToken } from '@/utils/auth';
 import { MessageBox, Message } from 'element-ui';
+import { APP_API_URL } from '@/constants';
 
 // Create an axios instance
 const service = axios.create({
-  baseURL: 'http://127.0.0.1:2810/',
+  baseURL: APP_API_URL,
   timeout: 5000 // request timeout.
 });
 

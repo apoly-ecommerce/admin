@@ -6,12 +6,15 @@
       <App-main />
       <App-footer />
     </main>
+
+    <!-- Widget Message -->
+    <chat-room-widget />
   </div>
 </template>
 
 <script>
-// Components @ > layouts
 import { AppMain, AppHeader, AppSidebar, AppFooter, AppSetting } from './components';
+import { ChatRoomWidget } from '@/components/MessageWidget';
 
 export default {
   name: 'Layout',
@@ -21,6 +24,7 @@ export default {
     AppSidebar,
     AppFooter,
     AppSetting,
+    ChatRoomWidget
   }
 }
 </script>

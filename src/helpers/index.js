@@ -115,6 +115,25 @@ const formatTime = (time) => {
   return moment(time).format('DD-MM-YYYY HH:mm');
 }
 
+const pusherAuthorizer = (channel, options) => {
+  // console.log();
+  return {
+    authorize: (socketId, callback) => {
+      const data = {
+        socket_id: socketId,
+        channel_name: channel.name
+      };
+      store.dispatch('auth/pusherAuth', data)
+      .then(res => {
+        callback(null, res);
+      })
+      .catch(err => {
+        console.error(err);
+      });
+    }
+  }
+};
+
 export {
   changeToSlug,
   getCurrentYear,
@@ -124,5 +143,6 @@ export {
   formatCurrency,
   strUcFirst,
   recursiveSidebarMenu,
-  formatTime
+  formatTime,
+  pusherAuthorizer
 };

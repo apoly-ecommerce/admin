@@ -1,7 +1,7 @@
 <template>
   <div class="navTabs-selection">
     <div class="navTag-wrap">
-      <div class="author flex-c">
+      <div v-if="userAuth" class="author flex-c">
         <div class="author-avatar position-relative" role="button">
           <div class="avatar-thumbnail">
             <img

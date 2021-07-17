@@ -1,6 +1,6 @@
 :root {
   --border-color: #e9e9e9;
-  --height-msg: 600px;
+  --height-msg: calc(100vh - 150px);
 
   --width-sidebarNav: 365px;
   --width-NavTabsSelection: 65px;
@@ -38,24 +38,20 @@
   border: 1px solid #fff;
   border-radius: 50%;
 }
-
-.virtualized-scroll {
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-.virtualized-scroll::-webkit-scrollbar-track {
-  background-color: #ffff;
-  border-radius: 10px;
-  width: 5px;
-}
-
-.virtualized-scroll::-webkit-scrollbar-thumb {
-  background: red;
-  border-radius: 10px;
-}
 .truncate {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   word-wrap: break-word;
+}
+.virtualized-scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.virtualized-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.virtualized-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(172, 172, 172, 0.5);
+  border-radius: 10px;
 }
