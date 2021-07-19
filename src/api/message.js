@@ -1,9 +1,10 @@
 import request from '@/utils/request';
 
-export function fetchConvListFriends() {
+export function fetchMyFriends(query) {
   return request({
-    url: 'api/admin/support/userMessage/friends',
-    method: 'GET'
+    url: 'api/admin/admin/user/friends',
+    method: 'GET',
+    params: query
   });
 }
 

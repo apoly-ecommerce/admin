@@ -1,7 +1,8 @@
 export default {
-  tabChatSelected: 'convListFriends',
+  tabChatSelected: 'myFriends',
   strContactSearch: '',
-  convListFriends:  [],
-  convListRooms:    [],
-  convListFeedback: [],
+  myFriends:    [],
+  convFriends:  [],
+  convGroup:    [],
+  convFeedback: [],
 };

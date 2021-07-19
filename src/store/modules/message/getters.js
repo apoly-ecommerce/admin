@@ -1,4 +1,8 @@
 export default {
+  getMyFriends(state) {
+    return state.myFriends;
+  },
+
   getConvFriends(state) {
     return state.convFriends;
   },
@@ -13,9 +17,13 @@ export default {
 
   getConvListSearch(state) {
     const { strContactSearch } = state;
-    let result = state[state.tabChatSelected].filter(item => {
-      return item.title.toLowerCase().includes(strContactSearch.toLowerCase());
-    });
-    return result;
+    const convList = state[state.tabChatSelected];
+    if (convList.length) {
+      let result = convList.filter(item => {
+        return item.title.toLowerCase().includes(strContactSearch.toLowerCase());
+      });
+      return result;
+    } return [];
   }
+
 }

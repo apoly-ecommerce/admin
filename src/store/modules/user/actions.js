@@ -13,7 +13,7 @@ import {
   fetchUserItemById,
   updateUser,
   updatePasswordUser,
-  emptyTrashUser
+  emptyTrashUser,
 } from '@/api/user';
 
 export default {
@@ -166,6 +166,5 @@ export default {
       .then(res => resolve(res.data))
       .catch(err => reject(err));
     });
-  }
-
+  },
 };

@@ -13,7 +13,7 @@
             <div class="conv-item-title__name truncate">
               <span>{{ conv.title }}</span>
             </div>
-            <div class="conv-item-title__more">
+            <div v-if="$props.conv.last_ib_at" class="conv-item-title__more">
               <span>{{ lastIbAt }}</span>
             </div>
           </div>

@@ -1,16 +1,16 @@
 import {
-  fetchConvListFriends,
+  fetchMyFriends,
   storeChatRoom,
   fetchChatRooms
 } from '@/api/message'
 
 export default {
 
-  fetchConvListFriends({ commit }) {
+  fetchMyFriends({ commit }, query) {
     return new Promise((resolve, reject) => {
-      fetchConvListFriends()
+      fetchMyFriends(query)
       .then(res => {
-        commit('SET_CONV_LIST_FRIENDS', res.data.friends);
+        commit('ADD_FRIENDS', res.data.friends);
         resolve(res.data);
       })
       .catch(err => reject(err))

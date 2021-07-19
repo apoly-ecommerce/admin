@@ -1,4 +1,4 @@
 module.exports = {
-  appName: 'H-K',
-  appTitle: 'Booking HomeStay',
+  appName: 'Apoly app',
+  appTitle: 'Apoly Admin',
 };

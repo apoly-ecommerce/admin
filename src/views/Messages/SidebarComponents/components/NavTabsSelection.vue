@@ -16,12 +16,26 @@
       </div>
       <div class="tabs">
         <div
+          title="Danh sách bạn bè"
+          class="tab-item flex-c"
+          role="button"
+          data-id=""
+          :class="{ 'active': tabActive === 'myFriends' }"
+          @click="changeTabActive('myFriends')"
+        >
+          <el-badge :value="3" class="item">
+            <i class="fas fa-address-book"></i>
+          </el-badge>
+          <span class="d-none">Danh sách bạn bè</span>
+        </div>
+
+        <div
           title="Tin nhắn cá nhân"
           class="tab-item flex-c"
           role="button"
           data-id=""
-          :class="{ 'active': tabActive === 'convListFriends' }"
-          @click="changeTabActive('convListFriends')"
+          :class="{ 'active': tabActive === 'convFriends' }"
+          @click="changeTabActive('convFriends')"
         >
           <el-badge :value="3" class="item">
             <i class="fas fa-comment-dots" />
@@ -34,8 +48,8 @@
           class="tab-item flex-c"
           role="button"
           data-id=""
-          :class="{ 'active': tabActive === 'convListRooms' }"
-          @click="changeTabActive('convListRooms')"
+          :class="{ 'active': tabActive === 'convGroup' }"
+          @click="changeTabActive('convGroup')"
         >
           <el-badge :value="3" class="item">
             <i class="fas fa-comments" />
@@ -48,8 +62,8 @@
           role="button"
           data-id=""
           class="tab-item flex-c"
-          :class="{ 'active': tabActive === 'convListFeedback' }"
-          @click="changeTabActive('convListFeedback')"
+          :class="{ 'active': tabActive === 'convFeedback' }"
+          @click="changeTabActive('convFeedback')"
         >
           <el-badge :value="3" class="item">
             <i class="el-icon-warning" />

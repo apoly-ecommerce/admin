@@ -4,11 +4,11 @@
 
       <template v-if="convList && convList.length">
         <div class="virtualized-scroll" :style="heightScroll()" id="infinite-list-conv">
-          <tab-msg-thrd-chat-item
+          <!-- <tab-msg-thrd-chat-item
             v-for="(conv, index) in convList"
             :key="index"
             :conv="conv"
-          />
+          /> -->
         </div>
       </template>
       <msg-tab-skeleton :count="5" v-else/>
@@ -17,13 +17,11 @@
 </template>
 
 <script>
-import MsgTabSkeleton from '../../CommonComponents/MsgTabSkeleton';
 import TabMsgThrdChatItem from './TabMsgThrdChatItem';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
   components: {
-    MsgTabSkeleton,
     TabMsgThrdChatItem,
   },
   created() {
@@ -42,14 +40,14 @@ export default {
   },
   methods: {
     ...mapActions({
-      'fetchConvListFriends': 'message/fetchConvListFriends',
+      'fetchFriends': 'message/fetchFriends',
       'fetchChatRooms': 'message/fetchChatRooms',
     }),
     async setup() {
       try {
         await Promise.all([
-          this.fetchConvListFriends(),
-          this.fetchChatRooms(),
+          this.fetchFriends(),
+          // this.fetchChatRooms(),
         ]);
       } catch (err) {
         console.error(err);
