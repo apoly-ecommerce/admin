@@ -164,8 +164,7 @@
                   class="w-100"
                   format="dd-MM-yyyy"
                   placeholder="Date of birth"
-                >
-                </el-date-picker>
+                />
                 <div v-if="formError.dob" class="el-form-item__error">{{ formError.dob }}</div>
               </el-form-item>
             </el-col>

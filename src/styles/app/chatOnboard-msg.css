@@ -87,6 +87,8 @@
 .chatView-onboard {
   width: 100%;
   height: calc(100% - 68px);
+  display: flex;
+  flex-direction: column;
 }
 #messageView {
   flex: 1 0 auto;
@@ -351,4 +353,124 @@
 }
 .msg-send-time__sendTime {
   font-size: 13px;
+}
+#appTollbar {
+  padding: 0 0 0 8px;
+  height: 46px;
+  background: #fff;
+  z-index: 3;
+}
+#appTollbar .charbar-photo,
+.chatbar-emoji,
+.send-msg-btn {
+  font-size: 1.2rem;
+  color: #394e60;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  width: 40px;
+  height: 40px;
+}
+#appTollbar .charbar-photo:hover,
+.chatbar-emoji:hover,
+.send-msg-btn:hover {
+  background: #eeeff2;
+  border-color: #eeeff2;
+  transition: all .25s ease;
+}
+.btn-chatbar-primary {
+  height: 40px;
+  min-width: 40px;
+  padding: 0 16px;
+  font-weight: 600;
+  text-align: left;
+  font-size: 15px;
+  letter-spacing: normal;
+  line-height: 38px;
+  box-sizing: border-box;
+}
+.chat-input__content {
+  border-top: 1px solid #e1e4ea;
+  background-color: #fff;
+}
+.chat-input__content__input {
+  width: 100%;
+}
+.chat-input-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.rich-input.empty {
+  overflow: hidden;
+}
+.rich-input {
+  position: relative;
+  user-select: text;
+  text-shadow: 0 0 0 rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+  min-height: 16px;
+  max-height: 182px;
+  justify-content: center;
+  flex-direction: column;
+  line-height: normal;
+  font-weight: 400;
+  text-align: left;
+  font-size: 15px;
+  letter-spacing: normal;
+  padding: 21px 10px 16px 16px;
+  overflow: auto;
+  flex: 1 1 auto;
+  word-break: break-word;
+  word-wrap: break-word;
+}
+.rich-input.empty:before {
+  content: attr(placeholder);
+  cursor: text;
+  background: none;
+  color: #72808e;
+  display: block;
+  position: absolute;
+  left: 16px;
+  right: 150px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  pointer-events: none;
+}
+.chat-input-btns {
+  display: flex;
+  align-items: center;
+  flex-flow: row nowrap;
+  position: relative;
+}
+.chat-input-btns .chatbar-emoji {
+  font-size: 1.3rem;
+}
+.chat-input-btns .chatbar-emoji>div {
+  position: absolute!important;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  top: 0;
+  left: 0;
+}
+.chatbar-btn-group {
+  margin-right: 10px;
+}
+
+.chatbar-btn-group .chatbar-emoji {
+  padding: 0;
+}
+.emoji-wysiwyg-editor {
+  display: none;
+}
+.chat-input-btns .emoji-picker-icon {
+  top: -11px;
+}
+.send-msg-btn {
+  color: #0068ff;
+  text-transform: uppercase;
+  font-size: 1.3rem;
 }
