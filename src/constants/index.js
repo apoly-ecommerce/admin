@@ -1,4 +1,4 @@
-const APP_API_URL        = 'http://127.0.0.1:2810/';
+const APP_API_URL        = 'https://apoly.leon3.vm/';
 const SIDEBAR_STATUS     = 'sb-stt';
 const USER_AVATAR        = 'https://www.gravatar.com/avatar/bf360ba5e23b916fd50940cc12bb1f69?s=30&d=mm';
 const APP_SIDE           = 'a-size';

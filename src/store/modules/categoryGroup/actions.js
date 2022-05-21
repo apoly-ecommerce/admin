@@ -11,7 +11,8 @@ import {
   massRestoreCategoryGroup,
   fetchCategoryGroupItemById,
   updateCategoryGroup,
-  emptyTrashCategoryGroup
+  emptyTrashCategoryGroup,
+  exportPdfCategoryGroup,
 } from '@/api/categoryGroup';
 
 export default {
@@ -146,6 +147,14 @@ export default {
     return new Promise((resolve, reject) => {
       emptyTrashCategoryGroup()
       .then(res => resolve(res.data))
+      .catch(err => reject(err));
+    });
+  },
+
+  exportPdfCategoryGroup() {
+    return new Promose((resolve, reject) => {
+      exportPdfCategoryGroup()
+      .then(res => resolve(res))
       .catch(err => reject(err));
     });
   }

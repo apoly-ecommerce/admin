@@ -100,3 +100,10 @@ export function emptyTrashCategoryGroup() {
     method: 'DELETE'
   });
 }
+
+export function exportPdfCategoryGroup() {
+  return request({
+    url: 'api/admin/catalog/categoryGroup/pdf/export',
+    method: 'GET'
+  });
+}

@@ -48,7 +48,7 @@
           size="mini"
           @click="emptyTrash"
         >Làm sạch thùng rác</el-button>
-        <el-button class="m-1" type="primary" size="mini" plain>PDF</el-button>
+        <el-button class="m-1" type="primary" size="mini" plain @click="exportPdfHandler">PDF</el-button>
         <el-button class="m-1" type="primary" size="mini" plain>EXCEL</el-button>
         <el-button class="m-1" type="primary" size="mini" plain>PRINT</el-button>
       </template>
@@ -259,7 +259,8 @@ export default {
       'massDestroyCategoryGroup': 'categoryGroup/massDestroyCategoryGroup',
       'restoreCategoryGroup': 'categoryGroup/restoreCategoryGroup',
       'massRestoreCategoryGroup': 'categoryGroup/massRestoreCategoryGroup',
-      'emptyTrashCategoryGroup': 'categoryGroup/emptyTrashCategoryGroup'
+      'emptyTrashCategoryGroup': 'categoryGroup/emptyTrashCategoryGroup',
+      'exportPdfCategoryGroup': 'categoryGroup/exportPdfCategoryGroup'
     }),
     formatTime(time) {
       return formatTime(time);
@@ -498,6 +499,16 @@ export default {
           this.$router.replace({ query });
         });
       };
+    },
+    exportPdfHandler() {
+      exportPdfCategoryGroup()
+        .then(res => {
+          console.log('export handler!');
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 }
